@@ -2,6 +2,10 @@ package base.sort;
 
 import java.util.Comparator;
 
+/**
+ * open the assertion:
+ * Run ->Edit the config,->VM option: type -ea
+ */
 public class BinarySort {
     public static void main(String[] args) {
 
