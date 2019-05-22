@@ -47,6 +47,7 @@ public class BinarySort {
                     a[left + 2] = a[left + 1];
                 case 1:
                     a[left + 1] = a[left];
+                    break;
                 default:
                     System.arraycopy(a, left, a, left + 1, n);
             }
