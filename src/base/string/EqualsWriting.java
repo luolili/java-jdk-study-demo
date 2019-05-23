@@ -1,13 +1,15 @@
 package base.string;
 
 /**
- * how to write equals between two strings
+ * 1. how to write equals between two strings
+ * 2. starts with a prefix?
  */
 public class EqualsWriting {
     public static void main(String[] args) {
         String s1 = "hello";
-        String s2 = "helloo";
+        String s2 = "hello";
         equals01(s1, s2);
+        startsWith01(s1, "he", 1);
     }
 
     static boolean equals01(String str1, String str2) {
@@ -28,5 +30,23 @@ public class EqualsWriting {
             return true;
         }
         return false;
+    }
+
+    static boolean startsWith01(String str, String prefix, int toffset) {
+
+        int len = str.length();
+        int to = toffset;
+        int preLen = prefix.length();
+        if (toffset < 0 || toffset + preLen > len)
+            return false;
+        int i = 0;
+        //-- before preLen because the num of loop is preLen and zero-based
+        while (--preLen >= 0) {
+            if (str.charAt(to++) != prefix.charAt(i++))
+                return false;
+        }
+
+
+        return true;
     }
 }
