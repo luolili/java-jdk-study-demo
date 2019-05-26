@@ -2,6 +2,11 @@ package base.template;
 
 /**
  * abstract base class defines the steps of doing the thing
+ * 1. refactor: add same code into the parent class
+ * 2. re-use
+ * 3.shield details
+ * drawback:
+ * 1.extend
  */
 public abstract class RefreshBeverage {
 

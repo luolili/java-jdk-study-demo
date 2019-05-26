@@ -9,6 +9,8 @@ import java.util.Random;
  * the customer has the discount request
  * it depends on the abstract layer,not concrete impls:
  * to reach low coupling
+ *
+ * spring security
  */
 public class Customer {
 
