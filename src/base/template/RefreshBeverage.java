@@ -6,7 +6,8 @@ package base.template;
 public abstract class RefreshBeverage {
 
     /**
-     * template method for the thing
+     * template method for the thing:
+     * it can not be changed by subclasses
      */
     public final void prepareBeverageTemplate() {
 
