@@ -21,7 +21,7 @@ public class MyQueue<E> {
 
     transient int modCount;
 
-    //constructor
+    //constructor withdefault capacity
     public MyQueue() {
         this(DEFAULT_INITIAL_CAPACITY, null);
     }
