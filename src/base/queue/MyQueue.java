@@ -1,7 +1,9 @@
 package base.queue;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import com.sun.jmx.remote.internal.ArrayQueue;
+
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * write a PriorityQueue that has only add method
@@ -21,7 +23,7 @@ public class MyQueue<E> {
 
     transient int modCount;
 
-    //constructor withdefault capacity
+    //constructor with default capacity
     public MyQueue() {
         this(DEFAULT_INITIAL_CAPACITY, null);
     }
@@ -96,11 +98,14 @@ public class MyQueue<E> {
         }
     }
 
+    // to find the child for the k
     private void siftUpUsingComparable(int k, E e) {
+        Comparable<? super E> key = (Comparable<? super E>) e;
+
         while (k > 0) {
             int parent = (k - 1) >>> 1;
             Object o = queue[parent];
-            if (comparator.compare(e, (E) o) >= 0) {
+            if (key.compareTo((E) o) >= 0) {
                 break;
             }
             queue[k] = o;//use parent to swap its child
@@ -121,5 +126,119 @@ public class MyQueue<E> {
             k = parent;// to get its parent element
         }
         queue[k] = e;//use the child to swap its parent
+    }
+
+    //iterator
+    public Iterator<E> iterator() {
+        return new Itr();
+    }
+
+    private final class Itr implements Iterator<E> {
+
+        private int cursor = 0;
+
+        private int lastRet = -1;
+
+        private ArrayDeque<E> forgetMeNot = null;
+
+
+        private int expectedModCount = modCount;
+        private E lastRetElt = null;
+
+        public boolean hasNext() {
+            return cursor < size ||
+                    (forgetMeNot != null && !forgetMeNot.isEmpty());
+        }
+
+        @SuppressWarnings("unchecked")
+        public E next() {
+            if (expectedModCount != modCount)
+                throw new ConcurrentModificationException();
+
+            if (cursor < size) {
+                return (E) queue[lastRet = cursor++];
+            }
+
+            if (forgetMeNot != null) {
+                lastRet = -1;
+                lastRetElt = forgetMeNot.poll();
+                if (lastRetElt != null)
+                    return lastRetElt;
+            }
+            throw new NoSuchElementException();
+        }
+
+        //remove
+        public void remove() {
+            if (expectedModCount != modCount)
+                throw new ConcurrentModificationException();
+
+            if (lastRet != -1) {
+                MyQueue.this.removeAt(lastRet);
+            }
+        }
+    }
+
+    private void removeAt(int i) {
+        modCount++;
+        int s = --size;
+        if (i == s) {
+            queue[i] = null;
+        } else {
+            E moved = (E) queue[s];
+            queue[s] = null;
+            siftDown(i, moved);
+
+        }
+
+
+    }
+
+    private void siftDown(int i, E x) {
+        if (comparator != null)
+            siftDownUsingComparator(i, x);
+        else
+            siftDownUsingComparable(i, x);
+
+    }
+
+    private void siftDownUsingComparable(int k, E x) {
+        Comparable<? super E> key = (Comparable<? super E>) x;
+
+        int half = size >>> 1;
+        while (k < half) {
+            int child = (k << 1) + 1;
+            int right = child + 1;
+            Object c = queue[child];
+            if (right < size &&
+                    ((Comparable<? super E>) c).compareTo((E) queue[right]) > 0) {
+                c = queue[child = right];
+            }
+
+            if (key.compareTo((E) c) <= 0)
+                break;
+            queue[k] = c;
+            k = child;
+        }
+        queue[k] = x;
+    }
+
+    private void siftDownUsingComparator(int k, E x) {
+        int half = size >>> 1;
+        while (k < half) {
+            int child = (k << 1) + 1;
+            int right = child + 1;
+            Object c = queue[child];
+            if (right < size &&
+                    comparator.compare((E) queue[child], (E) queue[right]) > 0) {
+                c = queue[child = right];
+            }
+
+            if (comparator.compare(x, (E) c) <= 0)
+                break;
+            queue[k] = c;
+            k = child;
+        }
+        queue[k] = x;
     }
 }
