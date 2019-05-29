@@ -174,9 +174,36 @@ public class MyQueue<E> {
                 throw new ConcurrentModificationException();
 
             if (lastRet != -1) {
-                MyQueue.this.removeAt(lastRet);
+                E moved = MyQueue.this.removeAt(lastRet);
+                lastRet = -1;
+                if (moved == null) {
+                    cursor--;
+                } else {
+                    if (forgetMeNot == null) {
+                        forgetMeNot = new ArrayDeque<>();
+                        forgetMeNot.add(moved);
+                    }
+                }
+
+            } else if (lastRetElt != null) {
+                MyQueue.this.removeEq(lastRetElt);
+                lastRetElt = null;
+            } else {
+                throw new IllegalStateException();
+            }
+            expectedModCount = modCount;
+        }
+    }
+
+    private boolean removeEq(Object e) {
+
+        for (int i = 0; i < size; i++) {
+            if (queue[i] == e) {
+                removeAt(i);
+                return true;
             }
         }
+        return false;
     }
 
     private E removeAt(int i) {
@@ -189,7 +216,7 @@ public class MyQueue<E> {
             queue[s] = null;
             siftDown(i, moved);//remove the specified ele
 
-            if (queue[i] == moved) {
+            if (queue[i] == moved) {//now i is the last index
                 siftUp(i, moved);
                 if (queue[i] != moved)
                     return moved;
