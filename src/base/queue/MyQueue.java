@@ -179,7 +179,7 @@ public class MyQueue<E> {
         }
     }
 
-    private void removeAt(int i) {
+    private E removeAt(int i) {
         modCount++;
         int s = --size;
         if (i == s) {
@@ -187,11 +187,16 @@ public class MyQueue<E> {
         } else {
             E moved = (E) queue[s];
             queue[s] = null;
-            siftDown(i, moved);
+            siftDown(i, moved);//remove the specified ele
 
+            if (queue[i] == moved) {
+                siftUp(i, moved);
+                if (queue[i] != moved)
+                    return moved;
+            }
         }
 
-
+        return null;
     }
 
     private void siftDown(int i, E x) {
