@@ -21,7 +21,10 @@ public class NoteBook {
 
         // you have two plug, but you need three plug
         BGTwoPlug bgTwoPlug = new BGTwoPlug();
-        ThreePlug adapter = new TwoPlugAdapter(bgTwoPlug);
+        //ThreePlug adapter = new TwoPlugAdapter(bgTwoPlug);
+
+        TwoPlugAdapterExtends adapter = new TwoPlugAdapterExtends();
+
 
         NoteBook noteBook = new NoteBook(adapter);
         noteBook.charge();

@@ -1,7 +1,7 @@
 package base.adapter;
 
 /**
- * two to three adapter
+ * two to three adapter:invoke source method in target method
  */
 public class TwoPlugAdapter implements ThreePlug {
 
