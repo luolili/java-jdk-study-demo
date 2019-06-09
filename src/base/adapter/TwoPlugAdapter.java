@@ -13,7 +13,7 @@ public class TwoPlugAdapter implements ThreePlug {
 
     @Override
     public void powerWithThree() {
-        System.out.println("tow --> three");
+        System.out.println("two --> three using composition");
         bgTwoPlug.powerWithTwo();
     }
 }
