@@ -1,6 +1,7 @@
 package com.luo.util;
 
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -68,7 +69,7 @@ public abstract class ObjectUtils {
         if (obj instanceof CharSequence) {
             return ((CharSequence) obj).length() == 0;
         }
-        //is an array
+        //---is an array. Array.getLength(obj) is  a native method
         if (obj.getClass().isArray()) {
             return Array.getLength(obj) == 0;
         }
@@ -88,4 +89,69 @@ public abstract class ObjectUtils {
     }
 
 
+    public static boolean nullSafeEquals(Object o1, Object o2) {
+        if (o1 == o2)
+            return true;
+
+        if (o1 == null || o2 == null)
+            return false;
+
+        if (o1.equals(o2))
+            return true;
+
+        if (o1.getClass().isArray() && o2.getClass().isArray())
+            return arrayEquals(o1, o2);
+
+        return false;
+    }
+
+    public static boolean arrayEquals(Object o1, Object o2) {
+        // is a Object[]
+        if (o1 instanceof Object[] && o2 instanceof Object[]) {
+            Arrays.equals((Object[]) o1, (Object[]) o2);
+        }
+        //--primitive type
+        //-1. is a boolean[]
+        if (o1 instanceof boolean[] && o2 instanceof boolean[]) {
+            Arrays.equals((boolean[]) o1, (boolean[]) o2);
+        }
+
+        //-2. is a boolean[]
+        if (o1 instanceof byte[] && o2 instanceof byte[]) {
+            Arrays.equals((byte[]) o1, (byte[]) o2);
+        }
+
+        //-3. is a boolean[]
+        if (o1 instanceof char[] && o2 instanceof char[]) {
+            Arrays.equals((char[]) o1, (char[]) o2);
+        }
+        //-4. is a short[]
+        if (o1 instanceof short[] && o2 instanceof short[]) {
+            Arrays.equals((short[]) o1, (short[]) o2);
+        }
+
+        //-5. is a int[]
+        if (o1 instanceof int[] && o2 instanceof int[]) {
+            Arrays.equals((int[]) o1, (int[]) o2);
+        }
+
+
+        //-6. is a float[]
+        if (o1 instanceof float[] && o2 instanceof float[]) {
+            Arrays.equals((float[]) o1, (float[]) o2);
+        }
+
+        //-7. is a double[]
+        if (o1 instanceof double[] && o2 instanceof double[]) {
+            Arrays.equals((double[]) o1, (double[]) o2);
+        }
+
+
+        //-8. is a long[]
+        if (o1 instanceof long[] && o2 instanceof long[]) {
+            Arrays.equals((long[]) o1, (long[]) o2);
+        }
+
+        return false;
+    }
 }
