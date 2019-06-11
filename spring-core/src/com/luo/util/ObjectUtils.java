@@ -154,4 +154,315 @@ public abstract class ObjectUtils {
 
         return false;
     }
+
+    //day02--toString
+    public static String identityToString(Object obj) {
+        if (obj == null) {
+            return EMPTY_STRING;
+        }
+
+        return obj.getClass().getName() + "@" + getIdentityHexString(obj);
+
+    }
+
+    private static String getIdentityHexString(Object obj) {
+
+        return Integer.toHexString(System.identityHashCode(obj));
+    }
+
+    public static String getDisplayString(Object obj) {
+
+        if (obj == null) {
+            return EMPTY_STRING;
+        }
+
+        return nullSafeToString(obj);
+    }
+
+    public static String nullSafeToString(Object obj) {
+
+        if (obj == null) {
+            return EMPTY_STRING;
+        }
+
+        if (obj instanceof String) {
+            return (String) obj;
+        }
+
+        if (obj instanceof Object[]) {
+            return nullSafeToString((Object[]) obj);
+        }
+
+        if (obj instanceof char[]) {
+            return nullSafeToString((char[]) obj);
+        }
+        if (obj instanceof boolean[]) {
+            return nullSafeToString((char[]) obj);
+        }
+        if (obj instanceof byte[]) {
+            return nullSafeToString((char[]) obj);
+        }
+        if (obj instanceof double[]) {
+            return nullSafeToString((char[]) obj);
+        }
+        if (obj instanceof float[]) {
+            return nullSafeToString((char[]) obj);
+        }
+        if (obj instanceof long[]) {
+            return nullSafeToString((char[]) obj);
+        }
+        if (obj instanceof int[]) {
+            return nullSafeToString((char[]) obj);
+        }
+        if (obj instanceof short[]) {
+            return nullSafeToString((char[]) obj);
+        }
+
+        String str = obj.toString();
+
+        //return (str==null? EMPTY_STRING:str);
+        return (str != null ? str : EMPTY_STRING);
+    }
+
+    public static String nullSafeToString(Object[] array) {
+        if (array == null) {
+            return EMPTY_STRING;
+        }
+
+        int len = array.length;
+
+        if (len == 0) {
+            return EMPTY_ARRAY;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+
+            if (i == 0) {
+                sb.append(ARRAY_START);
+            } else {
+                sb.append(ARRAY_ELEMENT_SEPARATE);
+            }
+            sb.append(String.valueOf(array[i]));
+
+        }
+        sb.append(ARRAY_END);
+        return sb.toString();
+    }
+
+
+    public static String nullSafeToString(byte[] array) {
+        if (array == null) {
+            return EMPTY_STRING;
+        }
+
+        int len = array.length;
+
+        if (len == 0) {
+            return EMPTY_ARRAY;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+
+            if (i == 0) {
+                sb.append(ARRAY_START);
+            } else {
+                sb.append(ARRAY_ELEMENT_SEPARATE);
+            }
+            sb.append(String.valueOf(array[i]));
+
+        }
+        sb.append(ARRAY_END);
+        return sb.toString();
+    }
+
+    public static String nullSafeToString(boolean[] array) {
+        if (array == null) {
+            return EMPTY_STRING;
+        }
+
+        int len = array.length;
+
+        if (len == 0) {
+            return EMPTY_ARRAY;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+
+            if (i == 0) {
+                sb.append(ARRAY_START);
+            } else {
+                sb.append(ARRAY_ELEMENT_SEPARATE);
+            }
+            sb.append(String.valueOf(array[i]));
+
+        }
+        sb.append(ARRAY_END);
+        return sb.toString();
+    }
+
+    public static String nullSafeToString(float[] array) {
+        if (array == null) {
+            return EMPTY_STRING;
+        }
+
+        int len = array.length;
+
+        if (len == 0) {
+            return EMPTY_ARRAY;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+
+            if (i == 0) {
+                sb.append(ARRAY_START);
+            } else {
+                sb.append(ARRAY_ELEMENT_SEPARATE);
+            }
+            sb.append(String.valueOf(array[i]));
+
+        }
+        sb.append(ARRAY_END);
+        return sb.toString();
+    }
+
+    public static String nullSafeToString(double[] array) {
+        if (array == null) {
+            return EMPTY_STRING;
+        }
+
+        int len = array.length;
+
+        if (len == 0) {
+            return EMPTY_ARRAY;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+
+            if (i == 0) {
+                sb.append(ARRAY_START);
+            } else {
+                sb.append(ARRAY_ELEMENT_SEPARATE);
+            }
+            sb.append(String.valueOf(array[i]));
+
+        }
+        sb.append(ARRAY_END);
+        return sb.toString();
+    }
+
+
+    public static String nullSafeToString(long[] array) {
+        if (array == null) {
+            return EMPTY_STRING;
+        }
+
+        int len = array.length;
+
+        if (len == 0) {
+            return EMPTY_ARRAY;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+
+            if (i == 0) {
+                sb.append(ARRAY_START);
+            } else {
+                sb.append(ARRAY_ELEMENT_SEPARATE);
+            }
+            sb.append(String.valueOf(array[i]));
+
+        }
+        sb.append(ARRAY_END);
+        return sb.toString();
+    }
+
+
+    public static String nullSafeToString(int[] array) {
+        if (array == null) {
+            return EMPTY_STRING;
+        }
+
+        int len = array.length;
+
+        if (len == 0) {
+            return EMPTY_ARRAY;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+
+            if (i == 0) {
+                sb.append(ARRAY_START);
+            } else {
+                sb.append(ARRAY_ELEMENT_SEPARATE);
+            }
+            sb.append(String.valueOf(array[i]));
+
+        }
+        sb.append(ARRAY_END);
+        return sb.toString();
+    }
+
+
+    public static String nullSafeToString(short[] array) {
+        if (array == null) {
+            return EMPTY_STRING;
+        }
+
+        int len = array.length;
+
+        if (len == 0) {
+            return EMPTY_ARRAY;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+
+            if (i == 0) {
+                sb.append(ARRAY_START);
+            } else {
+                sb.append(ARRAY_ELEMENT_SEPARATE);
+            }
+            sb.append(String.valueOf(array[i]));
+
+        }
+        sb.append(ARRAY_END);
+        return sb.toString();
+    }
+
+    public static String nullSafeToString(char[] array) {
+        if (array == null) {
+            return EMPTY_STRING;
+        }
+
+        int len = array.length;
+
+        if (len == 0) {
+            return EMPTY_ARRAY;
+        }
+
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+
+            if (i == 0) {
+                sb.append(ARRAY_START);
+            } else {
+                sb.append(ARRAY_ELEMENT_SEPARATE);
+            }
+            sb
+                    .append("'")
+                    .append(String.valueOf(array[i]))
+                    .append("'");
+
+        }
+        sb.append(ARRAY_END);
+        return sb.toString();
+    }
+
 }
