@@ -1,10 +1,7 @@
 package com.luo.util;
 
 import java.lang.reflect.Array;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public abstract class ObjectUtils {
 
@@ -464,5 +461,36 @@ public abstract class ObjectUtils {
         sb.append(ARRAY_END);
         return sb.toString();
     }
+
+
+    //--toObjectArray
+    public static Object[] toObjectArray(Object obj) {
+
+        if (obj instanceof Object[]) {
+            return (Object[]) obj;
+        }
+
+        if (obj == null) {
+            return new Object[0];
+        }
+
+        if (!obj.getClass().isArray()) {
+            throw new IllegalArgumentException("Source is not an array: " + obj);
+        }
+
+        int length = Array.getLength(obj);
+        //get the type of element in array
+        Class<?> wrapperType = Array.get(obj, 0).getClass();
+        Object[] newArr = (Object[]) Array.newInstance(wrapperType, length);
+        for (int i = 0; i < length; i++) {
+
+            //get i-indexed value
+            newArr[i] = Array.get(obj, i);
+
+        }
+
+        return newArr;
+    }
+
 
 }
