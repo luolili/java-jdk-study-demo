@@ -479,6 +479,9 @@ public abstract class ObjectUtils {
         }
 
         int length = Array.getLength(obj);
+        if (length == 0) {
+            return new Object[0];
+        }
         //get the type of element in array
         Class<?> wrapperType = Array.get(obj, 0).getClass();
         Object[] newArr = (Object[]) Array.newInstance(wrapperType, length);
