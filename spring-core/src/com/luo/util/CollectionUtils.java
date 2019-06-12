@@ -1,7 +1,6 @@
 package com.luo.util;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 /**
  * simepl start of spring-core
@@ -31,4 +30,51 @@ public abstract class CollectionUtils {
     }
 
 
+    /**
+     * source is the potentially primitive array
+     *
+     * @param source
+     * @return
+     */
+    public static List arrayToList(Object source) {
+        return Arrays.asList(ObjectUtils.toObjectArray(source));
+    }
+
+    /**
+     * put the source array into a collection
+     *
+     * @param source
+     * @param c
+     * @param <E>
+     */
+    public static <E> void mergeArrayIntoCollection(Object source, Collection<E> c) {
+        Object[] array = ObjectUtils.toObjectArray(source);
+
+        for (Object item : array) {
+
+            c.add((E) item);
+
+        }
+    }
+
+    /**
+     * check if the given iterator has the element
+     *
+     * @param it
+     * @param element
+     * @return
+     */
+    public static boolean contains(Iterator<?> it, Object element) {
+        if (it != null) {
+            while (it.hasNext()) {
+                Object next = it.next();
+                //return ObjectUtils.nullSafeEquals(next, element);
+                if (ObjectUtils.nullSafeEquals(next, element)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
 }
