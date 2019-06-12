@@ -495,5 +495,28 @@ public abstract class ObjectUtils {
         return newArr;
     }
 
+    public static <A, O extends A> A[] addObjectToArray(A[] array, O obj) {
+
+        //get super class first
+        Class<?> comType = Object.class;
+        if (array != null) {
+            comType = array.getClass().getComponentType();
+        } else if (obj != null) {
+            comType = obj.getClass();
+        }
+
+        int newLen = (array != null) ? array.length : 1;
+
+        A[] newArr = (A[]) Array.newInstance(comType, newLen);
+
+        if (array != null) {
+            System.arraycopy(array, 0, newArr, 0, array.length);
+        }
+
+        newArr[newArr.length - 1] = obj;
+        return newArr;
+
+
+    }
 
 }
