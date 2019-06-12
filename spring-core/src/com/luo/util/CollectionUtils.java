@@ -42,7 +42,7 @@ public abstract class CollectionUtils {
 
     /**
      * put the source array into a collection
-     *
+     *the type of element of collection is E
      * @param source
      * @param c
      * @param <E>
@@ -51,7 +51,6 @@ public abstract class CollectionUtils {
         Object[] array = ObjectUtils.toObjectArray(source);
 
         for (Object item : array) {
-
             c.add((E) item);
 
         }
@@ -59,7 +58,7 @@ public abstract class CollectionUtils {
 
     /**
      * check if the given iterator has the element
-     *
+     *the type of the element of iterator is ?
      * @param it
      * @param element
      * @return
