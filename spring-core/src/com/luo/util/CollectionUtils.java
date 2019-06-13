@@ -3,7 +3,7 @@ package com.luo.util;
 import java.util.*;
 
 /**
- * simepl start of spring-core
+ * simple start of spring-core
  */
 public abstract class CollectionUtils {
 
