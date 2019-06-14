@@ -123,10 +123,36 @@ public abstract class StringUtils {
             if (!Character.isWhitespace(c)) {
                 sb.append(c);
             }
-
         }
 
         return sb.toString();
 
     }
+
+    //delete first whitespace of str
+    public static String trimLeadingWhiteSpace(String str) {
+        if (!hasLength(str)) {
+            return str;
+        }
+        StringBuilder sb = new StringBuilder(str);
+        if (str.length() > 0 && Character.isWhitespace(str.charAt(0))) {
+            sb.deleteCharAt(0);
+        }
+        return sb.toString();
+
+    }
+
+    public static String trimTrailingWhiteSpace(String str) {
+        if (!hasLength(str)) {
+            return str;
+        }
+        StringBuilder sb = new StringBuilder(str);
+        if (str.length() > 0 && Character.isWhitespace(str.charAt(sb.length() - 1))) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
+
+    }
+
+
 }
