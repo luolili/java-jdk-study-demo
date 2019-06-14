@@ -192,6 +192,13 @@ public abstract class CollectionUtils {
         return candidate;
     }
 
+    /**
+     * set is unsortable,find the last ele of it
+     *
+     * @param set
+     * @param <T>
+     * @return
+     */
     public static <T> T lastElement(Set<T> set) {
         if (isEmpty(set)) {
             return null;
@@ -202,6 +209,7 @@ public abstract class CollectionUtils {
             return ((SortedSet<T>) set).last();
         }
 
+        //it is not like list, it has no index, so
         Iterator<T> it = set.iterator();
         T last = null;
         while (it.hasNext()) {
@@ -211,7 +219,7 @@ public abstract class CollectionUtils {
 
     }
 
-    public static <T> T lastElment(List<T> list) {
+    public static <T> T lastElement(List<T> list) {
         if (isEmpty(list)) {
             return null;
         }
