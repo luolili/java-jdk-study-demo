@@ -172,5 +172,34 @@ public abstract class StringUtils {
                 && str.regionMatches(true, str.length() - suffix.length(), suffix, 0, suffix.length()));
     }
 
+    public static boolean substringMatch(String str, int index, String substring) {
+        if (index + substring.length() > str.length()) {
+            return false;
+        }
+
+        //traverse the substring ,it is from index+i for the str
+        for (int i = 0; i < substring.length(); i++) {
+            if (str.charAt(index + i) != substring.charAt(i)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static int countOccurrencesOf(String str, String sub) {
+        if (!hasLength(str) || !hasLength(sub)) {
+            return 0;
+        }
+
+        int count = 0;
+        int pos = 0;//start (dynamic) index pos
+        int idx;
+
+        while ((idx = str.indexOf(sub, pos)) != -1) {
+            ++count;
+            pos = idx + sub.length();//update to the next pos
+        }
+        return count;
+    }
 
 }
