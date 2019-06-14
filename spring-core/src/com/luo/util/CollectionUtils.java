@@ -25,7 +25,7 @@ public abstract class CollectionUtils {
      * @param map
      * @return
      */
-    public static boolean isempty(Map<?, ?> map) {
+    public static boolean isEmpty(Map<?, ?> map) {
         return (map == null || map.isEmpty());
     }
 
@@ -75,5 +75,82 @@ public abstract class CollectionUtils {
         }
 
         return false;
+    }
+
+    public static boolean containsInstance(Collection<?> collection, Object ele) {
+        if (collection != null) {
+            for (Object candidate : collection) {
+
+                if (candidate == ele) {
+                    return true;
+                }
+
+            }
+        }
+        return false;
+    }
+
+    public static boolean containsAny(Collection<?> collection, Collection<?> candidates) {
+        if (isEmpty(collection) || isEmpty(candidates)) {
+            return false;
+        }
+
+        for (Object candidate : candidates) {
+            if (collection.contains(candidate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    /**
+     * return the first ele in candidates that is contained in source
+     *
+     * @param source
+     * @param candidates
+     * @param <E>
+     * @return
+     */
+    public static <E> E findFirstMatch(Collection<?> source, Collection<E> candidates) {
+        if (isEmpty(source) || isEmpty(candidates)) {
+            return null;
+        }
+        //the type of candidate is Object,not E
+        for (Object candidate : candidates) {
+
+            if (source.contains(candidate)) {
+                return (E) candidate;
+            }
+
+        }
+        return null;
+    }
+
+
+    /**
+     * find a single (element) value of the given type in collection
+     *
+     * @param collection
+     * @param type
+     * @param <T>
+     * @return
+     */
+    public static <T> T findValueOfType(Collection<?> collection, Class<T> type) {
+
+        if (isEmpty(collection)) {
+            return null;
+        }
+        T value = null;
+        for (Object candidate : collection) {
+            if (type == null || type.isInstance(candidate)) {
+                if (value != null) {
+                    return null;//has more than one element type in collection
+                }
+                value = (T) candidate;
+            }
+
+        }
+        return value;
     }
 }
