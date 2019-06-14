@@ -88,5 +88,45 @@ public abstract class StringUtils {
         return containsWhiteSpace((CharSequence) str);
     }
 
+    public static String trimWhiteSpace(String str) {
+        if (!hasLength(str)) {
+            return str;
+        }
 
+        int len = str.length();
+        int beginIdex = 0;
+        int endIndex = len - 1;
+
+        while (beginIdex <= endIndex && Character.isWhitespace(str.charAt(beginIdex))) {
+            beginIdex++;
+        }
+        while (endIndex > beginIdex && Character.isWhitespace(str.charAt(endIndex))) {
+            endIndex--;
+        }
+
+        return str.substring(beginIdex, endIndex + 1);
+
+    }
+
+    public static String trimAllWhiteSpace(String str) {
+        if (!hasLength(str)) {
+            return str;
+        }
+
+        int len = str.length();
+        StringBuilder sb = new StringBuilder(str.length());
+        for (int i = 0; i < len; i++) {
+            /*if (!Character.isWhitespace(str.charAt(i))) {
+                sb.append(str.charAt(i));
+            }*/
+            char c = str.charAt(i);
+            if (!Character.isWhitespace(c)) {
+                sb.append(c);
+            }
+
+        }
+
+        return sb.toString();
+
+    }
 }
