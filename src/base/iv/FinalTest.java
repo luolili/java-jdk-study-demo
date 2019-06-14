@@ -8,6 +8,12 @@ public class FinalTest {
 
     public static void main(String[] args) {
         System.out.println(isGood);//bollean default value is false
+        //Stringbuilder +
+        StringBuilder sb1 = new StringBuilder("k");
+        StringBuilder sb2 = new StringBuilder("k");
+        //sb1 += "f";//compile error
+        // sb1+=sb2;//imcompitible type
+        tryTest();
     }
 
     public static int f(final int m) {
@@ -28,6 +34,19 @@ public class FinalTest {
 
     private float d(float s) {
         return 1.2f;
+    }
+
+    //only finally
+    public static void tryTest() {
+        try {
+
+            int n = 1 / 0;
+            System.out.println("try");
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("arr");
+        } finally {
+            System.out.println("finally");
+        }
     }
 
 }
