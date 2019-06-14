@@ -116,7 +116,7 @@ public abstract class CollectionUtils {
         if (isEmpty(source) || isEmpty(candidates)) {
             return null;
         }
-        //the type of candidate is Object,not E
+        //traverse the candidates, the type of candidate is Object,not E
         for (Object candidate : candidates) {
 
             if (source.contains(candidate)) {
@@ -152,5 +152,69 @@ public abstract class CollectionUtils {
 
         }
         return value;
+    }
+
+
+    public static boolean hasUniqueObject(Collection<?> collection) {
+        if (isEmpty(collection)) {
+            return false;
+        }
+
+        Object candidate = null;
+        boolean hasCandidate = false;
+        for (Object ele : collection) {
+            if (!hasCandidate) {
+                hasCandidate = true;
+                candidate = ele;
+            } else if (candidate != ele) {//compare referrence of ele in collection
+                return false;
+            }
+
+
+        }
+        return true;
+    }
+
+    public static Class<?> findCommonElementType(Collection<?> collection) {
+        if (isEmpty(collection)) {
+            return null;
+        }
+        Class<?> candidate = null;//initialize the candidate for below use
+        for (Object ele : collection) {
+            if (ele != null) {
+                if (candidate == null) {
+                    candidate = ele.getClass();
+                } else if (candidate != ele.getClass()) {
+                    return null;
+                }
+            }
+        }
+        return candidate;
+    }
+
+    public static <T> T lastElement(Set<T> set) {
+        if (isEmpty(set)) {
+            return null;
+        }
+
+        if (set instanceof SortedSet) {
+            //return (T) ((SortedSet)set).last();
+            return ((SortedSet<T>) set).last();
+        }
+
+        Iterator<T> it = set.iterator();
+        T last = null;
+        while (it.hasNext()) {
+            last = it.next();
+        }
+        return last;
+
+    }
+
+    public static <T> T lastElment(List<T> list) {
+        if (isEmpty(list)) {
+            return null;
+        }
+        return list.get(list.size() - 1);
     }
 }
