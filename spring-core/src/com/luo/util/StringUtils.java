@@ -514,4 +514,31 @@ public abstract class StringUtils {
         return collectionToDelimitedString(coll, ",");
     }
 
+    public static String arrayToDelimitedString(Object[] arr, String delim) {
+        if (ObjectUtils.isEmpty(arr)) {
+            return "";
+        }
+
+        if (arr.length == 1) {
+            return ObjectUtils.nullSafeToString(arr[0]);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        int len = arr.length;
+        for (int i = 0; i < len; i++) {
+            if (i > 0) {
+                //if not the first one ele ,you need to append delimiter first, then append the ele
+                sb.append(delim);
+            }
+            sb.append(arr[i]);
+
+        }
+        return sb.toString();
+    }
+
+    //speciy the delimiter
+    public static String arrayToCommaDelimitedString(Object[] arr) {
+        return arrayToDelimitedString(arr, ",");
+    }
+
 }
