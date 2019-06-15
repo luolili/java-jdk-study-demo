@@ -1,5 +1,10 @@
 package com.luo.util;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 /**
  * it is abstract class too
  */
@@ -386,5 +391,48 @@ public abstract class StringUtils {
         return newArr;
 
     }
-    
+
+    /**
+     * use Arrays.sort to sort string arr
+     *
+     * @param array
+     * @return
+     */
+    public static String[] sortStringArray(String[] array) {
+        if (ObjectUtils.isEmpty(array)) {
+            return new String[0];
+        }
+        Arrays.sort(array);
+        return array;
+    }
+
+    //copy the coll into string arr
+    public static String[] toStringArray(Collection<String> collection) {
+        return collection.toArray(new String[0]);
+    }
+
+    public static String[] trimArrayElements(String[] array) {
+        if (ObjectUtils.isEmpty(array)) {
+            return array;
+        }
+
+        int len = array.length;
+        String[] re = new String[len];
+        //use fori, not for
+        for (int i = 0; i < len; i++) {
+            String ele = array[i];
+            re[i] = (ele != null ? ele.trim() : null);
+        }
+        return re;
+    }
+
+    public static String[] removeDuplicateStrings(String[] array) {
+        if (ObjectUtils.isEmpty(array)) {
+            return array;
+        }
+        Set<String> set = new LinkedHashSet<>(Arrays.asList(array));
+        //collection to arr
+        return toStringArray(set);
+
+    }
 }
