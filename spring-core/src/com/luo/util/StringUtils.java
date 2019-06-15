@@ -205,7 +205,7 @@ public abstract class StringUtils {
     }
 
     public static String deleteAny(String inString, String charsToDelete) {
-        if (!hasLength(inString) || hasLength(charsToDelete)) {
+        if (!hasLength(inString) || !hasLength(charsToDelete)) {
             return inString;
         }
 
@@ -433,7 +433,7 @@ public abstract class StringUtils {
 
     }
 
-    public static String[] deletedListToStringArray(String str, String delimiter, String charsToDelete) {
+    public static String[] delimitedListToStringArray(String str, String delimiter, String charsToDelete) {
         if (str == null) {
             return new String[0];
         }
@@ -452,7 +452,7 @@ public abstract class StringUtils {
         }//habit: else is below right bracket
         else {
             int pos = 0;
-            int delPos;
+            int delPos;//cursor
             while ((delPos = str.indexOf(delimiter, pos)) != -1) {
 
                 result.add(deleteAny(str.substring(pos, delPos), charsToDelete));
@@ -467,4 +467,23 @@ public abstract class StringUtils {
         return toStringArray(result);
 
     }
+
+    //two params
+    public static String[] delimitedListToStringArray(String str, String delimiter) {
+        return delimitedListToStringArray(str, delimiter, null);
+    }
+
+
+    //one param
+    public static String[] commaDelimitedListToStringAray(String str) {
+        return delimitedListToStringArray(str, ",");
+    }
+
+    //string[] to set
+    public static Set<String> commaDelimitedListToSet(String str) {
+        String[] sa = delimitedListToStringArray(str, ",");
+        return new LinkedHashSet<>(Arrays.asList(sa));
+
+    }
+
 }

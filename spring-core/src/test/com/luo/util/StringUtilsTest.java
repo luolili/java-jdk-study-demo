@@ -197,7 +197,6 @@ public class StringUtilsTest {
      */
     @Test
     public void testGetFileName() throws Exception {
-//TODO: Test goes here...
 
         String path = "/d/c/hu.mv";
         //System.out.println(StringUtils.getFileName(path));
@@ -205,6 +204,19 @@ public class StringUtilsTest {
 
         assertEquals("nn.", StringUtils.getFileName("nn."));
     }
+
+    @Test
+    public void testDelimitedListToStringArray() throws Exception {
+
+
+        String[] sa = StringUtils.delimitedListToStringArray("a,b", ",");
+
+        assertEquals(2, sa.length);
+        assertEquals("a", sa[0]);
+        //assertEquals("b", sa[1]);
+    }
+
+
 
 
 } 
