@@ -231,4 +231,50 @@ public abstract class StringUtils {
 
         return ((object instanceof String) ? quote((String) object) : object);
     }
+
+    //----unqualify:
+    public static String unqualify(String qualifiedName, char separator) {
+        return qualifiedName.substring(qualifiedName.lastIndexOf(separator) + 1);
+    }
+
+    public static String unqualify(String qualifiedName) {
+        return qualifiedName.substring(qualifiedName.lastIndexOf('.') + 1);
+    }
+
+    //--capitalize
+
+    public static String changeFirstCharacterCase(String str, boolean capitalize) {
+        if (!hasLength(str)) {
+            return str;
+        }
+
+        char baseChar = str.charAt(0);
+        char updateChar;
+
+        if (capitalize) {
+            updateChar = Character.toUpperCase(baseChar);
+        } else {
+            updateChar = Character.toLowerCase(baseChar);
+        }
+
+        if (updateChar == baseChar) {
+            return str;
+        }
+
+        char[] chars = str.toCharArray();
+        chars[0] = updateChar;
+
+
+        return new String(chars, 0, chars.length);
+
+
+    }
+
+    public static String capitalize(String str) {
+        return changeFirstCharacterCase(str, true);
+    }
+
+    public static String uncapitalize(String str) {
+        return changeFirstCharacterCase(str, false);
+    }
 }
