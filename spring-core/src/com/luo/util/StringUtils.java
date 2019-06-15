@@ -202,4 +202,33 @@ public abstract class StringUtils {
         return count;
     }
 
+    public static String deleteAny(String inString, String charsToDelete) {
+        if (!hasLength(inString) || hasLength(charsToDelete)) {
+            return inString;
+        }
+
+        int len = inString.length();
+        StringBuilder sb = new StringBuilder(inString.length());
+
+        for (int i = 0; i < len; i++) {
+            char c = inString.charAt(i);
+            if (charsToDelete.indexOf(c) == -1) {
+                sb.append(c);
+            }
+
+        }
+        return sb.toString();
+    }
+
+    //format string
+    public static String quote(String str) {
+
+        return (str != null ? "'" + str + "'" : null);
+    }
+
+
+    public static Object quoteIfString(Object object) {
+
+        return ((object instanceof String) ? quote((String) object) : object);
+    }
 }
