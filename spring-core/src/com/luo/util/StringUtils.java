@@ -293,4 +293,64 @@ public abstract class StringUtils {
         //-1 means path is the file name
         return (index != -1 ? path.substring(index + 1) : path);
     }
+
+    public static String getFilenameExtension(String path) {
+        if (path == null) {
+            return null;
+        }
+
+        int extIndex = path.lastIndexOf(EXTENSION_SEPARATOR);
+        if (extIndex == -1) {
+            return null;//no extension
+        }
+
+        //--dot is before separator
+        int folderIndex = path.lastIndexOf(FOLDER_SEPARATOR);
+        if (folderIndex > extIndex) {
+            return null;
+        }
+        return (path.substring(extIndex + 1));
+    }
+
+    /**
+     * strip the file extension for java resource path
+     *
+     * @param path
+     * @return
+     */
+    public static String stripFilenameExtension(String path) {
+        int extIndex = path.lastIndexOf(EXTENSION_SEPARATOR);
+        if (extIndex == -1) {
+            return path;
+        }
+
+        int folderIndex = path.lastIndexOf(FOLDER_SEPARATOR);
+        if (folderIndex > extIndex) {
+            return path;
+        }
+        return path.substring(0, extIndex);
+    }
+
+    /**
+     * use the relative path
+     *
+     * @param path
+     * @param relativePath
+     * @return
+     */
+    public static String applyRelativePath(String path, String relativePath) {
+
+        int folderIndex = path.lastIndexOf(FOLDER_SEPARATOR);
+        if (folderIndex != -1) {
+            String newPath = path.substring(0, folderIndex);
+            if (!relativePath.startsWith(FOLDER_SEPARATOR)) {
+                newPath += FOLDER_SEPARATOR;
+            }
+            return newPath + relativePath;
+        } else {
+            return relativePath;
+        }
+
+    }
+
 }
