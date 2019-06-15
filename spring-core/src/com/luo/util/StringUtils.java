@@ -486,4 +486,32 @@ public abstract class StringUtils {
 
     }
 
+    //coll to string with delim
+    public static String collectionToDelimitedString(Collection<?> coll, String delim, String prefix, String suffix) {
+        if (CollectionUtils.isEmpty(coll)) {
+            return "";
+        }
+
+        Iterator<?> it = coll.iterator();
+        StringBuilder sb = new StringBuilder();
+        while (it.hasNext()) {
+            sb.append(prefix).append(it.next()).append(suffix);
+            if (it.hasNext()) {//if the last one ,there is no delim
+                sb.append(delim);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    public static String collectionToDelimitedString(Collection<?> coll, String delim) {
+        //speicify the default preifx and suffix
+        return collectionToDelimitedString(coll, delim, "", "");
+    }
+
+    public static String collectionToDelimitedString(Collection<?> coll) {
+        //speicify the default delimiter
+        return collectionToDelimitedString(coll, ",");
+    }
+
 }
