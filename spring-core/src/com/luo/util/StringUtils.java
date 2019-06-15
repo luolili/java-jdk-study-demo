@@ -353,4 +353,38 @@ public abstract class StringUtils {
 
     }
 
+    //string to array
+    public static String[] addStringToArray(String[] array, String str) {
+        if (ObjectUtils.isEmpty(array)) {
+            return new String[]{str};
+        }
+
+        String[] newArr = new String[array.length + 1];
+        System.arraycopy(array, 0, newArr, 0, array.length);
+        newArr[array.length] = str;
+        return newArr;
+    }
+
+    /**
+     * concat two arrs into one arr
+     *
+     * @param array1
+     * @param array2
+     * @return
+     */
+    public static String[] concatenateStringArrays(String[] array1, String[] array2) {
+        if (ObjectUtils.isEmpty(array1)) {
+            return array2;
+        }
+        if (ObjectUtils.isEmpty(array2)) {
+            return array1;
+        }
+
+        String[] newArr = new String[array1.length + array2.length];
+        System.arraycopy(array1, 0, newArr, 0, array1.length);
+        System.arraycopy(array2, 0, newArr, array1.length, array2.length);
+        return newArr;
+
+    }
+    
 }
