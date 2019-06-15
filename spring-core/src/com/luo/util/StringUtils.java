@@ -264,10 +264,7 @@ public abstract class StringUtils {
         char[] chars = str.toCharArray();
         chars[0] = updateChar;
 
-
         return new String(chars, 0, chars.length);
-
-
     }
 
     public static String capitalize(String str) {
@@ -276,5 +273,24 @@ public abstract class StringUtils {
 
     public static String uncapitalize(String str) {
         return changeFirstCharacterCase(str, false);
+    }
+
+
+    //--file
+
+    /**
+     * get the file name from the path
+     *
+     * @param path
+     * @return
+     */
+    public static String getFileName(String path) {
+        if (path == null) {
+            return null;
+        }
+
+        int index = path.lastIndexOf(FOLDER_SEPARATOR);
+        //-1 means path is the file name
+        return (index != -1 ? path.substring(index + 1) : path);
     }
 }
