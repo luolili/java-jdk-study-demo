@@ -1,9 +1,6 @@
 package com.luo.util;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * it is abstract class too
@@ -433,6 +430,41 @@ public abstract class StringUtils {
         Set<String> set = new LinkedHashSet<>(Arrays.asList(array));
         //collection to arr
         return toStringArray(set);
+
+    }
+
+    public static String[] deletedListToStringArray(String str, String delimiter, String charsToDelete) {
+        if (str == null) {
+            return new String[0];
+        }
+
+        if (delimiter == null) {
+            return new String[]{str};
+        }
+
+
+        List<String> result = new ArrayList<>();
+        if (delimiter.isEmpty()) {
+            for (int i = 0; i < str.length(); i++) {
+                result.add(deleteAny(str.substring(i, i + 1), charsToDelete));
+
+            }
+        }//habit: else is below right bracket
+        else {
+            int pos = 0;
+            int delPos;
+            while ((delPos = str.indexOf(delimiter, pos)) != -1) {
+
+                result.add(deleteAny(str.substring(pos, delPos), charsToDelete));
+                pos = delPos + delimiter.length();
+            }
+
+            if (str.length() > 0 && pos < str.length()) {
+                result.add(deleteAny(str.substring(pos), charsToDelete));
+            }
+
+        }
+        return toStringArray(result);
 
     }
 }
