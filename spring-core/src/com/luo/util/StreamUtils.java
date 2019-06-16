@@ -1,8 +1,7 @@
 package com.luo.util;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
+import java.nio.charset.Charset;
 
 /**
  * abstract class too like others
@@ -30,5 +29,33 @@ public abstract class StreamUtils {
         out.flush();
 
         return byteCount;
+    }
+
+    public static byte[] copyToByteArray(InputStream in) throws IOException {
+        if (in == null) {
+            return new byte[0];
+        }
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream(BUFFER_SIZE);
+        copy(in, out);//copy in into byte array out
+        return out.toByteArray();
+
+    }
+
+
+    public static String copyToString(InputStream in, Charset charset) throws IOException {
+        if (in == null) {
+            return "";
+        }
+
+        StringBuilder out = new StringBuilder();
+        int byteRead = -1;
+        char[] buffer = new char[BUFFER_SIZE];
+        InputStreamReader reader = new InputStreamReader(in, charset);
+        while ((byteRead = reader.read()) != -1) {
+            out.append(buffer, 0, byteRead);
+        }
+        return out.toString();
+
     }
 }
