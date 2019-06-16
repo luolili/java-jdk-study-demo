@@ -90,6 +90,20 @@ public abstract class ReflectionUtils {
      */
     public static Field findField(Class<?> clazz, String name, Class<?> type) {
 
+        //prepare searchType for loop
+        Class<?> searchType = clazz;
+        //while(searchType) + for (fileds)
+        while (Object.class != searchType && searchType != null) {
+            Field[] fields = getDeclaredFields(searchType);
+            for (Field field : fields) {
+                if ((name == null || name.equals(field.getName())) && (type == null || type.equals(field.getType()))) {
+                    return field;//if name  and type is null, return the first field. notce: avoid NPE here
+                }
+
+            }
+            searchType = searchType.getSuperclass();//search field from its parent class
+
+        }
 
         return null;
     }
