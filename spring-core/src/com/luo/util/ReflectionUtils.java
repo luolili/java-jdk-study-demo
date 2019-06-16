@@ -29,7 +29,7 @@ public abstract class ReflectionUtils {
     /**
      * matches all non-bridge and non-synthetic method
      */
-    public static final MethodFilter user_declared_metods =
+    public static final MethodFilter USER_DECLARED_METODS =
             (method -> (!method.isBridge() && !method.isSynthetic() && method.getDeclaringClass() != Object.class));
 
 
@@ -62,17 +62,17 @@ public abstract class ReflectionUtils {
      */
     public static Field[] getDeclaredFields(Class<?> clazz) {
 
-        //get all declared fields from the field cache first
+        //-1 get all declared fields from the field cache first
         Field[] result = declaredFieldsCache.get(clazz);
 
         if (result == null) {
 
             try {
-                result = clazz.getDeclaredFields();//get all declared fields from clazz
+                result = clazz.getDeclaredFields();//-2 get all declared fields from clazz
                 //put the result into the cahce
                 declaredFieldsCache.put(clazz, (result.length == 0 ? NO_FIELD : result));
 
-            } catch (Throwable e) {//catch ex
+            } catch (Throwable e) {//-3 catch ex
                 throw new IllegalStateException("Failed to introspect class [" + clazz.getName()
                         + "] from the class loader [" + clazz.getClassLoader() + "]", e);
             }
@@ -94,21 +94,21 @@ public abstract class ReflectionUtils {
      */
     public static Field findField(Class<?> clazz, String name, Class<?> type) {
 
-        //prepare searchType for loop
+        //-1 prepare searchType for loop
         Class<?> searchType = clazz;
-        //while(searchType) + for (fileds)
+        //-2 while(searchType) + for (fileds)
         while (Object.class != searchType && searchType != null) {
             Field[] fields = getDeclaredFields(searchType);
             for (Field field : fields) {
                 if ((name == null || name.equals(field.getName())) && (type == null || type.equals(field.getType()))) {
-                    return field;//if name  and type is null, return the first field. notce: avoid NPE here
+                    return field;//-3 if name  and type is null, return the first field. notce: avoid NPE here
                 }
 
             }
-            searchType = searchType.getSuperclass();//search field from its parent class
+            searchType = searchType.getSuperclass();//-4 search field from its parent class
 
         }
-
+        //-5 else no
         return null;
     }
 
@@ -132,6 +132,17 @@ public abstract class ReflectionUtils {
     }
 
     //-----handle  reflectio ex
+
+    /**
+     * reflection ex includes:
+     * 1. NoSuchMethodException
+     * 2. IllegalAccessException no access to method
+     * 3. InvocationTargetException
+     * 4. RuntimeException
+     * 5.UndeclaredThrowableException
+     *
+     * @param e
+     */
     public static void handleReflectionException(Exception e) {
         //for method exception
         if (e instanceof NoSuchMethodException) {
@@ -200,13 +211,13 @@ public abstract class ReflectionUtils {
 
     //--find method: return null if none found
     public static Method findMethod(Class<?> clazz, String name, Class<?>... paramTypes) {
-
+        //-1 prepare the searchType for loop
         Class<?> searchType = clazz;
         while (searchType != null) {
-
+            //-2 if clazz is an interface, get its methods,if not, get its methods and its interface methods
             Method[] methods = searchType.isInterface() ? searchType.getMethods() : getDeclaredMethods(searchType);
             for (Method method : methods) {
-
+                //-3 use Arrays.equals to compare two Object[] array
                 if (StringUtils.isEmpty(name) || name.equals(method.getName()) && (paramTypes == null || Arrays.equals(paramTypes, method.getParameterTypes()))) {
                     return method;
                 }
@@ -214,6 +225,7 @@ public abstract class ReflectionUtils {
             }
             searchType = searchType.getSuperclass();
         }
+        //-4 else no
         return null;
     }
 
@@ -280,7 +292,7 @@ public abstract class ReflectionUtils {
     public static Object invokeMethod(Method method, Object target, Object... args) {
         try {
             return method.invoke(target, args);
-        } catch (Exception e) {
+        } catch (Exception e) {// handle  reflection ex
             handleReflectionException(e);
         }
         throw new IllegalStateException("Should never get here");

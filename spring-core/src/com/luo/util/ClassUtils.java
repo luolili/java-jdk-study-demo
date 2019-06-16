@@ -1,5 +1,7 @@
 package com.luo.util;
 
+import com.luo.lang.Nullable;
+
 import java.io.Closeable;
 import java.io.Externalizable;
 import java.io.Serializable;
@@ -111,7 +113,7 @@ public abstract class ClassUtils {
             //-1 get current thread cl first
             cl = Thread.currentThread().getContextClassLoader();//get by current thread
         } catch (Throwable e) {
-// Cannot access thread context ClassLoader - falling back...
+            // Cannot access thread context ClassLoader - falling back...
         }
 
         //can not access thread context class loader
@@ -125,7 +127,7 @@ public abstract class ClassUtils {
                     //-3 use system cl if the cl of this class is null
                     cl = ClassLoader.getSystemClassLoader();
                 } catch (Throwable e) {
-// Cannot access system ClassLoader - oh well, maybe the caller can live with null...
+                    // Cannot access system ClassLoader - oh well, maybe the caller can live with null...
                 }
             }
         }
@@ -161,27 +163,39 @@ public abstract class ClassUtils {
      * @return
      */
     public static Class<?> resolvePrimitiveClassName(String name) {
-
+        //-1 prepare the returned result and initialize
         Class<?> result = null;
-
+        //-2 get the result from the map, this is how we resolve
         if (name != null && name.length() <= 8) {
             result = primitiveTypeNameMap.get(name);
         }
         return result;
     }
 
-    public static Class<?> forName(String name, ClassLoader classLoader)
+    /**
+     * the class loader may be null,which indicates the default cl
+     *
+     * @param name
+     * @param classLoader
+     * @return
+     * @throws ClassNotFoundException
+     * @throws LinkageError
+     */
+    public static Class<?> forName(String name, @Nullable ClassLoader classLoader)
             throws ClassNotFoundException, LinkageError {
-
+        //-1 first handle primitive class
         Class<?> clazz = resolvePrimitiveClassName(name);
+        //-2 if it is not primitive class , get from commonClassCache that includes primitive and wrapper class and other common classes
         if (clazz == null) {
             clazz = commonClassCache.get(name);//from common class cache
         }
+        //-3 if not null, just return it
         if (clazz != null) {
             return clazz;
         }
 
-        //if clazz is null,can not get from cache
+        // -4 if clazz is null,can not get from cache. there are  conditions: string[] style;
+        // array condition:  [Ljava.lang.String; [[I
 
         //like String[] style
         if (name.endsWith(ARRAY_SUFFIX)) {
@@ -210,6 +224,7 @@ public abstract class ClassUtils {
             return Array.newInstance(elementClass, 0).getClass();
 
         }
+        //-1 prepare the cl
         ClassLoader clToUse = classLoader;
         if (clToUse == null) {
             clToUse = getDefaultClassLoader();
