@@ -1,8 +1,6 @@
 package com.luo.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -106,6 +104,61 @@ public abstract class ReflectionUtils {
         }
 
         return null;
+    }
+
+    /**
+     * set the field on the target obj to the value
+     *
+     * @param field
+     * @param target
+     * @param value
+     */
+    public static void setField(Field field, Object target, Object value) {
+
+        try {
+            field.set(target, value);
+        } catch (IllegalAccessException e) {
+            //handle reflection ex
+            throw new IllegalStateException(
+                    "Unexpected reflection exception - " + e.getClass().getName() + ": " + e.getMessage());
+        }
+    }
+
+    public static void handleReflectionException(Exception e) {
+        //for method exception
+        if (e instanceof NoSuchMethodException) {
+            throw new IllegalStateException("Method not found: " + e.getMessage());
+        }
+
+        if (e instanceof IllegalAccessException) {
+            throw new IllegalStateException("can not access method: " + e.getMessage());
+        }
+        //invoke target ex: thrown by an invoked method or constructor
+        if (e instanceof InvocationTargetException) {
+            handleInvocationTargetException((InvocationTargetException) e);
+        }
+        if (e instanceof RuntimeException) {
+            throw (RuntimeException) e;
+        }
+
+        throw new UndeclaredThrowableException(e);
+
+    }
+
+    public static void handleInvocationTargetException(InvocationTargetException e) {
+
+        rethrowRuntimeException(e.getTargetException());
+    }
+
+    public static void rethrowRuntimeException(Throwable e) {
+        if (e instanceof RuntimeException) {
+            throw (RuntimeException) e;
+        }
+
+        if (e instanceof Error) {
+            throw (Error) e;
+        }
+        throw new UndeclaredThrowableException(e);
     }
 
 }
