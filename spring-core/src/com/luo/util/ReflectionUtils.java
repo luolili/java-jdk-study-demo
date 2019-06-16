@@ -1,6 +1,9 @@
 package com.luo.util;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
+
 import java.lang.reflect.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -166,6 +169,17 @@ public abstract class ReflectionUtils {
         throw new UndeclaredThrowableException(e);
     }
 
+    public static void rethrowException(Throwable e) throws Exception {
+        if (e instanceof Exception) {
+            throw (Exception) e;
+        }
+
+        if (e instanceof Error) {
+            throw (Error) e;
+        }
+        throw new UndeclaredThrowableException(e);
+    }
+
     //--
 
     /**
@@ -260,4 +274,74 @@ public abstract class ReflectionUtils {
         }
         return result;
     }
+
+
+    //--invoke method
+    public static Object invokeMethod(Method method, Object target, Object... args) {
+        try {
+            return method.invoke(target, args);
+        } catch (Exception e) {
+            handleReflectionException(e);
+        }
+        throw new IllegalStateException("Should never get here");
+    }
+
+    public static Object invokeMethod(Method method, Object target) {
+        return invokeMethod(method, target, new Object[0]);
+    }
+
+    public static Object invokeJdbcMethod(Method method, Object target, Object... args) throws SQLException {
+        try {
+            return method.invoke(target, args);
+        } catch (IllegalAccessException e) {
+            handleReflectionException(e);
+        } catch (InvocationTargetException ex) {
+
+            //handle sql exception
+            if (ex.getTargetException() instanceof SQLException) {
+                throw (SQLException) ex.getTargetException();
+            }
+
+            handleInvocationTargetException(ex);
+        }
+        throw new IllegalStateException("Should never get here");
+    }
+
+    public static Object invokeJdbcMethod(Method method, Object target) throws SQLException {
+        return invokeJdbcMethod(method, target, new Object[0]);
+    }
+
+
+    public static boolean declaresException(Method method, Class<?> exceptionType) {
+        Class<?>[] exceptionTypes = method.getExceptionTypes();
+        for (Class<?> declaredException : exceptionTypes) {
+            //exceptionType is declaredException subclass or subinterface
+            if (declaredException.isAssignableFrom(exceptionType)) {
+                return true;
+            }
+        }
+        return false;
+
+
+    }
+
+    public static boolean isPublicStaticFinal(Method method) {
+        int modifiers = method.getModifiers();
+        return (Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers));
+
+
+    }
+
+    public static boolean isEqualsMethod(Method method) {
+        //if method is not null, so its name is not null
+        if (method == null || !method.getName().equals("equals")) {
+            return false;
+        }
+
+        //determine by its param type==Object.class and param num==1
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        return (parameterTypes.length == 1 && parameterTypes[0] == Object.class);
+
+    }
+
 }
