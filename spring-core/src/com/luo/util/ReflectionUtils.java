@@ -325,10 +325,10 @@ public abstract class ReflectionUtils {
 
     }
 
+    //--
     public static boolean isPublicStaticFinal(Method method) {
         int modifiers = method.getModifiers();
         return (Modifier.isPublic(modifiers) && Modifier.isStatic(modifiers) && Modifier.isFinal(modifiers));
-
 
     }
 
@@ -344,4 +344,22 @@ public abstract class ReflectionUtils {
 
     }
 
+    public static boolean isHashCodeMethod(Method method) {
+        return (method != null && method.getName().equals("hashCode")
+                && method.getParameterCount() == 0);
+    }
+
+    public static boolean isObjectMethod(Method method) {
+        if (method == null) {
+            return false;
+        }
+
+
+        try {
+            Object.class.getDeclaredMethod(method.getName(), method.getParameterTypes());
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
