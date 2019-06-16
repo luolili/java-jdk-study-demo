@@ -58,4 +58,23 @@ public abstract class StreamUtils {
         return out.toString();
 
     }
+
+    //put byte[] into out
+    public static void copy(byte[] in, OutputStream out) throws IOException {
+        out.write(in);
+    }
+
+    //put string into out using out writer
+    public static void copy(String in, Charset charset, OutputStream out) throws IOException {
+        OutputStreamWriter writer = new OutputStreamWriter(out, charset);
+
+        writer.write(in);
+        writer.flush();
+
+    }
+
+    //get an empty in
+    public static InputStream emptyInput() {
+        return new ByteArrayInputStream(EMPTY_CONTENT);
+    }
 }
