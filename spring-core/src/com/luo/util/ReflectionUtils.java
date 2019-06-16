@@ -1,6 +1,8 @@
 package com.luo.util;
 
 import java.lang.reflect.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -119,11 +121,13 @@ public abstract class ReflectionUtils {
             field.set(target, value);
         } catch (IllegalAccessException e) {
             //handle reflection ex
+            handleReflectionException(e);
             throw new IllegalStateException(
                     "Unexpected reflection exception - " + e.getClass().getName() + ": " + e.getMessage());
         }
     }
 
+    //-----handle  reflectio ex
     public static void handleReflectionException(Exception e) {
         //for method exception
         if (e instanceof NoSuchMethodException) {
@@ -161,4 +165,81 @@ public abstract class ReflectionUtils {
         throw new UndeclaredThrowableException(e);
     }
 
+    //--
+
+    /**
+     * @param field
+     * @param target
+     * @return the value of the field
+     */
+    public static Object getField(Field field, Object target) {
+        try {
+            return field.get(target);
+        } catch (IllegalAccessException e) {
+            handleReflectionException(e);
+            throw new IllegalStateException(
+                    "Unexpected reflection exception - " + e.getClass().getName() + ": " + e.getMessage());
+        }
+    }
+
+
+    //--find method
+    public static Method findMethod(Class<?> clazz, Object name, Class<?>... paramTypes) {
+
+        return null;
+    }
+
+    public static Method[] getDeclaredMethods(Class<?> clazz) {
+
+        Method[] result = declaredMethodsCache.get(clazz);
+        if (result == null) {
+
+            try {
+                Method[] declaredMethods = clazz.getDeclaredMethods();
+                List<Method> defaultMethods = findConcreteMethodsOnInterfaces(clazz);
+                if (declaredMethods != null) {
+                    result = new Method[declaredMethods.length + defaultMethods.size()];
+                    System.arraycopy(declaredMethods, 0, result, 0, declaredMethods.length);
+                    int index = declaredMethods.length;//cursor
+                    for (Method defaultMethod : defaultMethods) {
+                        result[index] = defaultMethod;
+                        index++;
+
+                    }
+                } else {//defaultMethods on interfaces are null
+                    result = declaredMethods;
+                }
+
+                declaredMethodsCache.put(clazz, (result.length == 0 ? NO_METHODS : result));
+            } catch (Throwable ex) {
+                throw new IllegalStateException("Failed to introspect Class [" + clazz.getName() +
+                        "] from ClassLoader [" + clazz.getClassLoader() + "]", ex);
+            }
+
+        }
+
+        return result;
+
+
+    }
+
+    //find interface's methods
+    public static List<Method> findConcreteMethodsOnInterfaces(Class<?> clazz) {
+        List<Method> result = null;
+
+        for (Class<?> ifc : clazz.getInterfaces()) {
+            for (Method ifcMethod : ifc.getMethods()) {
+                //interface method is public abstract
+                if (!Modifier.isAbstract(ifcMethod.getModifiers())) {
+                    if (result == null) {
+                        result = new ArrayList<>();
+                    }
+                    result.add(ifcMethod);
+
+                }
+
+            }
+        }
+        return result;
+    }
 }
