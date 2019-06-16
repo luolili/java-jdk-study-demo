@@ -2,6 +2,7 @@ package com.luo.util;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -183,12 +184,28 @@ public abstract class ReflectionUtils {
     }
 
 
-    //--find method
-    public static Method findMethod(Class<?> clazz, Object name, Class<?>... paramTypes) {
+    //--find method: return null if none found
+    public static Method findMethod(Class<?> clazz, String name, Class<?>... paramTypes) {
 
+        Class<?> searchType = clazz;
+        while (searchType != null) {
+
+            Method[] methods = searchType.isInterface() ? searchType.getMethods() : getDeclaredMethods(searchType);
+            for (Method method : methods) {
+
+                if (StringUtils.isEmpty(name) || name.equals(method.getName()) && (paramTypes == null || Arrays.equals(paramTypes, method.getParameterTypes()))) {
+                    return method;
+                }
+
+            }
+            searchType = searchType.getSuperclass();
+        }
         return null;
     }
 
+    public static Method findMethod(Class<?> clazz, String name) {
+        return findMethod(clazz, name, new Class<?>[0]);
+    }
     public static Method[] getDeclaredMethods(Class<?> clazz) {
 
         Method[] result = declaredMethodsCache.get(clazz);
@@ -222,6 +239,7 @@ public abstract class ReflectionUtils {
 
 
     }
+
 
     //find interface's methods
     public static List<Method> findConcreteMethodsOnInterfaces(Class<?> clazz) {
