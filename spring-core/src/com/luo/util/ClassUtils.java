@@ -131,4 +131,26 @@ public abstract class ClassUtils {
         return cl;
     }
 
+    //--
+
+    /**
+     * override current thread context lc when bean cl is not equivalent to it already
+     *
+     * @param classLoaderToUse
+     * @return
+     */
+    public static ClassLoader overrideThreadContextClassLoader(ClassLoader classLoaderToUse) {
+        Thread thread = Thread.currentThread();
+        ClassLoader cl = thread.getContextClassLoader();
+
+        if (classLoaderToUse != null && !classLoaderToUse.equals(cl)) {
+            thread.setContextClassLoader(classLoaderToUse);
+            return classLoaderToUse;
+        } else {
+            return null;
+        }
+
+
+    }
+
 }
