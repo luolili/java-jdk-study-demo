@@ -3,28 +3,29 @@ package com.luo.util;
 import java.io.Closeable;
 import java.io.Externalizable;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public abstract class ClassUtils {
 
-    private static final String array_suffix = "[]";
+    private static final String ARRAY_SUFFIX = "[]";
 
 
-    private static final String internal_array_prefix = "[";
+    private static final String INTERNAL_ARRAY_PREFIX = "[";
 
     //for non-primitive array
-    private static final String non_primitive_array_prefix = "[L";
+    private static final String NON_PRIMITIVE_ARRAY_PREFIX = "[L";
 
-    private static final char package_separator = '.';
+    private static final char PACKAGE_SEPARATOR = '.';
 
-    private static final String path_separator = "/";
+    private static final String PATH_SEPARATOR = "/";
 
     //inner class
-    private static final String inner_class_separator = "$";
+    private static final String INNER_CLASS_SEPARATOR = "$";
 
 
-    public static final String cglib_class_separator = "$$";
-    public static final String class_file_suffix = ".class";
+    public static final String CGLIB_CLASS_SEPARATOR = "$$";
+    public static final String CLASS_FILE_SUFFIX = ".class";
 
 
     //map with wrapper type -> primitive type: Integer.class ->int.class
@@ -148,6 +149,90 @@ public abstract class ClassUtils {
             return classLoaderToUse;
         } else {
             return null;
+        }
+
+
+    }
+
+    /**
+     * the name of the potentially primitive class
+     *
+     * @param name
+     * @return
+     */
+    public static Class<?> resolvePrimitiveClassName(String name) {
+
+        Class<?> result = null;
+
+        if (name != null && name.length() <= 8) {
+            result = primitiveTypeNameMap.get(name);
+        }
+        return result;
+    }
+
+    public static Class<?> forName(String name, ClassLoader classLoader)
+            throws ClassNotFoundException, LinkageError {
+
+        Class<?> clazz = resolvePrimitiveClassName(name);
+        if (clazz == null) {
+            clazz = commonClassCache.get(name);//from common class cache
+        }
+        if (clazz != null) {
+            return clazz;
+        }
+
+        //if clazz is null,can not get from cache
+
+        //like String[] style
+        if (name.endsWith(ARRAY_SUFFIX)) {
+
+            String elementClassName = name.substring(0, name.length() - ARRAY_SUFFIX.length());
+            Class<?> elementClass = forName(elementClassName, classLoader);
+            return Array.newInstance(elementClass, 0).getClass();
+
+        }
+
+        // "[Ljava.lang.String;" style arrays
+        if (name.startsWith(NON_PRIMITIVE_ARRAY_PREFIX) && name.endsWith(";")) {
+
+            String elementClassName = name.substring(NON_PRIMITIVE_ARRAY_PREFIX.length(), name.length() - 1);
+            Class<?> elementClass = forName(elementClassName, classLoader);
+            return Array.newInstance(elementClass, 0).getClass();
+
+        }
+
+
+        // "[[I" or "[[Ljava.lang.String;" style arrays
+        if (name.startsWith(INTERNAL_ARRAY_PREFIX)) {
+
+            String elementClassName = name.substring(INTERNAL_ARRAY_PREFIX.length());
+            Class<?> elementClass = forName(elementClassName, classLoader);
+            return Array.newInstance(elementClass, 0).getClass();
+
+        }
+        ClassLoader clToUse = classLoader;
+        if (clToUse == null) {
+            clToUse = getDefaultClassLoader();
+        }
+
+
+        try {
+
+            return Class.forName(name, false, clToUse);
+        } catch (ClassNotFoundException e) {
+
+            int lastDotIndex = name.lastIndexOf(PACKAGE_SEPARATOR);
+            if (lastDotIndex != -1) {
+                String innerClassName =
+                        name.substring(0, lastDotIndex) + INNER_CLASS_SEPARATOR + name.substring(lastDotIndex + 1);
+
+                try {
+                    return Class.forName(innerClassName, false, clToUse);
+                } catch (ClassNotFoundException ex2) {
+                    // Swallow - let original exception get through
+                }
+            }
+            throw e;
         }
 
 
