@@ -93,6 +93,7 @@ public abstract class ClassUtils {
         javaLanguageInterfaces = new HashSet<>(Arrays.asList(javaLanguageInterfaceArray));
     }
 
+    //--
     public static void registerCommonClasses(Class<?>... commonClasses) {
         for (Class<?> clazz : commonClasses) {
             commonClassCache.put(clazz.getName(), clazz);
@@ -100,5 +101,34 @@ public abstract class ClassUtils {
         }
     }
 
+    public static ClassLoader getDefaultClassLoader() {
+
+        ClassLoader cl = null;
+
+        try {
+
+            //-1 get current thread cl first
+            cl = Thread.currentThread().getContextClassLoader();//get by current thread
+        } catch (Throwable e) {
+// Cannot access thread context ClassLoader - falling back...
+        }
+
+        //can not access thread context class loader
+        if (cl == null) {
+
+            //-2 use the cl of this class
+            cl = ClassUtils.class.getClassLoader();
+            if (cl == null) {
+
+                try {
+                    //-3 use system cl if the cl of this class is null
+                    cl = ClassLoader.getSystemClassLoader();
+                } catch (Throwable e) {
+// Cannot access system ClassLoader - oh well, maybe the caller can live with null...
+                }
+            }
+        }
+        return cl;
+    }
 
 }
