@@ -293,4 +293,22 @@ public abstract class ClassUtils {
             return false;
         }
     }
+
+    public static boolean isVisible(Class<?> clazz, ClassLoader classLoader) {
+
+        if (classLoader == null) {
+            return true;
+        }
+        try {
+            //-2 determine by class loader
+            if (clazz.getClassLoader() == classLoader) {
+                return true;
+            }
+
+        } catch (SecurityException ex) {
+            // Fall through to loadable check below
+        }
+        //-3 invoke isLoadable method
+        return isLoadable(clazz, classLoader);
+    }
 }
