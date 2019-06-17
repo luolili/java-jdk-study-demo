@@ -283,4 +283,14 @@ public abstract class ClassUtils {
             return false;
         }
     }
+
+    public static boolean isLoadable(Class<?> clazz, ClassLoader classLoader) {
+
+        try {
+            return (clazz == classLoader.loadClass(clazz.getName()));
+        } catch (ClassNotFoundException ex) {
+            // No corresponding class found at all
+            return false;
+        }
+    }
 }
