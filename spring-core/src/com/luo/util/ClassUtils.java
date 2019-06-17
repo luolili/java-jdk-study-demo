@@ -268,4 +268,19 @@ public abstract class ClassUtils {
         }
     }
 
+
+    public static boolean isPresent(String className, ClassLoader classLoader) {
+
+        try {
+
+            forName(className, classLoader);
+            return true;
+        } catch (IllegalAccessError err) {
+            throw new IllegalStateException("Readability mismatch in inheritance hierarchy of class [" +
+                    className + "]: " + err.getMessage(), err);
+        } catch (Throwable ex) {
+            // notice: Typically ClassNotFoundException or NoClassDefFoundError...
+            return false;
+        }
+    }
 }
