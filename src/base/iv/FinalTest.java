@@ -6,14 +6,32 @@ public class FinalTest {
 
     private static boolean isGood;
 
+    private int num;
     public static void main(String[] args) {
-        System.out.println(isGood);//bollean default value is false
+        //System.out.println(isGood);//bollean default value is false
         //Stringbuilder +
-        StringBuilder sb1 = new StringBuilder("k");
-        StringBuilder sb2 = new StringBuilder("k");
+        StringBuilder sb1 = new StringBuilder("dd");
+        StringBuilder sb2 = new StringBuilder("hh");
         //sb1 += "f";//compile error
         // sb1+=sb2;//imcompitible type
-        tryTest();
+        //tryTest();
+        //f1();//false
+        change(sb1, sb2);
+        System.out.println(sb1 + "--" + sb2);
+
+        //System.out.println( "num is : "+changeFinalObj( new FinalTest()));//0
+        FinalTest o = new FinalTest();
+        changeFinalObj(o);
+        System.out.println(o.num);//1
+    }
+
+    public static int changeFinalObj(final FinalTest o) {
+        return o.num++;
+    }
+
+    public static void change(StringBuilder x, StringBuilder y) {
+        y.append(x);
+        y = x;
     }
 
     public static int f(final int m) {
@@ -25,7 +43,10 @@ public class FinalTest {
         String s = "true";
         Boolean s2 = Boolean.valueOf("true");
 
-        System.out.println(s.equals(s2));
+        System.out.println(s2.equals(s));
+        /*if (s.equals(s2)) {
+            System.out.println("--");
+        }*/
     }
 
     public float d() {
