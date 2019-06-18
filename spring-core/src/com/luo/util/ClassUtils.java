@@ -331,8 +331,8 @@ public abstract class ClassUtils {
             //classLoader's parent
             ClassLoader current = classLoader;
             while (current != null) {
-                ClassLoader parent = current.getParent();
-                if (target == parent) {
+                current = current.getParent();
+                if (target == current) {
                     return true;
                 }
 
@@ -340,8 +340,8 @@ public abstract class ClassUtils {
 
             //target's parent
             while (target != null) {
-                ClassLoader parent = target.getParent();
-                if (target == parent) {
+                target = target.getParent();
+                if (target == classLoader) {
                     return false;
                 }
 
