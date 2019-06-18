@@ -311,5 +311,47 @@ public abstract class ClassUtils {
         }
         //-3 invoke isLoadable method
         return isLoadable(clazz, classLoader);
+
+    }
+
+    public static boolean isCacheSafe(Class<?> clazz, ClassLoader classLoader) {
+        //Assert use
+        Assert.notNull(clazz, "Class must not be null");
+        try {
+            ClassLoader target = clazz.getClassLoader();
+
+            if (target == classLoader || target == null) {
+                return true;
+            }
+
+            if (classLoader == null) {
+                return false;
+            }
+
+            //classLoader's parent
+            ClassLoader current = classLoader;
+            while (current != null) {
+                ClassLoader parent = current.getParent();
+                if (target == parent) {
+                    return true;
+                }
+
+            }
+
+            //target's parent
+            while (target != null) {
+                ClassLoader parent = target.getParent();
+                if (target == parent) {
+                    return false;
+                }
+
+
+            }
+        } catch (SecurityException e) {
+        }
+        // notice: Fallback for ClassLoaders without parent/child relationship:
+        // safe if same Class can be loaded from given ClassLoader
+        return (classLoader != null && isLoadable(clazz, classLoader));
     }
 }
+
