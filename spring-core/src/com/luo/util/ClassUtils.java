@@ -353,5 +353,30 @@ public abstract class ClassUtils {
         // safe if same Class can be loaded from given ClassLoader
         return (classLoader != null && isLoadable(clazz, classLoader));
     }
+
+    public static boolean isPrimitiveWrapper(Class<?> clazz) {
+
+        Assert.notNull(clazz, "Class must not be null");
+        return primitiveWrapperTypeMap.containsKey(clazz);
+
+    }
+
+    //determine a class is primitive or wrapper type
+    public static boolean isPrimitiveOrWrapper(Class<?> clazz) {
+        Assert.notNull(clazz, "Class must not be null");//pre-check for param clazz
+        return clazz.isPrimitive() || isPrimitiveWrapper(clazz);
+
+    }
+
+
+    public static boolean isPrimitiveArray(Class<?> clazz) {
+        Assert.notNull(clazz, "Class must not be null");//pre-check for param clazz
+        return clazz.isArray() && clazz.getComponentType().isPrimitive();
+    }
+
+    public static boolean isPrimitiveWrapperArray(Class<?> clazz) {
+        Assert.notNull(clazz, "Class must not be null");//pre-check for param clazz
+        return clazz.isArray() && isPrimitiveWrapper(clazz.getComponentType());
+    }
 }
 
