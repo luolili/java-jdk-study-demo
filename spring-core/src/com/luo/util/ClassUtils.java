@@ -296,6 +296,7 @@ public abstract class ClassUtils {
 
     public static boolean isVisible(Class<?> clazz, ClassLoader classLoader) {
 
+        //-1 default true if cl is null
         if (classLoader == null) {
             return true;
         }

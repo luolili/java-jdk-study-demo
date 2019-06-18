@@ -7,6 +7,11 @@ public class AbsrtactImpl extends AbstractClass {
 
     }*/
 
+    @Override
+    protected int getInt() {
+        return 0;
+    }
+
   /* @Override
     protected void say() {
 
