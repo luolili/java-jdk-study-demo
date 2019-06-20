@@ -378,5 +378,36 @@ public abstract class ClassUtils {
         Assert.notNull(clazz, "Class must not be null");//pre-check for param clazz
         return clazz.isArray() && isPrimitiveWrapper(clazz.getComponentType());
     }
+
+    //lhsType is super, rhsType is sub
+    public static boolean isAssignable(Class<?> lhsType, Class<?> rhsType) {
+        Assert.notNull(lhsType, "Left-hand side type must not be null");
+        Assert.notNull(rhsType, "Right-hand side type must not be null");
+        if (lhsType.isAssignableFrom(rhsType)) {
+            return true;
+        }
+
+        //for lhsType is primitive type
+        if (lhsType.isPrimitive()) {
+            //-1 get the preimitive of rhsType
+            Class<?> resolvedPrimitive = primitiveWrapperTypeMap.get(rhsType);
+
+            if (lhsType == resolvedPrimitive) {
+                return true;
+            }
+
+        }
+        //for lhsType is wrapper type
+        else {
+            Class<?> resolvedWrapper = primitiveTypeToWraperMap.get(rhsType);
+            if (resolvedWrapper != null && lhsType.isAssignableFrom(resolvedWrapper)) {
+                return true;
+            }
+
+        }
+        return false;
+
+    }
+
 }
 
