@@ -423,5 +423,25 @@ public abstract class ClassUtils {
         Assert.notNull(className, "className path must not be null");
         return className.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR);
     }
+
+    public static String classPackageAsResourcePath(Class<?> clazz) {
+        if (clazz == null) {
+            return "";
+        }
+
+        String className = clazz.getName();
+        int packageEndIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
+        if (packageEndIndex == -1) {
+            return "";
+        }
+
+        //get package name without no class name
+        String packageName = className.substring(0, packageEndIndex);
+
+        //package name to path
+        return packageName.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR);
+
+
+    }
 }
 
