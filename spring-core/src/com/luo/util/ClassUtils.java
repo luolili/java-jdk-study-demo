@@ -409,5 +409,9 @@ public abstract class ClassUtils {
 
     }
 
+    public static boolean isAssignableValue(Class<?> type, Object value) {
+        return (value != null ? isAssignable(type, value.getClass()) : !type.isPrimitive());
+    }
+
 }
 
