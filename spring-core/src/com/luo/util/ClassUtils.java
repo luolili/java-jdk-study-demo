@@ -20,7 +20,7 @@ public abstract class ClassUtils {
 
     private static final char PACKAGE_SEPARATOR = '.';
 
-    private static final String PATH_SEPARATOR = "/";
+    private static final char PATH_SEPARATOR = '/';
 
     //inner class
     private static final String INNER_CLASS_SEPARATOR = "$";
@@ -413,5 +413,15 @@ public abstract class ClassUtils {
         return (value != null ? isAssignable(type, value.getClass()) : !type.isPrimitive());
     }
 
+    //resource path to class name
+    public static String convertResourcePathToClassName(String resourcePath) {
+        Assert.notNull(resourcePath, "Resource path must not be null");
+        return resourcePath.replace(PATH_SEPARATOR, PACKAGE_SEPARATOR);
+    }
+
+    public static String convertClassNameToResourcePath(String className) {
+        Assert.notNull(className, "className path must not be null");
+        return className.replace(PACKAGE_SEPARATOR, PATH_SEPARATOR);
+    }
 }
 
