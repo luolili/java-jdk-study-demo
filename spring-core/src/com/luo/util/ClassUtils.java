@@ -450,7 +450,7 @@ public abstract class ClassUtils {
         }
         StringBuilder sb = new StringBuilder("[");
 
-
+        //use iterator of collection
         for (Iterator<Class<?>> it = classes.iterator(); it.hasNext(); ) {
             Class<?> clazz = it.next();
             sb.append(clazz.getName());
