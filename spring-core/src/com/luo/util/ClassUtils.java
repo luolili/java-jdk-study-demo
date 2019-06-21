@@ -572,5 +572,37 @@ public abstract class ClassUtils {
         return Proxy.getProxyClass(classLoader, interfaces);
 
     }
+
+    public static Class<?> determineCommonAncestor(Class<?> clazz1, Class<?> clazz2) {
+        if (clazz1 == null) {
+            return clazz2;
+        }
+
+
+        if (clazz2 == null) {
+            return clazz1;
+        }
+
+        //clazz1 is parent, clazz2 is child
+        if (clazz1.isAssignableFrom(clazz2)) {
+            return clazz1;//return parent
+        }
+
+        if (clazz2.isAssignableFrom(clazz1)) {
+            return clazz1;//return parent
+        }
+        //only presume the ancestor is clazz1 to start our work
+        Class<?> ancestor = clazz1;
+
+        do {
+            ancestor = ancestor.getSuperclass();
+            if (ancestor == null || Object.class == ancestor) {
+                return null;
+            }
+
+
+        } while (!ancestor.isAssignableFrom(clazz2));//when the ancestor is the parent of clazz2
+        return ancestor;
+    }
 }
 
