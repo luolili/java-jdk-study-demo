@@ -6,6 +6,7 @@ import java.io.Closeable;
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.lang.reflect.Proxy;
 import java.util.*;
 
 public abstract class ClassUtils {
@@ -498,7 +499,7 @@ public abstract class ClassUtils {
      * @return the class array
      * @see StringUtils#toStringArray(Collection)
      */
-    public Class<?>[] toClassArray(Collection<?> collection) {
+    public static Class<?>[] toClassArray(Collection<?> collection) {
 
         return collection.toArray(new Class<?>[0]);
     }
@@ -546,7 +547,7 @@ public abstract class ClassUtils {
 
 
     //higher than method with two params. one param
-    public static Set<Class<?>> getAllInterafcesForClassAsSet(Class<?> clazz) {
+    public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz) {
 
         return getAllInterfacesForClassAsSet(clazz, null);
     }
@@ -554,8 +555,22 @@ public abstract class ClassUtils {
     //highest method with Object param
     public static Set<Class<?>> getAllInterfaces(Object instance) {
         Assert.notNull(instance, "Instance must not be null ");
-        return getAllInterafcesForClassAsSet(instance.getClass());
+        return getAllInterfacesForClassAsSet(instance.getClass());
     }
 
+    //class's all interfaces to class array
+    public static Class<?>[] getAllInterfacesForClass(Class<?> clazz, ClassLoader classLoader) {
+
+        return toClassArray(getAllInterfacesForClassAsSet(clazz, classLoader));
+    }
+
+    //class loader may be null
+    public static Class<?> createCompositeInterface(Class<?>[] interfaces, ClassLoader classLoader) {
+
+        //-1 the num of interfaces must be less than 65536
+        Assert.notNull(interfaces, "Interfaces must not be null");
+        return Proxy.getProxyClass(classLoader, interfaces);
+
+    }
 }
 
