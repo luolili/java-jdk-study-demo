@@ -6,6 +6,7 @@ import java.io.Closeable;
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.*;
 
@@ -574,16 +575,16 @@ public abstract class ClassUtils {
     }
 
     public static Class<?> determineCommonAncestor(Class<?> clazz1, Class<?> clazz2) {
+        //-1 if clazz1 is null. the parent is the other
         if (clazz1 == null) {
             return clazz2;
         }
-
 
         if (clazz2 == null) {
             return clazz1;
         }
 
-        //clazz1 is parent, clazz2 is child
+        //-2 clazz1 is parent, clazz2 is child
         if (clazz1.isAssignableFrom(clazz2)) {
             return clazz1;//return parent
         }
@@ -591,7 +592,7 @@ public abstract class ClassUtils {
         if (clazz2.isAssignableFrom(clazz1)) {
             return clazz1;//return parent
         }
-        //only presume the ancestor is clazz1 to start our work
+        //-3 only presume the ancestor is clazz1 to start our work
         Class<?> ancestor = clazz1;
 
         do {
@@ -603,6 +604,32 @@ public abstract class ClassUtils {
 
         } while (!ancestor.isAssignableFrom(clazz2));//when the ancestor is the parent of clazz2
         return ancestor;
+    }
+
+    public static boolean isJavaLanguageInterfaces(Class<?> ifc) {
+
+        //it is a set. use set contains method
+        return javaLanguageInterfaces.contains(ifc);
+    }
+
+    //inner class is non-static
+    public static boolean isInnerClass(Class<?> clazz) {
+        return clazz.isMemberClass() && !Modifier.isStatic(clazz.getModifiers());
+    }
+
+    //--cglib name - clazz - object
+    //check if the specified class name is cglib-generated class
+    public static boolean isCglibClassName(@Nullable String className) {
+        return (className != null && className.contains(CGLIB_CLASS_SEPARATOR));
+
+    }
+
+    public static boolean isCglibProxyClass(Class<?> clazz) {
+        return isCglibClassName(clazz.getName());
+    }
+
+    public static boolean isCglibProxy(Object object) {
+        return isCglibProxyClass(object.getClass());
     }
 }
 
