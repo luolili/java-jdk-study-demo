@@ -619,17 +619,35 @@ public abstract class ClassUtils {
 
     //--cglib name - clazz - object
     //check if the specified class name is cglib-generated class
-    public static boolean isCglibClassName(@Nullable String className) {
+    public static boolean isCglibProxyClassName(@Nullable String className) {
         return (className != null && className.contains(CGLIB_CLASS_SEPARATOR));
 
     }
 
     public static boolean isCglibProxyClass(Class<?> clazz) {
-        return isCglibClassName(clazz.getName());
+        return isCglibProxyClassName(clazz.getName());
     }
 
     public static boolean isCglibProxy(Object object) {
         return isCglibProxyClass(object.getClass());
+    }
+
+    //get user-defined class
+    public static Class<?> getUserClass(Class<?> clazz) {
+        //cglib-generated class condition
+        if (clazz.getName().contains(CGLIB_CLASS_SEPARATOR)) {
+            Class<?> superClass = clazz.getSuperclass();
+            if (superClass != null && Object.class != superClass) {
+                return superClass;
+            }
+
+        }
+        return clazz;
+    }
+
+    public static Class<?> getUserClass(Object instance) {
+        Assert.notNull(instance, "Instance must not be null");
+        return getUserClass(instance.getClass());
     }
 }
 
