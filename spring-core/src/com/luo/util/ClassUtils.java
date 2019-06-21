@@ -444,6 +444,7 @@ public abstract class ClassUtils {
 
     }
 
+    //param is Collection<?> classes
     public static String classNamesToString(Collection<Class<?>> classes) {
         if (CollectionUtils.isEmpty(classes)) {
             return "[]";
@@ -461,6 +462,13 @@ public abstract class ClassUtils {
         }
         sb.append("]");
         return sb.toString();
+    }
+
+
+    //param is Class<?> classes.it's the combined use of Arrays.asList() and the method which param is
+    //Collection<?> classes
+    public static String classNamesToString(Class<?> classes) {
+        return classNamesToString(Arrays.asList(classes));
     }
 }
 
