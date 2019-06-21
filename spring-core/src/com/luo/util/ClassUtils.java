@@ -503,7 +503,15 @@ public abstract class ClassUtils {
         return collection.toArray(new Class<?>[0]);
     }
 
-    public Set<Class<?>> getAllInterfacesAsSet(Class<?> clazz, ClassLoader classLoader) {
+    /**
+     * the lowest method:0.
+     * with two params
+     *
+     * @param clazz
+     * @param classLoader
+     * @return
+     */
+    public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz, ClassLoader classLoader) {
 
         Assert.notNull(clazz, "Class must not be null");
         //-1 the clazz is interface and it is loadable and it has a class loader
@@ -536,6 +544,18 @@ public abstract class ClassUtils {
 
     }
 
+
+    //higher than method with two params. one param
+    public static Set<Class<?>> getAllInterafcesForClassAsSet(Class<?> clazz) {
+
+        return getAllInterfacesForClassAsSet(clazz, null);
+    }
+
+    //highest method with Object param
+    public static Set<Class<?>> getAllInterfaces(Object instance) {
+        Assert.notNull(instance, "Instance must not be null ");
+        return getAllInterafcesForClassAsSet(instance.getClass());
+    }
 
 }
 
