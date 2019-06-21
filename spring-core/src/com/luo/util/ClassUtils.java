@@ -490,5 +490,52 @@ public abstract class ClassUtils {
 
         return classPackageAsResourcePath(clazz) + resourceName;
     }
+
+    //it's like StringUtils#toStringArray
+
+    /**
+     * @param collection
+     * @return the class array
+     * @see StringUtils#toStringArray(Collection)
+     */
+    public Class<?>[] toClassArray(Collection<?> collection) {
+
+        return collection.toArray(new Class<?>[0]);
+    }
+
+    public Set<Class<?>> getAllInterfacesAsSet(Class<?> clazz, ClassLoader classLoader) {
+
+        Assert.notNull(clazz, "Class must not be null");
+        //-1 the clazz is interface and it is loadable and it has a class loader
+        if (clazz.isInterface() && isVisible(clazz, classLoader)) {
+
+            //-2 use set to hold the interfaces
+            //Collections.singleton(clazz) creates a singleton set (SingletonSet)
+            return Collections.singleton(clazz);
+        }
+
+        //-3 if clazz is not interface first . hold with LinkedHashSet
+        Set<Class<?>> interfaces = new LinkedHashSet<>();
+
+        Class<?> current = clazz;
+        while (current != null) {
+            Class<?>[] ifcs = clazz.getInterfaces();
+            for (Class<?> ifc : ifcs) {
+                //-4 if it is not visible, it can't be loaded by class loader
+                if (isVisible(ifc, classLoader)) {
+                    interfaces.add(ifc);
+                }
+
+            }
+            //-5 update the current clazz
+            current = current.getSuperclass();
+
+        }
+
+        return interfaces;
+
+    }
+
+
 }
 
