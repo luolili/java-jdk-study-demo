@@ -470,5 +470,25 @@ public abstract class ClassUtils {
     public static String classNamesToString(Class<?> classes) {
         return classNamesToString(Arrays.asList(classes));
     }
+
+    /**
+     * resource path= package path + resource name
+     * resource path uses /
+     * package path uses .
+     *
+     * @param clazz
+     * @param resourceName
+     * @return the built-up resource path
+     */
+    public static String addResourcePathToPackagePath(Class<?> clazz, String resourceName) {
+        Assert.notNull(resourceName, "Resource name must not be null");
+
+        if (!resourceName.startsWith("/")) {
+            //classPackageAsResourcePath: to resource path, add / reparator before adding resource name
+            return classPackageAsResourcePath(clazz) + "/" + resourceName;
+        }
+
+        return classPackageAsResourcePath(clazz) + resourceName;
+    }
 }
 
