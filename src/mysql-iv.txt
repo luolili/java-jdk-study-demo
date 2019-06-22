@@ -1,0 +1,15 @@
+
+一. mysql 截取字符串的方法
+    1. left(str, length) or right(str, length):从左（或右）截取length长度的字符串
+    notice: 如果length<=0 ，结果为空
+
+    2. substring(str, index):包含index从index位置截取
+     substring(str, index, len)
+     substring(str, delim, count)
+     i.e: substring( "www.baidu.com" ,".",1) -- www
+     count==0时：--空
+     count==-1 -- com
+     notice:当字符串里面没有分隔符的时候，返回原来的字符串
+
+二：Oracle的sql*plus:客户端工具
+
