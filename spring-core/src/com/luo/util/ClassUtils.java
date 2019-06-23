@@ -690,7 +690,18 @@ public abstract class ClassUtils {
 
         return className.substring(lastEndIndex + 1) + CLASS_FILE_SUFFIX;
 
+    }
 
+
+    public static String getPackageName(String fqClassName) {
+        Assert.notNull(fqClassName, "Full-qualified class name must not be null");
+        int lastDotIndex = fqClassName.lastIndexOf(PACKAGE_SEPARATOR);
+
+        return (lastDotIndex != -1 ? fqClassName.substring(0, lastDotIndex) : "");
+    }
+
+    public static String getPackageName(Class<?> clazz) {
+        return getPackageName(clazz.getName());
     }
 }
 
