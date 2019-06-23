@@ -875,5 +875,32 @@ public abstract class ClassUtils {
         }
         return method;
     }
+
+    public static boolean isOverridable(Method method, Class<?> targetClass) {
+        //-1 private methods are not overridable
+        if (Modifier.isPrivate(method.getModifiers())) {
+            return false;
+        }
+        //-2 public or protected methods are overridable
+        if (Modifier.isPublic(method.getModifiers()) || Modifier.isProtected(method.getModifiers())) {
+            return true;
+        }
+        //packgae name of the class from method equals with the package name of targetClass
+        return (targetClass == null ||
+                getPackageName(method.getDeclaringClass()).equals(getPackageName(targetClass)));
+    }
+
+    @Nullable//returned value can be null
+    public static Method getStaticMethod(Class<?> clazz, String methodName, Class<?>... args) {
+        Assert.notNull(clazz, "Class must not be null");
+        Assert.notNull(methodName, "method name must not be null");
+
+        try {
+            Method method = clazz.getMethod(methodName, args);
+            return Modifier.isStatic(method.getModifiers()) ? method : null;
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
 }
 
