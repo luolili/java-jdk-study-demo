@@ -649,5 +649,31 @@ public abstract class ClassUtils {
         Assert.notNull(instance, "Instance must not be null");
         return getUserClass(instance.getClass());
     }
+
+    //get the type desc of an obj
+    public String getDesriptiveType(Object value) {
+
+        if (value == null) {
+            return null;
+        }
+        Class<?> clazz = value.getClass();
+
+        if (Proxy.isProxyClass(clazz)) {
+            StringBuilder sb = new StringBuilder();
+            Class<?>[] ifcs = clazz.getInterfaces();
+            sb.append(" implementing ");
+            for (int i = 0; i < ifcs.length; i++) {
+                sb.append(ifcs[i].getName());
+                if (i < ifcs.length - 1) {
+                    sb.append(",");
+                }
+            }
+            return sb.toString();
+
+        } else {
+            return clazz.getTypeName();
+        }
+
+    }
 }
 
