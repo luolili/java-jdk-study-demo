@@ -5,10 +5,7 @@ import com.luo.lang.Nullable;
 import java.io.Closeable;
 import java.io.Externalizable;
 import java.io.Serializable;
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.Proxy;
+import java.lang.reflect.*;
 import java.util.*;
 
 public abstract class ClassUtils {
@@ -724,5 +721,20 @@ public abstract class ClassUtils {
         return getQualifiedMethodName(method, null);
     }
 
+
+    //get constructor by its paramTypes
+    public static <T> Constructor<T> getConstructorIfAvailable(Class<T> clazz, Class<?>... paramTypes) {
+        Assert.notNull(clazz, "Class must be not null");
+        try {
+            return clazz.getConstructor(paramTypes);
+        } catch (NoSuchMethodException e) {
+            return null;
+        }
+    }
+
+    //check if a class has a constructor
+    public static boolean hasConstructor(Class<?> clazz, Class<?>... paramTypes) {
+        return (getConstructorIfAvailable(clazz, paramTypes) != null);
+    }
 }
 
