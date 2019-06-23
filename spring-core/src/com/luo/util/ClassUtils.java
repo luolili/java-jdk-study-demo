@@ -6,7 +6,6 @@ import java.io.Closeable;
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.*;
-import java.sql.Ref;
 import java.util.*;
 
 public abstract class ClassUtils {
@@ -140,8 +139,8 @@ public abstract class ClassUtils {
     /**
      * override current thread context lc when bean cl is not equivalent to it already
      *
-     * @param classLoaderToUse
-     * @return
+     * @param classLoaderToUse the specific cl
+     * @return cl
      */
     public static ClassLoader overrideThreadContextClassLoader(ClassLoader classLoaderToUse) {
         Thread thread = Thread.currentThread();
@@ -161,7 +160,7 @@ public abstract class ClassUtils {
      * the name of the potentially primitive class
      *
      * @param name
-     * @return
+     * @return the class called name
      */
     public static Class<?> resolvePrimitiveClassName(String name) {
         //-1 prepare the returned result and initialize
@@ -176,9 +175,9 @@ public abstract class ClassUtils {
     /**
      * the class loader may be null,which indicates the default cl
      *
-     * @param name
-     * @param classLoader
-     * @return
+     * @param name full-qualified class name
+     * @param classLoader cl
+     * @return clazz
      * @throws ClassNotFoundException
      * @throws LinkageError
      */
@@ -477,8 +476,8 @@ public abstract class ClassUtils {
      * resource path uses /
      * package path uses .
      *
-     * @param clazz
-     * @param resourceName
+     * @param clazz class
+     * @param resourceName resource name
      * @return the built-up resource path
      */
     public static String addResourcePathToPackagePath(Class<?> clazz, String resourceName) {
@@ -495,7 +494,7 @@ public abstract class ClassUtils {
     //it's like StringUtils#toStringArray
 
     /**
-     * @param collection
+     * @param collection coll
      * @return the class array
      * @see StringUtils#toStringArray(Collection)
      */
@@ -508,9 +507,9 @@ public abstract class ClassUtils {
      * the lowest method:0.
      * with two params
      *
-     * @param clazz
-     * @param classLoader
-     * @return
+     * @param clazz class
+     * @param classLoader cl
+     * @return class set
      */
     public static Set<Class<?>> getAllInterfacesForClassAsSet(Class<?> clazz, ClassLoader classLoader) {
 
@@ -650,8 +649,7 @@ public abstract class ClassUtils {
     }
 
     //get the type desc of an obj
-    public String getDesriptiveType(Object value) {
-
+    public String getDescriptiveType(Object value) {
         if (value == null) {
             return null;
         }
@@ -676,9 +674,10 @@ public abstract class ClassUtils {
     }
 
     //the given class matches the user-defined type name
-    public static boolean matchesTypeName(Class<?> clazz, String typeName) {
+    public static boolean matchesTypeName(Class<?> clazz, @Nullable String typeName) {
+        //Assert.notNull(typeName, "Type name must be not null");
         return (typeName != null
-                && typeName.equals(clazz.getTypeName()) || typeName.equals(clazz.getSimpleName()));
+                && (typeName.equals(clazz.getTypeName()) || typeName.equals(clazz.getSimpleName())));
     }
 
     public static String getClassFileName(Class<?> clazz) {
@@ -846,8 +845,8 @@ public abstract class ClassUtils {
      * find the interface of the class, then find the interface method.
      * if the class has no interface ,just return the original method
      *
-     * @param method
-     * @return
+     * @param method the method to chekc
+     * @return method
      */
     public static Method getInterfaceMethodIfPossible(Method method) {
         //-1 when the method's class is public and not an interface
