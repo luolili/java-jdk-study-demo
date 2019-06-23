@@ -813,8 +813,8 @@ public abstract class ClassUtils {
         return count;
     }
 
-
-    public static boolean hasAtLeatOneMethodWitName(Class<?> clazz, String methodName) {
+    //at least one mehtod called methodName
+    public static boolean hasAtLeastOneMethodWithName(Class<?> clazz, String methodName) {
         //-1 pre-check
         Assert.notNull(clazz, "Class must be not null");
         Assert.notNull(methodName, "method name must be not null");
@@ -830,15 +830,50 @@ public abstract class ClassUtils {
         Class<?>[] ifcs = clazz.getInterfaces();
         for (Class<?> ifc : ifcs) {
             //-4 invoke the method
-            if (hasAtLeatOneMethodWitName(ifc, methodName)) {
+            if (hasAtLeastOneMethodWithName(ifc, methodName)) {
                 return true;
             }
 
         }
 
         //-5 if the classhas super class
-        return (clazz.getSuperclass() != null && hasAtLeatOneMethodWitName(clazz.getSuperclass(), methodName));
+        return (clazz.getSuperclass() != null && hasAtLeastOneMethodWithName(clazz.getSuperclass(), methodName));
 
+    }
+
+    /**
+     * find the interface of the class, then find the interface method.
+     * if the class has no interface ,just return the original method
+     *
+     * @param method
+     * @return
+     */
+    public static Method getInterfaceMethodIfPossible(Method method) {
+        //-1 when the method's class is public and not an interface
+        if (Modifier.isPublic(method.getModifiers()) && !method.getDeclaringClass().isInterface()) {
+            //-2 get the class
+            Class<?> current = method.getDeclaringClass();
+            while (current != null && Object.class != current) {
+                //-3 get all interfaces of the class
+                Class<?>[] ifcs = current.getInterfaces();
+                for (Class<?> ifc : ifcs) {
+
+                    try {
+                        //-4 invoke class getMethod(methodName,paramTypes) to get it
+                        return ifc.getMethod(method.getName(), method.getParameterTypes());
+                    } catch (NoSuchMethodException e) {
+                        //nothing: no ex thrown because return the original method at last
+                    }
+
+                }
+
+                current = current.getSuperclass();
+
+            }
+
+
+        }
+        return method;
     }
 }
 
