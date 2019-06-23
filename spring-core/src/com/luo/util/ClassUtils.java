@@ -675,5 +675,22 @@ public abstract class ClassUtils {
         }
 
     }
+
+    //the given class matches the user-defined type name
+    public static boolean matchesTypeName(Class<?> clazz, String typeName) {
+        return (typeName != null
+                && typeName.equals(clazz.getTypeName()) || typeName.equals(clazz.getSimpleName()));
+    }
+
+    public static String getClassFileName(Class<?> clazz) {
+        Assert.notNull(clazz, "Class must not be null");
+        String className = clazz.getName();
+
+        int lastEndIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
+
+        return className.substring(lastEndIndex + 1) + CLASS_FILE_SUFFIX;
+
+
+    }
 }
 
