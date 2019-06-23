@@ -6,6 +6,7 @@ import java.io.Closeable;
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.*;
+import java.sql.Ref;
 import java.util.*;
 
 public abstract class ClassUtils {
@@ -902,5 +903,33 @@ public abstract class ClassUtils {
             return null;
         }
     }
+
+    public static Method getMostSpecificMethod(Method method, Class<?> targetClass) {
+
+        if (targetClass != null && targetClass != method.getDeclaringClass() && isOverridable(method, targetClass)) {
+
+            try {
+                if (Modifier.isPublic(method.getModifiers())) {
+                    try {
+
+                        return targetClass.getMethod(method.getName(), method.getParameterTypes());
+                    } catch (NoSuchMethodException e) {
+                        return method;
+                    }
+                } else {
+                    Method specificMethod =
+                            ReflectionUtils.findMethod(targetClass, method.getName(), method.getParameterTypes());
+                    return (specificMethod != null ? specificMethod : method);
+
+                }
+            } catch (SecurityException ex) {
+// Security settings are disallowing reflective access; fall back to 'method' below.
+            }
+
+        }
+        return method;
+    }
+
+
 }
 
