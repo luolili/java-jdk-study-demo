@@ -6,6 +6,7 @@ import java.io.Closeable;
 import java.io.Externalizable;
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.util.*;
@@ -703,5 +704,25 @@ public abstract class ClassUtils {
     public static String getPackageName(Class<?> clazz) {
         return getPackageName(clazz.getName());
     }
+
+    //it is type name
+    public static String getQualifiedName(Class<?> clazz) {
+        return clazz.getTypeName();
+    }
+
+    //get qualified method name by method and class
+    public static String getQualifiedMethodName(Method method, Class<?> clazz) {
+        Assert.notNull(method, "Method must not be null");
+        //-1 get clazz name
+        //-2 add . + method name
+        return (clazz != null ? clazz : method.getDeclaringClass()).getName() + "." + method.getName();
+    }
+
+    //class == null
+    public static String getQualifiedMethodName(Method method) {
+
+        return getQualifiedMethodName(method, null);
+    }
+
 }
 
