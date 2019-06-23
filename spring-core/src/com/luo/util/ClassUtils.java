@@ -737,7 +737,7 @@ public abstract class ClassUtils {
         return (getConstructorIfAvailable(clazz, paramTypes) != null);
     }
 
-    public static Method getMethod(Class<?> clazz, String methodName, Class<?>... paramTypes) {
+    public static Method getMethodIfAvailable(Class<?> clazz, String methodName, Class<?>... paramTypes) {
         //-1 class and method name can't be nul
         Assert.notNull(clazz, "Class must be not null");
         Assert.notNull(methodName, "method name must be not null");
@@ -775,12 +775,70 @@ public abstract class ClassUtils {
             else {
                 throw new IllegalStateException("No unique method found: " + clazz.getName() + '.' + methodName);
             }
-
         }
     }
 
     public static boolean hasMethod(Class<?> clazz, String methodName, Class<?>... paramTypes) {
-        return (getMethod(clazz, methodName, paramTypes) != null);
+        return (getMethodIfAvailable(clazz, methodName, paramTypes) != null);
+    }
+
+    public static int getMethodCountForName(Class<?> clazz, String methodName) {
+        //-1 pre-check
+        Assert.notNull(clazz, "Class must be not null");
+        Assert.notNull(methodName, "method name must be not null");
+
+        //-2 prepare a count
+        int count = 0;
+        //-3 get the declared methods and count the num of method called methodName
+        Method[] declaredMethods = clazz.getDeclaredMethods();
+        for (Method declaredMethod : declaredMethods) {
+            if (methodName.equals(declaredMethod.getName())) {
+                count++;
+            }
+
+        }
+
+        //-4 count the methods on interfaces
+        Class<?>[] ifcs = clazz.getInterfaces();
+        for (Class<?> ifc : ifcs) {
+            //-5 invoke the method
+            count += getMethodCountForName(ifc, methodName);
+
+        }
+        //-5 count the mehtod if the class has super class
+        if (clazz.getSuperclass() != null) {
+            count += getMethodCountForName(clazz.getSuperclass(), methodName);
+        }
+
+        return count;
+    }
+
+
+    public static boolean hasAtLeatOneMethodWitName(Class<?> clazz, String methodName) {
+        //-1 pre-check
+        Assert.notNull(clazz, "Class must be not null");
+        Assert.notNull(methodName, "method name must be not null");
+
+        //-2 get all methods
+        Method[] declaredMethods = clazz.getDeclaredMethods();
+        for (Method declaredMethod : declaredMethods) {
+            if (methodName.equals(declaredMethod.getName())) {
+                return true;
+            }
+        }
+        //-3 get all interfaces
+        Class<?>[] ifcs = clazz.getInterfaces();
+        for (Class<?> ifc : ifcs) {
+            //-4 invoke the method
+            if (hasAtLeatOneMethodWitName(ifc, methodName)) {
+                return true;
+            }
+
+        }
+
+        //-5 if the classhas super class
+        return (clazz.getSuperclass() != null && hasAtLeatOneMethodWitName(clazz.getSuperclass(), methodName));
+
     }
 }
 
