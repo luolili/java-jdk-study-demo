@@ -736,5 +736,51 @@ public abstract class ClassUtils {
     public static boolean hasConstructor(Class<?> clazz, Class<?>... paramTypes) {
         return (getConstructorIfAvailable(clazz, paramTypes) != null);
     }
+
+    public static Method getMethod(Class<?> clazz, String methodName, Class<?>... paramTypes) {
+        //-1 class and method name can't be nul
+        Assert.notNull(clazz, "Class must be not null");
+        Assert.notNull(methodName, "method name must be not null");
+        //-2 if the method has params
+        if (paramTypes != null) {
+            try {
+                //-3 get method by invoking class getMethod(method name, paramTypes
+                return clazz.getMethod(methodName, paramTypes);
+            } catch (NoSuchMethodException e) {
+                throw new IllegalStateException("Expected method not found: " + e);
+            }
+
+        }
+        //-4 the method no param
+        else {
+            //-5 use the hashset to hold the unique method
+            Set<Method> candidates = new HashSet<>(1);
+            //-6 traverse all the methods on class
+            Method[] methods = clazz.getMethods();
+            for (Method method : methods) {
+                if (methodName.equals(method.getName())) {
+                    candidates.add(method);
+                }
+
+            }
+            //-7 there is only one method called methodName
+            if (candidates.size() == 1) {
+                return candidates.iterator().next();
+            }
+            //-8 no methodcalled methodName
+            else if (candidates.isEmpty()) {
+                throw new IllegalStateException("Expected method not found: " + clazz.getName() + '.' + methodName);
+            }
+            //-9 more than one methods called methodName
+            else {
+                throw new IllegalStateException("No unique method found: " + clazz.getName() + '.' + methodName);
+            }
+
+        }
+    }
+
+    public static boolean hasMethod(Class<?> clazz, String methodName, Class<?>... paramTypes) {
+        return (getMethod(clazz, methodName, paramTypes) != null);
+    }
 }
 
