@@ -14,7 +14,6 @@ import java.net.URL;
  */
 public abstract class ResourceUtils {
 
-
     private static final String CLASSPATH_URL_PREFIX = "classpath:";
 
     private static final String FILE_URL_PREFIX = "file:";
@@ -27,13 +26,14 @@ public abstract class ResourceUtils {
     private static final String URL_PROTOCOL_ZIP = "zip";
 
     //from websphere
-    private static final String URL_PROTOCOL_WAJAR = "wsjar";
+    private static final String URL_PROTOCOL_WSJAR = "wsjar";
     //from Jboss
     private static final String URL_PROTOCOL_VFZIP = "vfzip";
     //a general Jboss vfs file resource
     private static final String URL_PROTOCOL_VFSFILE = "vfsfile";
-    //a general Jboss vfs resourCE
+    //a general Jboss vfs resource
     private static final String URL_PROTOCOL_VFS = "vfs";
+    private static final String URL_PROTOCOL_VFSZIP = "vfszip";
 
     private static final String JAR_FILE_EXTENSION = ".jar";
 
@@ -100,6 +100,14 @@ public abstract class ResourceUtils {
     }
 
 
+    /**
+     * create a file by uri's schema specific part prop
+     *
+     * @param resourceUri uri
+     * @param description desc
+     * @return file
+     * @throws FileNotFoundException
+     */
     public static File getFile(URI resourceUri, String description) throws FileNotFoundException {
 
         Assert.notNull(resourceUri, "Resource URI must not be null");
@@ -109,15 +117,16 @@ public abstract class ResourceUtils {
                     "because it does not reside in the file system: " + resourceUri);
 
         }
-
         return new File(resourceUri.getSchemeSpecificPart());
 
     }
 
+    //location to uri
     public static URI toURI(String location) throws URISyntaxException {
         return new URI(StringUtils.replace(location, " ", "%20"));
     }
 
+    //url to uri
     public static URI toURI(URL url) throws URISyntaxException {
         return toURI(url.toString());
     }
@@ -159,8 +168,8 @@ public abstract class ResourceUtils {
      * 1.  public static File getFile(URL resourceUrl)
      * 2.  public static File getFile(URL resourceUrl, String description)
      *
-     * @param resourceLocation
-     * @return
+     * @param resourceLocation   resource location
+     * @return file
      * @throws FileNotFoundException
      */
     public static File getFile(String resourceLocation) throws FileNotFoundException {
@@ -177,7 +186,7 @@ public abstract class ResourceUtils {
             //-5 ex handle
             if (url == null) {
                 throw new FileNotFoundException(description +
-                        "can't be resolved to a URL because it does not exist");
+                        "can't be resolved to a absolute file path because it does not exist");
             }
 
             return getFile(url, description);
@@ -194,4 +203,24 @@ public abstract class ResourceUtils {
     }
 
 
+    //check if the url points to a resource in the file system
+    public static boolean isFileUrl(URL url) {
+        String protocol = url.getProtocol();
+        return (URL_PROTOCOL_FILe.equals(protocol) || URL_PROTOCOL_VFSFILE.equals(protocol)
+                || URL_PROTOCOL_VFS.equals(protocol));
+
+    }
+
+    public static boolean isJarURL(URL url) {
+        String protocol = url.getProtocol();
+        return (URL_PROTOCOL_JAR.equals(protocol) || URL_PROTOCOL_WAR.equals(protocol) ||
+                URL_PROTOCOL_ZIP.equals(protocol) || URL_PROTOCOL_VFSZIP.equals(protocol) ||
+                URL_PROTOCOL_WSJAR.equals(protocol));
+    }
+
+
+    public static boolean isJarFileUrl(URL url) {
+        return (URL_PROTOCOL_FILe.equals(url.getProtocol()) &&
+                url.getPath().toLowerCase().endsWith(JAR_FILE_EXTENSION));
+    }
 }
