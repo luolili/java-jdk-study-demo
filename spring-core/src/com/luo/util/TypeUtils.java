@@ -106,4 +106,30 @@ public abstract class TypeUtils {
         }
         return false;
     }
+
+    private static boolean isAssignable(ParameterizedType lhsType, ParameterizedType rhsType) {
+        //-1 referrence equals
+        if (lhsType.equals(rhsType)) {
+            return true;
+        }
+
+        Type[] lhsTypeArguments = lhsType.getActualTypeArguments();
+        Type[] rhsTypeArguments = rhsType.getActualTypeArguments();
+        if (lhsTypeArguments.length != rhsTypeArguments.length) {
+            return false;
+        }
+
+        for (int i = 0; i < lhsTypeArguments.length; i++) {
+            Type lhsTypeArgument = lhsTypeArguments[i];
+            Type rhsTypeArgument = rhsTypeArguments[i];
+
+            if (!lhsTypeArgument.equals(rhsTypeArgument) &&
+                    !(lhsTypeArgument instanceof WildcardType && isAssignable((WildcardType) lhsTypeArgument, rhsTypeArgument))) {
+                return false;
+            }
+
+
+        }
+        return true;
+    }
 }
