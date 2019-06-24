@@ -4,10 +4,7 @@ import com.luo.lang.Nullable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.net.*;
 
 /**
  * resolve the resource location to files
@@ -222,5 +219,16 @@ public abstract class ResourceUtils {
     public static boolean isJarFileUrl(URL url) {
         return (URL_PROTOCOL_FILe.equals(url.getProtocol()) &&
                 url.getPath().toLowerCase().endsWith(JAR_FILE_EXTENSION));
+    }
+
+
+    /**
+     * JNLP: java network launching protocol: use it to open a java program by a url
+     * it is like a web app
+     *
+     * @param conn
+     */
+    public static void useCachesIfNeccessary(URLConnection conn) {
+        conn.setUseCaches(conn.getClass().getSimpleName().startsWith("JNLP"));
     }
 }
