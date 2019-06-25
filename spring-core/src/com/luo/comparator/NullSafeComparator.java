@@ -12,7 +12,8 @@ public class NullSafeComparator<T> implements Comparator<T> {
 
     private Comparator<T> nonNullComparator;
 
-    private static final NullSafeComparator NULLS_HIGH = new NullSafeComparator<>(false);
+    public static final NullSafeComparator NULLS_HIGH = new NullSafeComparator<>(false);
+    public static final NullSafeComparator NULLS_LOW = new NullSafeComparator<>(true);
 
     public NullSafeComparator(boolean nullsLow) {
         this.nonNullComparator = ComparableComparator.INSTANCE;
@@ -70,7 +71,7 @@ public class NullSafeComparator<T> implements Comparator<T> {
         return this.nonNullComparator.hashCode() * (this.nullsLow ? -1 : 1);
     }
 
-    
+
     @Override
     public String toString() {
         return "NullSafeComparator: non-null comparator [" + this.nonNullComparator + "]; " +
