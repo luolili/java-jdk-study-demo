@@ -16,6 +16,14 @@ import java.util.List;
 public abstract class DomUtils {
 
 
+    /**
+     * Retrieves all child elements of the given DOM element that match any of the given element names.
+     * only look at the direct child level of the given ele
+     *
+     * @param ele           Element is in rt.jar
+     * @param childEleNames the child ele names to look for
+     * @return child list
+     */
     public static List<Element> getChildElementsByTagName(Element ele, String... childEleNames) {
         //-1 pre-check
         Assert.notNull(ele, "Element must not be null");
@@ -31,7 +39,7 @@ public abstract class DomUtils {
             Node node = nl.item(i);
             //-5 node type check and name match, after they are true, add it
             if (node instanceof Element && nodeNameMatches(node, childElementNameList)) {
-                childNodes.add(node);
+                childNodes.add((Element) node);
             }
 
         }
