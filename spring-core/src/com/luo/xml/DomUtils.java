@@ -49,7 +49,37 @@ public abstract class DomUtils {
 
     }
 
+
+    //retrieve the child list of the given ele and the given  ele name
+    public static List<Element> getChildElementsByTagName(Element ele, String childEleName) {
+        return getChildElementsByTagName(ele, new String[]{childEleName});
+    }
+
+    //return the first element identified by its name
+    public static Element getChildElementByTagName(Element ele, String childEleName) {
+        Assert.notNull(ele, "Element must not be null");
+        Assert.notNull(childEleName, "Element name must not be null");
+
+        NodeList nl = ele.getChildNodes();
+
+        for (int i = 0; i < nl.getLength(); i++) {
+
+            Node node = nl.item(i);
+            if (node instanceof Element && nodeNameMatches(node, childEleName)) {
+                return (Element) node;
+            }
+
+        }
+        return null;
+    }
+
+
     public static boolean nodeNameMatches(Node node, Collection<?> desiredNames) {
         return (desiredNames.contains(node.getNodeName()) || desiredNames.contains(node.getLocalName()));
+    }
+
+
+    public static boolean nodeNameMatches(Node node, String desiredNames) {
+        return (desiredNames.equals(node.getNodeName()) || desiredNames.equals(node.getLocalName()));
     }
 }
