@@ -1,9 +1,7 @@
 package com.luo.xml;
 
 import com.luo.util.Assert;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -73,6 +71,21 @@ public abstract class DomUtils {
         return null;
     }
 
+
+    public static String getTextValue(Element valueEle) {
+        Assert.notNull(valueEle, "element is required");
+        StringBuilder sb = new StringBuilder();
+
+        NodeList nl = valueEle.getChildNodes();
+        for (int i = 0; i < nl.getLength(); i++) {
+            Node node = nl.item(i);
+            if ((node instanceof CharacterData && !(node instanceof Comment)) || (node instanceof EntityReference)) {
+                sb.append(node.getNodeValue());
+            }
+        }
+
+        return sb.toString();
+    }
 
     public static boolean nodeNameMatches(Node node, Collection<?> desiredNames) {
         return (desiredNames.contains(node.getNodeName()) || desiredNames.contains(node.getLocalName()));
