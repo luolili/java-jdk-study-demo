@@ -87,6 +87,30 @@ public abstract class DomUtils {
         return sb.toString();
     }
 
+    public static String getChildElementValueByTagName(Element ele, String childEleName) {
+        Element child = getChildElementByTagName(ele, childEleName);
+        return (child != null ? getTextValue(child) : null);
+    }
+
+
+    public static List<Element> getChildElements(Element ele) {
+        Assert.notNull(ele, "Element must not be null");
+        NodeList nl = ele.getChildNodes();
+        List<Element> childEles = new ArrayList<>();
+        for (int i = 0; i < nl.getLength(); i++) {
+            Node node = nl.item(i);
+            if (node instanceof Element) {
+                childEles.add((Element) node);
+            }
+        }
+        return childEles;
+    }
+
+    public static boolean nodeNameEquals(Node node, String desiredName) {
+        Assert.notNull(node, "Node must not be null");
+        Assert.notNull(desiredName, "Desired name must not be null");
+        return nodeNameMatches(node, desiredName);
+    }
     public static boolean nodeNameMatches(Node node, Collection<?> desiredNames) {
         return (desiredNames.contains(node.getNodeName()) || desiredNames.contains(node.getLocalName()));
     }
