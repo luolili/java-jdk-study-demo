@@ -10,7 +10,7 @@ public class ToStringCreator {
 
 
     //准备默认的toString styler, final
-    static final ToStringStyler DEFAULT_TO_STRING_STYLER =
+    private static final ToStringStyler DEFAULT_TO_STRING_STYLER =
             new DefaultToStringStyler(StylerUtils.DEFAULT_VALUE_STYLER);
 
 
@@ -84,5 +84,16 @@ public class ToStringCreator {
         } else {
             this.styledFirstField = true;
         }
+    }
+
+    public ToStringCreator append(Object value) {
+        this.styler.styleValue(this.buffer, value);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        this.styler.styleEnd(this.buffer, this.object);
+        return this.buffer.toString();
     }
 }

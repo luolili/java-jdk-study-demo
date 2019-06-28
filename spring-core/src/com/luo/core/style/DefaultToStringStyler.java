@@ -45,10 +45,10 @@ public class DefaultToStringStyler implements ToStringStyler {
     }
 
     @Override
-    public void styleField(StringBuilder buffer, String filedName, Object value) {
-        styleFieldStart(buffer, filedName);
+    public void styleField(StringBuilder buffer, String fieldName, Object value) {
+        styleFieldStart(buffer, fieldName);
         styleValue(buffer, value);
-        styleFieldEnd(buffer, filedName);
+        styleFieldEnd(buffer, fieldName);
     }
 
     protected void styleFieldStart(StringBuilder buffer, String fieldName) {

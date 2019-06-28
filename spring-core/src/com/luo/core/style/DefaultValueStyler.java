@@ -14,11 +14,11 @@ public class DefaultValueStyler implements ValueStyler {
     //attr ,tag
     private static final String EMPTY = "[empty]";
     private static final String NULL = "[null]";
-    private static final String COLLECTION = "[collection]";
-    private static final String SET = "[set]";
-    private static final String LIST = "[list]";
-    private static final String MAP = "[map]";
-    private static final String ARRAY = "[array]";
+    private static final String COLLECTION = "collection";
+    private static final String SET = "set";
+    private static final String LIST = "list";
+    private static final String MAP = "map";
+    private static final String ARRAY = "array";
 
     @Override
     public String style(@Nullable Object value) {
@@ -85,7 +85,7 @@ public class DefaultValueStyler implements ValueStyler {
     private String style(Collection<?> coll) {
         StringBuilder sb = new StringBuilder(coll.size() * 8 + 16);
 
-        sb.append(COLLECTION + "[");
+        sb.append(getCollectionTypeString(coll)).append("[");
         for (Iterator<?> it = coll.iterator(); it.hasNext(); ) {
             Object next = it.next();
             sb.append(next);
@@ -118,7 +118,7 @@ public class DefaultValueStyler implements ValueStyler {
         StringBuilder sb = new StringBuilder(array.length + 16);
         sb.append(ARRAY + "<")
                 .append(ClassUtils.getShortName(array.getClass().getComponentType()))
-                .append("<[");
+                .append(">[");
 
         for (int i = 0; i < array.length - 1; i++) {
             sb.append(style(array[i]));
