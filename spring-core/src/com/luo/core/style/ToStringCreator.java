@@ -40,7 +40,38 @@ public class ToStringCreator {
 
     }
 
-    //--append
+
+    //--7个基本类型转为Object, char 不用转
+    public ToStringCreator append(String fielfName, byte value) {
+        return append(fielfName, Byte.valueOf(value));
+    }
+
+    public ToStringCreator append(String fielfName, short value) {
+        return append(fielfName, Short.valueOf(value));
+    }
+
+    public ToStringCreator append(String fielfName, int value) {
+        return append(fielfName, Integer.valueOf(value));
+    }
+
+    public ToStringCreator append(String fielfName, float value) {
+        return append(fielfName, Float.valueOf(value));
+    }
+
+    public ToStringCreator append(String fielfName, long value) {
+        return append(fielfName, Long.valueOf(value));
+    }
+
+    public ToStringCreator append(String fielfName, double value) {
+        return append(fielfName, Double.valueOf(value));
+    }
+
+    public ToStringCreator append(String fielfName, boolean value) {
+        return append(fielfName, Boolean.valueOf(value));
+    }
+
+
+    //--append 基础方法
     public ToStringCreator append(String fieldName, @Nullable Object value) {
         printFieldSeparatorIfNeccsary();
         this.styler.styleField(this.buffer, fieldName, value);
