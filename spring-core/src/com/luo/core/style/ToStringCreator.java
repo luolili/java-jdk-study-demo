@@ -4,15 +4,16 @@ import com.luo.lang.Nullable;
 import com.luo.util.Assert;
 
 /**
- * 完成定义在策略接口中的方法
+ * DefaultToStringStyler完成定义在策略接口中的方法
+ * ToStringCreator builds the result by invking the methods in order
  */
 public class ToStringCreator {
 
 
-    //准备默认的toString styler, final
+    //准备默认的toString styler, final.these fields are all final except styledFirstField.
+    //only the DEFAULT_TO_STRING_STYLER is static
     private static final ToStringStyler DEFAULT_TO_STRING_STYLER =
             new DefaultToStringStyler(StylerUtils.DEFAULT_VALUE_STYLER);
-
 
     private final StringBuilder buffer = new StringBuilder(256);
 
@@ -20,11 +21,10 @@ public class ToStringCreator {
 
     private final Object object;
 
-
     private boolean styledFirstField;
 
     public ToStringCreator(Object obj) {
-        this(obj, (ToStringStyler) null);
+        this(obj, (ToStringStyler) null);//must cast the second param to ToStringStyler
     }
 
     public ToStringCreator(Object obj, @Nullable ValueStyler styler) {
@@ -39,7 +39,6 @@ public class ToStringCreator {
         this.styler.styleStart(this.buffer, this.object);//开始风格化
 
     }
-
 
     //--7个基本类型转为Object, char 不用转
     public ToStringCreator append(String fielfName, byte value) {

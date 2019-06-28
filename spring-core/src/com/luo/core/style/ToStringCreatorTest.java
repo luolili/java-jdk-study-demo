@@ -9,6 +9,11 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
+/**
+ * notice : you need override the toString of the ToStringCreator
+ * for collection: you need to append the type of coll before append [
+ * map and collection is with no []
+ */
 public class ToStringCreatorTest {
 
     private SomeObject s1, s2, s3;
