@@ -162,7 +162,7 @@ public abstract class ObjectUtils {
 
     }
 
-    private static String getIdentityHexString(Object obj) {
+    public static String getIdentityHexString(Object obj) {
 
         return Integer.toHexString(System.identityHashCode(obj));
     }
@@ -518,5 +518,6 @@ public abstract class ObjectUtils {
 
 
     }
+
 
 }
