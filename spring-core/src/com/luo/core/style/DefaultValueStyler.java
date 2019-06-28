@@ -4,8 +4,7 @@ import com.luo.lang.Nullable;
 import com.luo.util.ClassUtils;
 
 import java.lang.reflect.Method;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 将对象转换为字符串的风格
@@ -48,7 +47,7 @@ public class DefaultValueStyler implements ValueStyler {
 
         for (Iterator<Map.Entry<K, V>> it = map.entrySet().iterator(); it.hasNext(); ) {
             Map.Entry<K, V> entry = it.next();
-            sb.append(style(entry));//调用的是style(Object value)
+            sb.append(style(entry));//调用的是style(Map.Entry value)
             if (it.hasNext()) {
                 sb.append(',').append(' ');//单引号
             }
@@ -60,6 +59,50 @@ public class DefaultValueStyler implements ValueStyler {
 
         sb.append("]");
         return sb.toString();
+
+    }
+
+
+    /**
+     * entry 里面有是Object 类型的key and value
+     * 调用style(Object value)方法
+     *
+     * @param entry 要风格化的entry
+     * @return 风格化后的字符串
+     */
+    private String style(Map.Entry<?, ?> entry) {
+        return style(entry.getKey()) + " -> " + style(entry.getValue());
+    }
+
+    private String style(Collection<?> coll) {
+        StringBuilder sb = new StringBuilder(coll.size() * 8 + 16);
+
+        sb.append(COLLECTION + "[");
+        for (Iterator<?> it = coll.iterator(); it.hasNext(); ) {
+            Object next = it.next();
+            sb.append(next);
+            if (it.hasNext()) {
+                sb.append(',').append(' ');
+            }
+
+
+        }
+        if (coll.isEmpty()) {
+            sb.append(EMPTY);
+        }
+        sb.append("]");
+        return sb.toString();
+    }
+
+    //获取集合里面的元素的类型
+    private String getCollectionTypeString(Collection<?> coll) {
+        if (coll instanceof List) {
+            return LIST;
+        } else if (coll instanceof Set) {
+            return SET;
+        } else {
+            return COLLECTION;
+        }
 
     }
 }
