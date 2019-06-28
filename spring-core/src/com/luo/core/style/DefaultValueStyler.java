@@ -2,6 +2,7 @@ package com.luo.core.style;
 
 import com.luo.lang.Nullable;
 import com.luo.util.ClassUtils;
+import com.luo.util.ObjectUtils;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -31,10 +32,17 @@ public class DefaultValueStyler implements ValueStyler {
             //-1 类型转换
             Method method = (Method) value;
             return method.getName() + "@" + ClassUtils.getShortName(method.getDeclaringClass());
+        } else if (value instanceof Map) {
+            return style((Map) value);
+        } else if (value instanceof Map.Entry) {
+            return style((Map.Entry) value);
+        } else if (value instanceof Collection) {
+            return style((Collection) value);
+        } else if (value.getClass().isArray()) {
+            return styleArray(ObjectUtils.toObjectArray(value));
+        } else {
+            return String.valueOf(value);//基础类型的数组或基础类型
         }
-
-
-        return null;
     }
 
 
@@ -103,6 +111,29 @@ public class DefaultValueStyler implements ValueStyler {
         } else {
             return COLLECTION;
         }
+
+    }
+
+    private String styleArray(Object[] array) {
+        StringBuilder sb = new StringBuilder(array.length + 16);
+        sb.append(ARRAY + "<")
+                .append(ClassUtils.getShortName(array.getClass().getComponentType()))
+                .append("<[");
+
+        for (int i = 0; i < array.length - 1; i++) {
+            sb.append(style(array[i]));
+            sb.append(',').append(' ');
+        }
+
+        if (array.length > 0) {
+            sb.append(style(array[array.length - 1])).append("]");
+        } else {
+            sb.append(EMPTY);
+        }
+
+
+        return sb.toString();
+
 
     }
 }
