@@ -23,7 +23,7 @@ public abstract class ClassUtils {
     private static final char PATH_SEPARATOR = '/';
 
     //inner class
-    private static final String INNER_CLASS_SEPARATOR = "$";
+    private static final char INNER_CLASS_SEPARATOR = '$';
 
 
     public static final String CGLIB_CLASS_SEPARATOR = "$$";
@@ -930,5 +930,25 @@ public abstract class ClassUtils {
     }
 
 
+    //获取类的名字不带包名
+    public static String getShortName(String className) {
+        Assert.hasLength(className, "class name must not be empty");
+
+        int lastDotIndex = className.lastIndexOf(PACKAGE_SEPARATOR);
+        int nameEndIndex = className.indexOf(CGLIB_CLASS_SEPARATOR);
+
+        //不是cglib创建的类
+        if (nameEndIndex == -1) {
+            nameEndIndex = className.length();
+        }
+        String shortName = className.substring(lastDotIndex + 1, nameEndIndex);
+        //把内部类的分隔符换成 dot .
+        shortName = shortName.replace(INNER_CLASS_SEPARATOR, PACKAGE_SEPARATOR);//参数是char类型
+        return shortName;
+    }
+
+    public static String getShortName(Class<?> clazz) {
+        return getShortName(getQualifiedName(clazz));
+    }
 }
 
