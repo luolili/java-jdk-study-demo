@@ -123,6 +123,7 @@ public class ToStringCreatorTest {
                 " myMethod = appendMethod@ToStringCreatorTest]", str);
     }
 
+    //create a inner class because ClassUtils.getShortName uses the inner class
     public static class SomeObject {
     }
 
