@@ -528,6 +528,45 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         return (result == Boolean.TRUE);
     }
 
+
+    //注意参数的类型
+    @Override
+    public boolean replace(K key, final V oldValue, final V newValue) {
+        Boolean result = doTask(key, new Task<Boolean>(TaskOption.RESTRUCTURE_BEFORE, TaskOption.SKIP_IF_EMPTY) {
+
+            @Override
+            protected Boolean execute(@Nullable Reference<K, V> ref, @Nullable Entry<K, V> entry) {
+                if (entry != null && ObjectUtils.nullSafeEquals(entry.getValue(), oldValue)) {
+
+                    entry.setValue(newValue);
+                    return true;
+                }
+                return false;
+            }
+        });
+        return (result == Boolean.TRUE);
+    }
+
+
+    @Override
+    public V replace(K key, final V value) {
+        return doTask(key, new Task<V>(TaskOption.RESTRUCTURE_BEFORE, TaskOption.SKIP_IF_EMPTY) {
+
+            @Override
+            @Nullable
+            protected V execute(@Nullable Reference<K, V> ref, @Nullable Entry<K, V> entry) {
+                if (entry != null) {
+                    //获取旧的值
+                    V oldValue = entry.getValue();
+                    //设置新的值
+                    entry.setValue(value);
+                    return oldValue;
+                }
+                return null;
+            }
+        });
+    }
+
     //--------ReferenceManager
     protected class ReferenceManager {
 
