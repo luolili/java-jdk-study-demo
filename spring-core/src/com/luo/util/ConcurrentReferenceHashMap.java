@@ -95,7 +95,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         }
         this.segments = segments;//赋值
 
-
     }
 
 
@@ -123,7 +122,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     //分割map的块
     @SuppressWarnings("serial")
     protected final class Segment extends ReentrantLock {
-
 
         private final ReferenceManager referenceManager;
 
@@ -233,6 +231,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
             lock();
 
             try {
+                //初始化references, resizeThreshold, count
                 this.references = createReferenceArray(initialSize);
                 resizeThreshold = (int) (this.references.length * getLoadFactor());
                 this.count = 0;
@@ -243,7 +242,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
         /**
          * 重构引用表的数据结构：扩容以及清除被垃圾收集器处理的引用
-         *
+         *当allowResize为false的时候，不会扩容，只会新建一个表，或者用原来的表
          * @param allowResize 是否允许扩容
          */
         protected void restructureIfNecessary(boolean allowResize) {
@@ -283,7 +282,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
                         restructureSize <<= 1;//扩容
                         resizing = true;
                     }
-                    //不满足上面的条件，那么久创建createReferenceArray一个新的表，或使用原来存在的表:this.references table
+                    //不满足上面的条件，那么创建createReferenceArray一个新的表，或使用原来存在的表:this.references table
                     //restructured 表示已经重构的ref table
                     Reference<K, V>[] restructured =
                             (resizing ? createReferenceArray(restructureSize) : this.references);
@@ -320,7 +319,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
                     //不论扩容不扩容，现在都要更新容量
                     this.count = Math.max(countAfterRestructure, 0);//数量应该大于等于0
 
-
                 } finally {
                     unlock();
                 }
@@ -330,7 +328,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
         }
 
-        //根据给出的ref 和他所在表的hash以及这个ref里面的entry的key来查找ref
+        //根据给出的ref 和key所在表的hash以及这个ref里面的entry的key来查找ref
         @Nullable
         private Reference<K, V> findInChain(Reference<K, V> ref, Object key, int hash) {
             Reference<K, V> currRef = ref;
