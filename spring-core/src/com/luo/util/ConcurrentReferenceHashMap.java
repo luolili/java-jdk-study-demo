@@ -5,6 +5,7 @@ import com.luo.lang.Nullable;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.ReentrantLock;
@@ -32,6 +33,89 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     private final ReferenceType referenceType;
 
+
+    //the shift value of the num of the segments
+    private final int shift;
+
+    //late binding entry set
+    private Set<Map.Entry<K, V>> entrySet;
+
+
+    //----------constructors:5个
+
+    public ConcurrentReferenceHashMap(int initialCapacity) {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL, DEFAULT_REFERENCE_TYPE);
+    }
+
+    public ConcurrentReferenceHashMap(int initialCapacity, float loadFactor) {
+        this(initialCapacity, loadFactor, DEFAULT_CONCURRENCY_LEVEL, DEFAULT_REFERENCE_TYPE);
+    }
+
+    public ConcurrentReferenceHashMap(int initialCapacity, int concurrencyLevel) {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR, concurrencyLevel, DEFAULT_REFERENCE_TYPE);
+    }
+
+    public ConcurrentReferenceHashMap(int initialCapacity, ReferenceType referenceType) {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL, referenceType);
+    }
+
+    public ConcurrentReferenceHashMap(int initialCapacity, float loadFactor, int concurrencyLevel) {
+        this(initialCapacity, loadFactor, concurrencyLevel, DEFAULT_REFERENCE_TYPE);
+    }
+
+    /**
+     * 4个参数
+     *
+     * @param initialCapacity  the initial capacity of the map
+     * @param loadFactor
+     * @param concurrencyLevel the expected num of threads that will concurrently write to the map
+     * @param referenceType    the reference type used for the entry
+     */
+    @SuppressWarnings("unchecked")
+    public ConcurrentReferenceHashMap(int initialCapacity, float loadFactor, int concurrencyLevel, ReferenceType referenceType) {
+
+        //-1 pre check
+        Assert.isTrue(initialCapacity > 0, "initial capacity must not be negative");
+        Assert.isTrue(loadFactor > 0f, "load factor must  be positive");
+        Assert.isTrue(concurrencyLevel > 0f, "concurrency level  must  be positive");
+        Assert.notNull(referenceType, "reference type must not be null");
+        this.loadFactor = loadFactor;
+        this.shift = calculateShift(concurrencyLevel, MAXIMUM_CONCRRENCY_LEVEL);
+        int size = 1 << this.shift;//obtain a value
+        this.referenceType = referenceType;
+        //获得四舍五入的segment 容量
+        int roundedUpSegmentCapacity = (int) ((initialCapacity + size - 1L) / size);
+        int initialSize = 1 << calculateShift(roundedUpSegmentCapacity, MAXIMUM_SEGMENT_SIZE);
+        //add uncheck
+        Segment[] segments = (Segment[]) Array.newInstance(Segment.class, size);
+        int resizeThreshold = (int) (initialSize * getLoadFactor());
+        //初始化每个segment
+        for (int i = 0; i < segments.length; i++) {
+            segments[i] = new Segment(initialSize, resizeThreshold);
+        }
+        this.segments = segments;//赋值
+
+
+    }
+
+
+    /**
+     * calculate the shift value between the min and max
+     *
+     * @param minimum min value
+     * @param maximum max value
+     * @return the shift value
+     */
+    protected static int calculateShift(int minimum, int maximum) {
+        //initialize the shift first
+        int shift = 0;
+        int value = 1;
+        while (value < minimum && value < maximum) {
+            value <<= 1;
+            shift++;
+        }
+        return shift;
+    }
     protected ReferenceManager createReferenceManager() {
         return new ReferenceManager();
     }

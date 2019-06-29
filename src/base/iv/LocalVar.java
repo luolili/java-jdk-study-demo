@@ -23,7 +23,8 @@ public class LocalVar {
         Map<Object, String> map = new HashMap<>();
         map.put("d", "hu");
         map.put(1, "hu");
-        System.out.println(map.size());//2
+        //System.out.println(map.size());//2
+        System.out.println((int) (12 / 10));
 
     }
 }
