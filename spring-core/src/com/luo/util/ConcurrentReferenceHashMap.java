@@ -443,6 +443,91 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     }
 
+    //---put
+
+    private <T> T doTask(Object key, Task<T> task) {
+        int hash = getHash(key);
+        return getSegmentForHash(hash).doTask(hash, key, task);
+    }
+
+    /**
+     * 只有该类可以调用这个方法
+     *
+     * @param key
+     * @param value
+     * @param overwriteExisting
+     * @return
+     */
+    private V put(@Nullable final K key, @Nullable final V value, final boolean overwriteExisting) {
+        return doTask(key, new Task<V>(TaskOption.RESTRUCTURE_BEFORE, TaskOption.RESIZE) {
+            @Override
+            @Nullable
+            protected V execute(@Nullable Reference<K, V> ref, @Nullable Entry<K, V> entry, @Nullable Entries entries) {
+                if (entry != null) {
+                    V oldValue = entry.getValue();
+                    if (overwriteExisting) {
+                        entry.setValue(value);
+                    }
+                    return oldValue;
+                }
+                //判空
+                Assert.state(entries != null, "no entries segment");
+                entries.add(value);
+                return null;
+
+            }
+        });
+    }
+
+    @Override
+    public V put(K key, V value) {
+        return put(key, value, true);
+    }
+
+    @Override
+    @Nullable//from map
+    public V putIfAbsent(K key, V value) {
+        return put(key, value, false);
+    }
+
+    @Override
+    @Nullable
+    public V remove(Object key) {
+        return doTask(key, new Task<V>(TaskOption.RESTRUCTURE_AFTER, TaskOption.SKIP_IF_EMPTY) {
+
+            @Override
+            protected V execute(@Nullable Reference<K, V> ref, @Nullable Entry<K, V> entry) {
+                if (entry != null) {
+                    if (ref != null) {
+                        ref.release();
+                    }
+                    return entry.value;
+                }
+                return null;
+            }
+        });
+    }
+
+
+    //删除给出的key和value值，如果key对应的value值不等于给出的value，返回false
+    @Override
+    public boolean remove(Object key, final Object value) {
+        Boolean result = doTask(key, new Task<Boolean>(TaskOption.RESTRUCTURE_AFTER, TaskOption.SKIP_IF_EMPTY) {
+
+            @Override
+            protected Boolean execute(Reference<K, V> ref, Entry<K, V> entry) {
+                if (entry != null && ObjectUtils.nullSafeEquals(entry.getValue(), value)) {
+                    if (ref != null) {
+                        ref.release();
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+        return (result == Boolean.TRUE);
+    }
+
     //--------ReferenceManager
     protected class ReferenceManager {
 
