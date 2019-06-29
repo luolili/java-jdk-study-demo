@@ -69,6 +69,67 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         }
 
 
+        /**
+         * update the segment
+         *
+         * @param hash the hash of the key
+         * @param key
+         * @param task the update operation
+         * @param <T>  the result of the task
+         * @return the result of the task
+         */
+        public <T> T doTask(int hash, Object key, Task<T> task) {
+            //-1 是否需要进行扩容操作
+            boolean resize = task.hasOption(TaskOption.RESIZE);
+
+            if (task.hasOption(TaskOption.RESTRUCTURE_BEFORE)) {
+                //-2 进行重构
+                restructureIfNecessary(resize);
+            }
+
+            //-3 如果sement的容量是空
+            if (task.hasOption(TaskOption.SKIP_IF_EMPTY) && this.count == 0) {
+                return task.execute(null, null, null);//没有更新操作
+            }
+
+            lock();
+
+            try {
+                //根据key的hash值 获取ref的索引
+                final int index = getIndex(hash, this.references);
+                //根据index获取ref:队列
+                Reference<K, V> head = this.references[index];
+                Reference<K, V> ref = findInChain(head, key, hash);
+                //获得entry
+                Entry<K, V> entry = (ref != null ? ref.get() : null);
+
+                //创建Entries
+                Entries entries = new Entries() {
+                    //重写add方法
+                    @Override
+                    public void add(@Nullable V value) {
+                        @SuppressWarnings("unchecked")
+                        //创建entry
+                                Entry<K, V> newEntry = new Entry((K) key, value);
+                        Reference<K, V> newReference = Segment.this.referenceManager.createReference(newEntry, hash, head);
+                        Segment.this.references[index] = newReference;//新增一个Ref
+                        Segment.this.count++;
+
+
+                    }
+                };
+                return task.execute(ref, entry, entries);
+
+            } finally {
+                unlock();
+                if (task.hasOption(TaskOption.RESTRUCTURE_AFTER)) {
+                    restructureIfNecessary(resize);
+                }
+            }
+
+        }
+
+        //clear the segment
         public void clear() {
             if (this.count == 0) {
                 return;//没有容量，不需要清空
@@ -411,6 +472,50 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         public int hashCode() {
             return ObjectUtils.nullSafeHashCode(this.key) ^ ObjectUtils.nullSafeHashCode(this.value);
         }
+    }
+
+
+    private abstract class Task<T> {
+        private final EnumSet<TaskOption> options;
+
+        public Task(TaskOption... options) {
+            this.options = (options.length == 0 ? EnumSet.noneOf(TaskOption.class) : EnumSet.of(options[0], options));
+        }
+
+        public boolean hasOption(TaskOption option) {
+            return this.options.contains(option);
+        }
+
+        @Nullable
+        protected T execute(@Nullable Reference<K, V> ref, @Nullable Entry<K, V> entry, @Nullable Entries entries) {
+            return execute(ref, entry);
+        }
+
+        /**
+         * do not need Entries
+         *
+         * @param ref   the fount ref
+         * @param entry the found entry
+         * @return the result ofthe task
+         */
+        @Nullable
+        protected T execute(@Nullable Reference<K, V> ref, @Nullable Entry<K, V> entry) {
+            return null;
+        }
+    }
+
+
+    private abstract class Entries {
+        @Nullable
+        public abstract void add(@Nullable V value);
+    }
+
+    /**
+     * Various options
+     */
+    private enum TaskOption {
+
+        RESTRUCTURE_BEFORE, RESTRUCTURE_AFTER, SKIP_IF_EMPTY, RESIZE
     }
 
     //枚举类
