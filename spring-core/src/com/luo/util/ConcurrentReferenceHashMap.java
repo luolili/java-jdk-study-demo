@@ -537,7 +537,6 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
             @Override
             protected Boolean execute(@Nullable Reference<K, V> ref, @Nullable Entry<K, V> entry) {
                 if (entry != null && ObjectUtils.nullSafeEquals(entry.getValue(), oldValue)) {
-
                     entry.setValue(newValue);
                     return true;
                 }
@@ -565,6 +564,45 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
                 return null;
             }
         });
+    }
+
+    //清空segments
+    @Override
+    public void clear() {
+        for (Segment s : this.segments) {
+            s.clear();
+        }
+    }
+
+    //purge all the entries on segments that no longer referenced
+
+    /**
+     * 他强制清洗不在被引用的entry，在频繁读取map而较少更新map的时候很有用
+     */
+    public void purgeUnreferenceEntries() {
+        for (Segment s : this.segments) {
+            s.restructureIfNecessary(false);
+        }
+    }
+
+
+    @Override
+    public int size() {
+        int size = 0;
+        for (Segment s : this.segments) {
+            size += s.getCount();//引用的数量
+        }
+        return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        for (Segment s : this.segments) {
+            if (s.getCount() > 0) {
+                return false;//只要有一个segment中含义一个引用，就表示不为空
+            }
+        }
+        return true;
     }
 
     //--------ReferenceManager
@@ -799,6 +837,69 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         public abstract void add(@Nullable V value);
     }
 
+    private class EntrySet extends AbstractSet<Map.Entry<K, V>> {
+
+    }
+
+
+    private class EntryIterator implements Iterator<Map.Entry<K, V>> {
+
+        private int segmentIndex;
+
+        private int referenceIndex;
+
+        @Nullable
+        private Reference<K, V>[] references;
+        private Reference<K, V> reference;
+
+        private Entry<K, V> next;
+        private Entry<K, V> last;
+
+
+        private void getNextIfNecessary() {
+            while (this.next == null) {
+                moveToNextReference();
+                if (this.reference == null) {
+                    return;
+                }
+                this.next = this.reference.get();
+            }
+        }
+
+        private void moveToNextReference() {
+            if (this.reference != null) {
+                this.reference = this.reference.getNext();
+            }
+
+            //当当前的ref为空并且当前的refIndex也超过了refs的长度，就要找下一个segment,并且把refIndex设为初始值0
+            while (this.reference == null && this.references != null) {
+                if (this.referenceIndex > this.references.length) {
+                    moveToNextSegment();
+                    this.referenceIndex = 0;
+                } else {
+                    //
+                    this.reference = this.references[referenceIndex];
+                    this.referenceIndex++;
+                }
+            }
+        }
+
+
+        private void moveToNextSegment() {
+
+            //先初始化segment里面的所有references和每个Ref
+            this.reference = null;
+            this.references = null;
+            while (this.segmentIndex < ConcurrentReferenceHashMap.this.segments.length) {
+                //把每一个segment的refs付给references数组
+                this.references = ConcurrentReferenceHashMap.this.segments[this.segmentIndex].references;
+                this.segmentIndex++;
+            }
+
+        }
+
+
+    }
     /**
      * Various options
      */
@@ -806,6 +907,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
         RESTRUCTURE_BEFORE, RESTRUCTURE_AFTER, SKIP_IF_EMPTY, RESIZE
     }
+
 
     //枚举类
     static enum Restructure {
