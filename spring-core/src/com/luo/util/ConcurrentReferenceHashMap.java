@@ -61,11 +61,23 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
             this.resizeThreshold = resizeThreshold;
         }
 
+        @Nullable
         public Reference<K, V> getReference(@Nullable Object key, int hash, Restructure restructure) {
 
             if (restructure == Restructure.WHEN_NECESSARY) {
-
+                restructureIfNecessary(false);
             }
+
+            if (this.count == 0) {
+                return null;
+            }
+
+            Reference<K, V>[] references = this.references;
+            int index = getIndex(hash, references);
+            Reference<K, V> head = references[index];
+
+            return findInChain(head, key, hash);
+
         }
 
 
