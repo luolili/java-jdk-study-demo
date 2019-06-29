@@ -21,6 +21,7 @@ public class NestedExceptionUtils {
 
     }
 
+    @Nullable//可能返回null
     public static Throwable getRootCause(@Nullable Throwable original) {
         if (original == null) {
             return null;
