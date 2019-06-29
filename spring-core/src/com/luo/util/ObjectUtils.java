@@ -1,5 +1,8 @@
 package com.luo.util;
 
+import com.luo.lang.Nullable;
+
+import javax.swing.text.StyledEditorKit;
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -518,6 +521,183 @@ public abstract class ObjectUtils {
 
 
     }
+
+    //----null safe hash code
+
+    public static int nullSafeHashCode(@Nullable Object obj) {
+
+        if (obj == null) {
+            return 0;
+        }
+
+        if (obj.getClass().isArray()) {
+            if (obj instanceof Object[]) {
+                return nullSafeHashCode((Object[]) obj);
+            }
+
+            if (obj instanceof byte[]) {
+                return nullSafeHashCode((byte[]) obj);
+            }
+            if (obj instanceof char[]) {
+                return nullSafeHashCode((char[]) obj);
+            }
+
+            if (obj instanceof int[]) {
+                return nullSafeHashCode((int[]) obj);
+            }
+            if (obj instanceof boolean[]) {
+                return nullSafeHashCode((boolean[]) obj);
+            }
+
+            if (obj instanceof short[]) {
+                return nullSafeHashCode((short[]) obj);
+            }
+
+            if (obj instanceof float[]) {
+                return nullSafeHashCode((float[]) obj);
+            }
+
+            if (obj instanceof long[]) {
+                return nullSafeHashCode((long[]) obj);
+            }
+
+            if (obj instanceof double[]) {
+                return nullSafeHashCode((double[]) obj);
+            }
+
+        }
+        //obj是一个非数组类型的对象
+        return obj.hashCode();
+
+    }
+
+    //Object array
+    public static int nullSafeHashCode(@Nullable Object[] array) {
+        if (array == null) {
+            return 0;
+        }
+        int hash = INITIAL_HASH;//7
+        for (Object element : array) {
+            hash = MULTIPLIER * hash + nullSafeHashCode(element);//累加值
+        }
+        return hash;
+    }
+
+
+    //byte array
+    public static int nullSafeHashCode(@Nullable byte[] array) {
+        if (array == null) {
+            return 0;
+        }
+        int hash = INITIAL_HASH;//7
+        for (byte element : array) {
+            hash = MULTIPLIER * hash + element;
+
+        }
+        return hash;
+
+    }
+
+    //char array:same with byte
+    public static int nullSafeHashCode(@Nullable char[] array) {
+        if (array == null) {
+            return 0;
+        }
+        int hash = INITIAL_HASH;//7
+        for (char element : array) {
+            hash = MULTIPLIER * hash + element;
+
+        }
+        return hash;
+
+    }
+
+
+    //short array, same with boolean
+    public static int nullSafeHashCode(@Nullable short[] array) {
+        if (array == null) {
+            return 0;
+        }
+        int hash = INITIAL_HASH;//7
+        for (short element : array) {
+            hash = MULTIPLIER * hash + element;
+
+        }
+        return hash;
+
+    }
+
+    //int array
+    public static int nullSafeHashCode(@Nullable int[] array) {
+        if (array == null) {
+            return 0;
+        }
+        int hash = INITIAL_HASH;//7
+        for (int element : array) {
+            hash = MULTIPLIER * hash + element;
+
+        }
+        return hash;
+
+    }
+
+    //double array, same with boolean
+    public static int nullSafeHashCode(@Nullable double[] array) {
+        if (array == null) {
+            return 0;
+        }
+        int hash = INITIAL_HASH;//7
+        for (double element : array) {
+            hash = MULTIPLIER * hash + Double.hashCode(element);
+
+        }
+        return hash;
+
+    }
+
+    //float array
+    public static int nullSafeHashCode(@Nullable float[] array) {
+        if (array == null) {
+            return 0;
+        }
+        int hash = INITIAL_HASH;//7
+        for (float element : array) {
+            hash = MULTIPLIER * hash + Float.hashCode(element);
+
+        }
+        return hash;
+
+    }
+
+    //long array
+    public static int nullSafeHashCode(@Nullable long[] array) {
+        if (array == null) {
+            return 0;
+        }
+        int hash = INITIAL_HASH;//7
+        for (long element : array) {
+            hash = MULTIPLIER * hash + Long.hashCode(element);
+
+        }
+        return hash;
+
+    }
+
+    //boolean array
+    public static int nullSafeHashCode(@Nullable boolean[] array) {
+        if (array == null) {
+            return 0;
+        }
+        int hash = INITIAL_HASH;//7
+        for (boolean element : array) {
+            hash = MULTIPLIER * hash + Boolean.hashCode(element);
+
+        }
+        return hash;
+
+    }
+
+
 
 
 }
