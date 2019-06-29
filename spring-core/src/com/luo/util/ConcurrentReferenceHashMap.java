@@ -855,6 +855,29 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         private Entry<K, V> next;
         private Entry<K, V> last;
 
+        //构造方法：移动到下一个segment
+        public EntryIterator() {
+            moveToNextSegment();
+        }
+
+        @Override
+        public boolean hasNext() {
+            //获取下一个entry，索引判断的是下一个entry是否为null
+            getNextIfNecessary();
+            return (this.next != null);
+        }
+
+        @Override
+        public Map.Entry<K, V> next() {
+            getNextIfNecessary();
+            if (this.next == null) {
+                throw new NoSuchElementException();
+            }
+
+            this.last = this.next;
+            this.next = null;
+            return this.last;
+        }
 
         private void getNextIfNecessary() {
             while (this.next == null) {
@@ -886,10 +909,10 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
 
         private void moveToNextSegment() {
-
             //先初始化segment里面的所有references和每个Ref
             this.reference = null;
             this.references = null;
+            //segmentIndex初始值是0
             while (this.segmentIndex < ConcurrentReferenceHashMap.this.segments.length) {
                 //把每一个segment的refs付给references数组
                 this.references = ConcurrentReferenceHashMap.this.segments[this.segmentIndex].references;
@@ -898,7 +921,11 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
         }
 
-
+        @Override
+        public void remove() {
+            Assert.state(this.last != null, "no element to remove");
+            ConcurrentReferenceHashMap.this.remove(this.last.getKey());
+        }
     }
     /**
      * Various options
