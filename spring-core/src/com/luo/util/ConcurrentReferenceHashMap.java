@@ -374,6 +374,75 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         return this.loadFactor;
     }
 
+    protected final int getMaximumSegmentSize() {
+
+        return this.segments.length;
+    }
+
+    protected final Segment getSegment(int index) {
+        return this.segments[index];
+    }
+
+    protected int getHash(@Nullable Object o) {
+        int hash = (o != null ? o.hashCode() : 0);
+        hash += (hash << 15) ^ 0xffffcd7d;
+        hash ^= (hash >>> 10);
+        hash += (hash << 3);
+        hash ^= (hash >>> 6);
+        hash += (hash << 2) + (hash << 14);
+        hash ^= (hash >>> 16);
+        return hash;
+    }
+
+    private Segment getSegmentForHash(int hash) {
+        return this.segments[(hash >>> (32 - this.shift)) & (this.segments.length - 1)];
+    }
+
+    /**
+     * 通过key 和Restructure获取Ref
+     *
+     * @param key
+     * @param restructure
+     * @return ref
+     */
+    @Nullable
+    protected final Reference<K, V> getReference(Object key, Restructure restructure) {
+        int hash = getHash(key);
+        return getSegmentForHash(hash).getReference(key, hash, restructure);
+
+    }
+
+    @Nullable
+    private Entry<K, V> getEntryIfAvailable(@Nullable Object key) {
+        Reference<K, V> reference = getReference(key, Restructure.WHEN_NECESSARY);
+        return (reference != null ? reference.get() : null);
+    }
+
+    //-----重写map里面的方法
+
+
+    @Override
+    @Nullable//获得entry的value
+    public V get(Object key) {
+        Entry<K, V> entry = getEntryIfAvailable(key);
+        return (entry != null ? entry.getValue() : null);
+    }
+
+    @Override
+    @Nullable//获得entry的value
+    public V getOrDefault(Object key, V defaultValue) {
+        Entry<K, V> entry = getEntryIfAvailable(key);
+        return (entry != null ? entry.getValue() : defaultValue);
+    }
+
+    @Override
+    public boolean containsKey(Object key) {
+        Entry<K, V> entry = getEntryIfAvailable(key);
+        return (entry != null && ObjectUtils.nullSafeEquals(entry.getKey(), key));
+
+
+    }
+
     //--------ReferenceManager
     protected class ReferenceManager {
 
