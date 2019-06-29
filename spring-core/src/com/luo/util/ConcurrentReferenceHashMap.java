@@ -837,8 +837,60 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         public abstract void add(@Nullable V value);
     }
 
+    //初始化entrySet
+    @Override
+    public Set<Map.Entry<K, V>> entrySet() {
+        Set<Map.Entry<K, V>> entrySet = this.entrySet;
+
+        if (entrySet == null) {
+            entrySet = new EntrySet();
+        }
+        return entrySet;
+    }
+
     private class EntrySet extends AbstractSet<Map.Entry<K, V>> {
 
+        @Override
+        public Iterator<Map.Entry<K, V>> iterator() {
+            return new EntryIterator();//开始从第一个segment移动
+        }
+
+        @Override
+        public boolean contains(@Nullable Object o) {
+            //-1 判断类型
+            if (o instanceof Map.Entry<?, ?>) {
+                //-2 类型转换
+                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) o;
+                Reference<K, V> ref = ConcurrentReferenceHashMap.this.getReference(entry.getKey(), Restructure.NEVER);
+
+                Entry<K, V> otherEntry = ref != null ? ref.get() : null;
+                if (otherEntry != null) {//此时otherEntry 和entry的key是一样的
+                    //比较entry的value
+                    return ObjectUtils.nullSafeEquals(otherEntry.getValue(), entry.getValue());
+                }
+
+            }
+            return false;
+        }
+
+        @Override
+        public boolean remove(Object o) {
+            if (o instanceof Map.Entry<?, ?>) {
+                Map.Entry<?, ?> entry = (Map.Entry<?, ?>) o;
+                return ConcurrentReferenceHashMap.this.remove(entry.getKey(), entry.getValue());
+            }
+            return false;
+        }
+
+        @Override
+        public int size() {
+            return ConcurrentReferenceHashMap.this.size();//the num of segments
+        }
+
+        @Override
+        public void clear() {
+            ConcurrentReferenceHashMap.this.clear();
+        }
     }
 
 
@@ -850,9 +902,11 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
         @Nullable
         private Reference<K, V>[] references;
+        @Nullable
         private Reference<K, V> reference;
-
+        @Nullable
         private Entry<K, V> next;
+        @Nullable
         private Entry<K, V> last;
 
         //构造方法：移动到下一个segment
