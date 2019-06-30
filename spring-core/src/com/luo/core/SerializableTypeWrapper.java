@@ -22,6 +22,36 @@ final class SerializableTypeWrapper {
 
     }
 
+    public Type forTypeProvider(TypeProvider provider) {
+        Type providedType = provider.getType();
+        if (providedType == null || providedType instanceof Serializable) {
+            return providedType;
+
+        }
+
+        if (GraalDetector.inImageCode() || !Serializable.class.isAssignableFrom(Class.class)) {
+            return providedType;
+        }
+
+        //get a serializable type for the provider
+        Type cached = cache.get(providedType);
+        if (cached != null) {
+            return cached;
+        }
+
+
+        for (Class<?> type : SUPPORTED_SERIALIZABLE_TYPES) {
+
+            if (type.isInstance(providedType)) {
+                ClassLoader classLoader = providedType.getClass().getClassLoader();
+            }
+
+        }
+
+
+    }
+
+    //FieldTypeProvider实现
     @SuppressWarnings("serial")
     static class FieldTypeProvider implements TypeProvider {
 
