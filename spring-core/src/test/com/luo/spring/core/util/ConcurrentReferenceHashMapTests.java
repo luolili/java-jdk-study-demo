@@ -291,6 +291,7 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.get(123), is("123"));
     }
 
+    //如果原来的value是null也不替换
     @Test
     public void shouldPutIfAbsentWithNullValue() {
         assertThat(this.map.putIfAbsent(123, null), is(nullValue()));
@@ -298,6 +299,7 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.get(123), is(nullValue()));
     }
 
+    //对于key是null，也不会替换
     @Test
     public void shouldPutIfAbsentWithNullKey() {
         assertThat(this.map.putIfAbsent(null, "123"), is(nullValue()));
@@ -305,6 +307,13 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.get(null), is("123"));
     }
 
+    /**
+     * remove：
+     * 1. 进入Map的doTask方法-->调用segment的doTask()方法
+     * 2.获取传入的key的ref和entry，创建Entries
+     * 3.调用task的execute方法，包含三个参数，-->调用含有2个参数的execute方法
+     * 4.如果获得的entry不为空的话，并且他对应的值也和传来的value一样，则进行替换
+     */
     @Test
     public void shouldRemoveKeyAndValue() {
         this.map.put(123, "123");
