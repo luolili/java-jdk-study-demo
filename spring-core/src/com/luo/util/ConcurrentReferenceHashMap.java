@@ -956,7 +956,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
             //当当前的ref为空并且当前的refIndex也超过了refs的长度，就要找下一个segment,并且把refIndex设为初始值0
             while (this.reference == null && this.references != null) {
-                if (this.referenceIndex > this.references.length) {
+                if (this.referenceIndex >= this.references.length) {
                     moveToNextSegment();
                     this.referenceIndex = 0;
                 } else {
@@ -972,8 +972,8 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
             //先初始化segment里面的所有references和每个Ref
             this.reference = null;
             this.references = null;
-            //segmentIndex初始值是0
-            while (this.segmentIndex < ConcurrentReferenceHashMap.this.segments.length) {
+            //segmentIndex初始值是0. note:here is if , not while
+            if (this.segmentIndex < ConcurrentReferenceHashMap.this.segments.length) {
                 //把每一个segment的refs付给references数组
                 this.references = ConcurrentReferenceHashMap.this.segments[this.segmentIndex].references;
                 this.segmentIndex++;

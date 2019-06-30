@@ -355,10 +355,11 @@ public class ConcurrentReferenceHashMapTests {
     @Test
     public void shouldReplaceValue() {
         this.map.put(123, "123");
-        assertThat(this.map.replace(123, "456"), is("123"));
-        assertThat(this.map.get(123), is("456"));
+        assertThat(this.map.replace(123, "456"), is("123"));//返回原来的值
+        assertThat(this.map.get(123), is("456"));//获取新的value
     }
 
+    //对value是null的情况也会进行替换
     @Test
     public void shouldReplaceNullValue() {
         this.map.put(123, null);
@@ -366,6 +367,7 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.get(123), is("456"));
     }
 
+    //替换效果
     @Test
     public void shouldGetSize() {
         assertThat(this.map.size(), is(0));
@@ -375,6 +377,7 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.size(), is(2));
     }
 
+    //测试isEmpty()
     @Test
     public void shouldSupportIsEmpty() {
         assertThat(this.map.isEmpty(), is(true));
@@ -415,6 +418,7 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.isEmpty(), is(true));
     }
 
+    //当删除的entry不存在的时候，返回null
     @Test
     public void shouldRemoveWhenKeyIsNotInMap() {
         assertThat(this.map.remove(123), is(nullValue()));
@@ -422,13 +426,14 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.isEmpty(), is(true));
     }
 
+    //支持putAll方法
     @Test
     public void shouldPutAll() {
         Map<Integer, String> m = new HashMap<>();
         m.put(123, "123");
         m.put(456, null);
         m.put(null, "789");
-        this.map.putAll(m);
+        this.map.putAll(m);//调用的是AbstractMap里面的putAll方法,里面调用的是自身的put方法
         assertThat(this.map.size(), is(3));
         assertThat(this.map.get(123), is("123"));
         assertThat(this.map.get(456), is(nullValue()));
@@ -469,8 +474,12 @@ public class ConcurrentReferenceHashMapTests {
         expected.add("123");
         expected.add(null);
         expected.add("789");
+        System.out.println(actual);//[789, 123, null]
+        System.out.println(expected);//[123, null, 789]
         actual.sort(NULL_SAFE_STRING_SORT);
         expected.sort(NULL_SAFE_STRING_SORT);
+        System.out.println(actual);
+        System.out.println(expected);//[null, 123, 789] : nullsLow:null排在前面
         assertThat(actual, is(expected));
     }
 
@@ -497,6 +506,11 @@ public class ConcurrentReferenceHashMapTests {
         expected.put(1, "1");
         expected.put(2, "2");
         expected.put(3, "3");
+        System.out.println(this.map.entrySet());//3,2,1
+        System.out.println(expected.entrySet());//1,2,3
+        System.out.println(this.map.entrySet() == expected.entrySet());//false
+        System.out.println(this.map.entrySet().equals(expected.entrySet()));//true
+
         assertThat(this.map.entrySet(), is(expected.entrySet()));
     }
 
@@ -526,7 +540,10 @@ public class ConcurrentReferenceHashMapTests {
         iterator.next();
         assertThat(iterator.hasNext(), is(false));
         assertThat(this.map.size(), is(3));
-        assertThat(this.map.get(2), is("2b"));
+        System.out.println(this.map.get(2));
+        System.out.println(this.map.get(3));
+
+        //assertThat(this.map.get(2), is("2b"));
     }
 
     @Test
