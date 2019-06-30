@@ -53,7 +53,7 @@ final class SerializableTypeWrapper {
 
         }
 
-
+        return null;
     }
 
     @SuppressWarnings("serial")
@@ -94,7 +94,7 @@ final class SerializableTypeWrapper {
         return (unwrapped != null ? (T) unwrapped : type);
     }
     //FieldTypeProvider实现
-    @SuppressWarnings("serial")
+    @SuppressWarnings("serial")//序列化和反序列化的时候
     static class FieldTypeProvider implements TypeProvider {
 
         private final String fieldName;//字段的名字
