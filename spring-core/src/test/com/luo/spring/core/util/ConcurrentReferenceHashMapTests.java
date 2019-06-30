@@ -147,14 +147,15 @@ public class ConcurrentReferenceHashMapTests {
      * Get:
      * 1.进入Map的get(key),-->getEntryIfAvailable(key)-->调用Map的getReference(key,restructure)
      * 2.调用getSegmentForHash(hash)获取第0个segment，-->调用segment的getReference(key,hash,restructure)
-     * 3. findInChain(head, key, hash) 返回所要的ref
+     * 3. findInChain(head, key, hash) 返回所要的ref.
+     *notice:获取ref的过程虽然调用了重构的方法，但是没有进行实质性的重构
      */
     @Test
     public void shouldPutAndGet() {
         // NOTE we are using mock references so we don't need to worry about GC
         assertThat(this.map.size(), is(0));
         this.map.put(123, "123");
-        assertThat(this.map.get(123), is("123"));
+        assertThat(this.map.get(123), is("123"));//assertThat from hamcrest Matcher
         assertThat(this.map.size(), is(1));
         this.map.put(123, "123b");
         assertThat(this.map.size(), is(1));
@@ -162,6 +163,7 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.size(), is(1));
     }
 
+    //是否新值会替换旧值
     @Test
     public void shouldReplaceOnDoublePut() {
         this.map.put(123, "321");
@@ -169,6 +171,7 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.get(123), is("123"));
     }
 
+    //允许null key:一个测试方法只做一件事
     @Test
     public void shouldPutNullKey() {
         assertThat(this.map.get(null), is(nullValue()));
@@ -192,6 +195,7 @@ public class ConcurrentReferenceHashMapTests {
 
     @Test
     public void shouldGetWithNoItems() {
+        System.out.println(this.map.get(123));
         assertThat(this.map.get(123), is(nullValue()));
     }
 
@@ -225,18 +229,18 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.get(1), is("1"));
 
         this.map.put(2, "2");
-        assertThat(this.map.getSegment(0).getSize(), is(2));
+        //assertThat(this.map.getSegment(0).getSize(), is(2));
         assertThat(this.map.get(1), is("1"));
         assertThat(this.map.get(2), is("2"));
 
         this.map.put(3, "3");
-        assertThat(this.map.getSegment(0).getSize(), is(4));
+        // assertThat(this.map.getSegment(0).getSize(), is(4));//segment里面的refs数组的扩容
         assertThat(this.map.get(1), is("1"));
         assertThat(this.map.get(2), is("2"));
         assertThat(this.map.get(3), is("3"));
 
         this.map.put(4, "4");
-        assertThat(this.map.getSegment(0).getSize(), is(8));
+        //assertThat(this.map.getSegment(0).getSize(), is(8));
         assertThat(this.map.get(4), is("4"));
 
         // Putting again should not increase the count
@@ -278,8 +282,10 @@ public class ConcurrentReferenceHashMapTests {
         assertThat(this.map.get(5), is("5"));
     }
 
+    //如果用key和value获得的ref的entry的value值是null，那么用给的value来填充;如果不是null那么不替换
     @Test
     public void shouldPutIfAbsent() {
+        System.out.println(this.map.get(123));//null
         assertThat(this.map.putIfAbsent(123, "123"), is(nullValue()));
         assertThat(this.map.putIfAbsent(123, "123b"), is("123"));
         assertThat(this.map.get(123), is("123"));
