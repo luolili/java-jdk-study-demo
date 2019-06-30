@@ -1,4 +1,4 @@
-package test.com.luo.util;
+package test.com.luo.spring.core;
 
 import com.luo.util.StringUtils;
 import org.junit.Test;

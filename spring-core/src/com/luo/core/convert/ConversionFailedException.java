@@ -5,8 +5,12 @@ package com.luo.core.convert;
  */
 public class ConversionFailedException extends ConversionException {
 
-    public ConversionFailedException() {
 
+    public ConversionFailedException(String msg) {
+        super(msg);
     }
 
+    public ConversionFailedException(String msg, Throwable cause) {
+        super(msg, cause);
+    }
 }

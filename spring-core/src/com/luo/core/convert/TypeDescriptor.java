@@ -23,7 +23,7 @@ public class TypeDescriptor implements Serializable {
             String.class, Object.class
 
     };
-    private static final Annotation[] EMPTY_ANNOTATION_ARRAY = new Annotation[0];
+    //private static final Annotation[] EMPTY_ANNOTATION_ARRAY = new Annotation[0];
 
 
 }

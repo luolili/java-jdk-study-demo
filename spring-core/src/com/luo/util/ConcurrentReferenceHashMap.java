@@ -41,7 +41,11 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     private Set<Map.Entry<K, V>> entrySet;
 
 
-    //----------constructors:5个
+    //----------constructors:6个
+
+    public ConcurrentReferenceHashMap() {
+        this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL, DEFAULT_REFERENCE_TYPE);
+    }
 
     public ConcurrentReferenceHashMap(int initialCapacity) {
         this(initialCapacity, DEFAULT_LOAD_FACTOR, DEFAULT_CONCURRENCY_LEVEL, DEFAULT_REFERENCE_TYPE);
@@ -98,6 +102,10 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     }
 
 
+    public final int getSegmentsSize() {
+        return this.segments.length;
+    }
+
     /**
      * calculate the shift value between the min and max
      *
@@ -121,7 +129,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
     //分割map的块
     @SuppressWarnings("serial")
-    protected final class Segment extends ReentrantLock {
+    public final class Segment extends ReentrantLock {
 
         private final ReferenceManager referenceManager;
 
@@ -368,7 +376,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     }
     //--------end Segment
 
-    protected final float getLoadFactor() {
+    public final float getLoadFactor() {
         return this.loadFactor;
     }
 
@@ -377,7 +385,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
         return this.segments.length;
     }
 
-    protected final Segment getSegment(int index) {
+    public final Segment getSegment(int index) {
         return this.segments[index];
     }
 
@@ -404,7 +412,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
      * @return ref
      */
     @Nullable
-    protected final Reference<K, V> getReference(Object key, Restructure restructure) {
+    public final Reference<K, V> getReference(Object key, Restructure restructure) {
         int hash = getHash(key);
         return getSegmentForHash(hash).getReference(key, hash, restructure);
 
@@ -604,7 +612,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     }
 
     //--------ReferenceManager
-    protected class ReferenceManager {
+    public class ReferenceManager {
 
         private final ReferenceQueue<Entry<K, V>> queue = new ReferenceQueue<>();
 
@@ -706,7 +714,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
 
     //Reference
-    protected interface Reference<K, V> {
+    public interface Reference<K, V> {
 
         @Nullable
         Entry<K, V> get();
@@ -723,7 +731,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
     }
 
     //entry 实现
-    protected static final class Entry<K, V> implements Map.Entry<K, V> {
+    public static final class Entry<K, V> implements Map.Entry<K, V> {
 
         @Nullable
         private final K key;
@@ -989,7 +997,7 @@ public class ConcurrentReferenceHashMap<K, V> extends AbstractMap<K, V> implemen
 
 
     //枚举类
-    static enum Restructure {
+    public static enum Restructure {
         WHEN_NECESSARY,
         NEVER
     }

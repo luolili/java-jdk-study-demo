@@ -1,7 +1,5 @@
 package com.luo.core;
 
-import sun.reflect.generics.tree.TypeSignature;
-
 import java.io.Serializable;
 import java.lang.reflect.Type;
 
@@ -12,7 +10,7 @@ public class ResolvableType implements Serializable {
 
 
     //将要被解析的类型
-    private final Type type;
+    //private final Type type;
 
 
     //实现了java 反射里面的Type接口，这里没有实现里面的方法
