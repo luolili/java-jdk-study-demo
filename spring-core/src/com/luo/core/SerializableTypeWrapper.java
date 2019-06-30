@@ -2,6 +2,7 @@ package com.luo.core;
 
 import com.luo.lang.Nullable;
 import com.luo.util.ConcurrentReferenceHashMap;
+import com.luo.util.ObjectUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -44,6 +45,10 @@ final class SerializableTypeWrapper {
 
             if (type.isInstance(providedType)) {
                 ClassLoader classLoader = providedType.getClass().getClassLoader();
+
+                Class<?>[] interfaces = {type, SerializableTypeProxy.class, Serializable.class};
+
+
             }
 
         }
@@ -51,6 +56,43 @@ final class SerializableTypeWrapper {
 
     }
 
+    @SuppressWarnings("serial")
+    private class TypeProxyInvocationHandler implements InvocationHandler, Serializable {
+        private final TypeProvider provider;
+
+        public TypeProxyInvocationHandler(TypeProvider provider) {
+            this.provider = provider;
+        }
+
+        @Override
+        @Nullable
+        public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+
+            if (method.getName().equals("equals") && args != null) {
+                Object other = args[0];
+                if (other instanceof Type) {
+                    other = unwrap((Type) other);
+
+                }
+
+                return ObjectUtils.nullSafeEquals(this.provider.getType(), other);//boolean也是一个对象
+            } else if (method.getName().equals("hashCode")) {
+                return ObjectUtils.nullSafeHashCode(this.provider.getType());
+            }
+            return null;
+        }
+    }
+
+    //返回最初的非可序列化的类型：unwrap the given type
+    public static <T extends Type> T unwrap(T type) {
+        Type unwrapped = type;
+        //通过TypeProvider的代理获得TypeProvider，进而获得type
+        while (unwrapped instanceof SerializableTypeProxy) {
+            unwrapped = ((SerializableTypeProxy) unwrapped).getTypeProvider().getType();
+        }
+
+        return (unwrapped != null ? (T) unwrapped : type);
+    }
     //FieldTypeProvider实现
     @SuppressWarnings("serial")
     static class FieldTypeProvider implements TypeProvider {
@@ -99,4 +141,9 @@ final class SerializableTypeWrapper {
         }
     }
 
+    //type proxy
+    interface SerializableTypeProxy {
+
+        TypeProvider getTypeProvider();
+    }
 }
