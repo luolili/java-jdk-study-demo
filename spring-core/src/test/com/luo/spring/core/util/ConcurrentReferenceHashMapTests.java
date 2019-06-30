@@ -143,6 +143,11 @@ public class ConcurrentReferenceHashMapTests {
      * 6.根据参数hash查找ref，然后根据ref查找entry,他们都有可能为null, -->创建Entries：里面包含第一个entry和下一个entry等信息
      * 7. 进入到Task里面的execute方法，包含三个参数，如果前面一个的key与后面一个的key一样，那么会用新的覆盖原来的value
      * 对于第一的put，添加操作是在Entries中的add方法里面对refs数组添加第一个元素
+     *
+     * Get:
+     * 1.进入Map的get(key),-->getEntryIfAvailable(key)-->调用Map的getReference(key,restructure)
+     * 2.调用getSegmentForHash(hash)获取第0个segment，-->调用segment的getReference(key,hash,restructure)
+     * 3. findInChain(head, key, hash) 返回所要的ref
      */
     @Test
     public void shouldPutAndGet() {
