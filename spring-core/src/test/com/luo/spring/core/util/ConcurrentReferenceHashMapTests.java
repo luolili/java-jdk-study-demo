@@ -39,7 +39,6 @@ import static org.junit.Assert.assertThat;
 /**
  * Tests for {@link ConcurrentReferenceHashMap}.
  *
- * @author Phillip Webb
  */
 public class ConcurrentReferenceHashMapTests {
 
