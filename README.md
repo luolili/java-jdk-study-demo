@@ -16,5 +16,4 @@ a new repo for me . nice to see
  choose git, ->commit Repository,then
  write something into the commit message,->
  choose commit and push
- 
- add some changes:this is a new branch called luoli
+
