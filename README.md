@@ -18,3 +18,4 @@ a new repo for me . nice to see
  choose commit and push
 
 create a new branch called luoli  .
+how to merge this to master
