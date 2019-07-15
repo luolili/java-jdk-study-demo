@@ -4,6 +4,7 @@ import com.luo.lang.Nullable;
 import com.luo.util.Assert;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
@@ -55,16 +56,39 @@ public class MethodParameter {
         Assert.notNull(original, "Original must not be null");
         this.executable = original.executable;
 
+        //参数名，参数对象，参数的索引
         this.parameterIndex = original.parameterIndex;
         this.parameter = original.parameter;
-        this.containingClass = original.containingClass;
+        this.parameterName = original.parameterName;
+
+        //参数类型，通用参数类型，
         this.parameterType = original.parameterType;
         this.genericParameterType = original.genericParameterType;
-        this.nestingLevel = original.nestingLevel;
+        //参数上的注解
         this.parameterAnnotations = original.parameterAnnotations;
+
+        this.containingClass = original.containingClass;
+        this.nestingLevel = original.nestingLevel;
         this.typeIndexesPerLevel = original.typeIndexesPerLevel;
-        this.parameterName = original.parameterName;
+
+        this.parameterNameDiscover = original.parameterNameDiscover;
 
     }
 
+    public MethodParameter(Constructor<?> ctor, int parameterIndex, int nestingLevel) {
+        Assert.notNull(ctor, "Constructor must not be null");
+        this.executable = ctor;
+        this.parameterIndex = validateIndex(ctor, parameterIndex);
+        this.nestingLevel = nestingLevel;
+    }
+
+    //对参数索引的范围检查
+    private static int validateIndex(Executable executable, int parameterIndex) {
+        //-1 获取参数的个数
+        int count = executable.getParameterCount();
+        Assert.isTrue((parameterIndex >= -1 && parameterIndex < count),
+                () -> "Parameter index needs to be between -1 and  " + (count - 1));
+        return parameterIndex;
+
+    }
 }
