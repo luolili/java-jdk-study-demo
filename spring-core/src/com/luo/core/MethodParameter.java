@@ -127,4 +127,9 @@ public class MethodParameter {
     public Class<?> getDeclaringClass() {
         return this.executable.getDeclaringClass();
     }
+
+    //Member is to identify info of a field , method ,ctor
+    public Member getMember() {
+        return this.executable;
+    }
 }
