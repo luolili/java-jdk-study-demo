@@ -4,10 +4,7 @@ import com.luo.lang.Nullable;
 import com.luo.util.Assert;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Executable;
-import java.lang.reflect.Parameter;
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 import java.util.Map;
 
 /**
@@ -75,11 +72,35 @@ public class MethodParameter {
 
     }
 
+    //-----参数是方法对象  exectable代表了方法对象或构造对象
+    public MethodParameter(Method method, int parameterIndex, int nestingLevel) {
+        Assert.notNull(method, "Method must not be null");
+        this.executable = method;
+        this.parameterIndex = validateIndex(method, parameterIndex);
+        this.nestingLevel = nestingLevel;
+    }
+
+    //默认参数的内嵌等级为1
+    public MethodParameter(Method method, int parameterIndex) {
+        this(method, parameterIndex, 1);
+    }
+    //----参数是构造对象
+
+    /**
+     * @param ctor           constructor to specify a parameter for
+     * @param parameterIndex
+     * @param nestingLevel   a List of Lists: its nesting level is 1
+     */
     public MethodParameter(Constructor<?> ctor, int parameterIndex, int nestingLevel) {
         Assert.notNull(ctor, "Constructor must not be null");
         this.executable = ctor;
         this.parameterIndex = validateIndex(ctor, parameterIndex);
         this.nestingLevel = nestingLevel;
+    }
+
+    //默认参数的内嵌等级为1
+    public MethodParameter(Constructor<?> ctor, int parameterIndex) {
+        this(ctor, parameterIndex, 1);
     }
 
     //对参数索引的范围检查
@@ -90,5 +111,20 @@ public class MethodParameter {
                 () -> "Parameter index needs to be between -1 and  " + (count - 1));
         return parameterIndex;
 
+    }
+
+    //通过exectable来获取方法对象
+    @Nullable
+    public Method getMethod() {
+        return (this.executable instanceof Method ? (Method) this.executable : null);
+    }
+
+    @Nullable
+    public Constructor<?> getConstructor() {
+        return (this.executable instanceof Constructor ? (Constructor<?>) this.executable : null);
+    }
+
+    public Class<?> getDeclaringClass() {
+        return this.executable.getDeclaringClass();
     }
 }
