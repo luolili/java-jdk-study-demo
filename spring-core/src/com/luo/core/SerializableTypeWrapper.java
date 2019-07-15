@@ -55,6 +55,12 @@ final class SerializableTypeWrapper {
         return null;
     }
 
+    @Nullable
+    public static Type forMethodParameter(MethodParameter methodParameter) {
+
+    }
+
+
     @SuppressWarnings("serial")
     private class TypeProxyInvocationHandler implements InvocationHandler, Serializable {
         private final TypeProvider provider;
@@ -130,10 +136,8 @@ final class SerializableTypeWrapper {
     //类型的提供人
     @SuppressWarnings("serial")
     interface TypeProvider extends Serializable {
-
         @Nullable
         Type getType();
-
         //return the source of the type
         @Nullable
         default Object getSource() {
@@ -141,9 +145,8 @@ final class SerializableTypeWrapper {
         }
     }
 
-    //type proxy
+    //type proxy:提供获取TypeProvider的方法
     interface SerializableTypeProxy {
-
         TypeProvider getTypeProvider();
     }
 }
