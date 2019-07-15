@@ -45,7 +45,6 @@ final class SerializableTypeWrapper {
 
             if (type.isInstance(providedType)) {
                 ClassLoader classLoader = providedType.getClass().getClassLoader();
-
                 Class<?>[] interfaces = {type, SerializableTypeProxy.class, Serializable.class};
 
 
@@ -128,6 +127,7 @@ final class SerializableTypeWrapper {
         }
     }
 
+    //类型的提供人
     @SuppressWarnings("serial")
     interface TypeProvider extends Serializable {
 
