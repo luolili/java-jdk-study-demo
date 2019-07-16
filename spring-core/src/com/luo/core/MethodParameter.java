@@ -223,4 +223,19 @@ public class MethodParameter {
         this.nestedMethodParameter = nestedParam;
         return nestedParam;
     }
+
+    public Class<?> getParameterType() {
+        Class<?> paramType = this.parameterType;
+        if (paramType == null) {
+            if (this.parameterIndex < 0) {
+                Method method = getMethod();
+                //用方法的返回类型作为参数类型，以返回Class类型
+                paramType = (method != null ? method.getReturnType() : void.class);
+            } else {
+                paramType = this.executable.getParameterTypes()[parameterIndex];
+            }
+            this.parameterType = paramType;//对类的parameterType重新赋值
+        }
+        return paramType;
+    }
 }
