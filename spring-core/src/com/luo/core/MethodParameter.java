@@ -2,6 +2,7 @@ package com.luo.core;
 
 import com.luo.lang.Nullable;
 import com.luo.util.Assert;
+import com.luo.util.ClassUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -13,7 +14,7 @@ import java.util.Map;
  */
 public class MethodParameter {
     //attr
-    private static final Annotation[] empty_annotation_array = new Annotation[0];
+    private static final Annotation[] EMPTY_ANNOTATION_ARRAY = new Annotation[0];
 
 
     private final Executable executable;//from java.reflect
@@ -146,7 +147,7 @@ public class MethodParameter {
 
     //------
 
-    //根据参数的索引来获取参数对象
+    //根据参数的索引来获取参数对象：这个方法是属于类的，而不是类的内部类的方法，索引这里参数索引是从0开始的
     public Parameter getParameter() {
         //-1 检查索引的范围
         if (this.parameterIndex < 0) {
@@ -237,5 +238,32 @@ public class MethodParameter {
             this.parameterType = paramType;//对类的parameterType重新赋值
         }
         return paramType;
+    }
+
+    //模板方法：返回的是后置处理的array，这是他的默认实现
+    protected Annotation[] adaptAnnotationArray(Annotation[] annotations) {
+        return annotations;
+    }
+
+    public Annotation[] getParameterAnnotations() {
+        Annotation[] paramAnns = this.parameterAnnotations;
+
+        if (paramAnns == null) {
+            Annotation[][] annotationArray = this.executable.getParameterAnnotations();
+            int index = this.parameterIndex;
+            //是构造方法的实例对象，是内部类.annotationArray.length是参数的个数
+            //对于内部类，他的参数索引是从-1 开始的
+            if (this.executable instanceof Constructor &&
+                    ClassUtils.isInnerClass(this.executable.getDeclaringClass()) &&
+                    annotationArray.length == this.executable.getParameterCount() - 1) {
+                index = this.parameterIndex - 1;
+
+            }
+            paramAnns = (index >= 0 && index < annotationArray.length ?
+                    adaptAnnotationArray(annotationArray[index]) : EMPTY_ANNOTATION_ARRAY);
+            this.parameterAnnotations = paramAnns;
+
+        }
+        return paramAnns;
     }
 }
