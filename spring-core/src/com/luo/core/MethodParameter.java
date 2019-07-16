@@ -8,6 +8,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * helper class for the method parameters
@@ -276,5 +277,23 @@ public class MethodParameter {
 
         }
         return false;
+    }
+
+    //当参数的类型是java8的Optional的时候返回内嵌的方法参数，否则返回自身
+    public MethodParameter nestedIfOptional() {
+        return (getParameterType() == Optional.class ? nested() : this);
+    }
+
+    public Class<?> getContainingClass() {
+        Class<?> containingClass = this.containingClass;
+        return (containingClass != null ? containingClass : getDeclaringClass());
+    }
+
+    public void setContainingClass(Class<?> containingClass) {
+        this.containingClass = containingClass;
+    }
+
+    public void setParameterType(@Nullable Class<?> parameterType) {
+        this.parameterType = parameterType;
     }
 }
