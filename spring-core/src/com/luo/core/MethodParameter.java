@@ -5,6 +5,7 @@ import com.luo.util.Assert;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -161,5 +162,38 @@ public class MethodParameter {
 
         return parameter;
     }
+
+    public int getParameterIndex() {
+        return this.parameterIndex;
+    }
+
+    public int getNestingLevel() {
+        return this.nestingLevel;
+    }
+
+    //增加内嵌水平
+    public int increaseNestingLevel() {
+        return this.nestingLevel++;
+    }
+
+    //延迟构建
+    public Map<Integer, Integer> getTypeIndexesPerLevel() {
+        if (this.typeIndexesPerLevel == null) {
+            this.typeIndexesPerLevel = new HashMap<>(4);
+        }
+        return this.typeIndexesPerLevel;
+    }
+
+    //获取当前内嵌水平所对应的type index
+    public Integer getTypeIndexForCurrentLevel() {
+        return getTypeIndexesPerLevel().get(this.nestingLevel);
+    }
+
+    //获取指定的内嵌水平所对应的type index
+    public Integer getTypeIndexForLevel(int nestingLevel) {
+        return getTypeIndexesPerLevel().get(nestingLevel);
+    }
+
+
 
 }
