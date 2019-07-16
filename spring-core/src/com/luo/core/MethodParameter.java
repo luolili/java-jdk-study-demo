@@ -176,12 +176,17 @@ public class MethodParameter {
         return this.nestingLevel++;
     }
 
-    //延迟构建
+    //延迟构建,map用来维护内嵌水平与type index的关系
     public Map<Integer, Integer> getTypeIndexesPerLevel() {
         if (this.typeIndexesPerLevel == null) {
             this.typeIndexesPerLevel = new HashMap<>(4);
         }
         return this.typeIndexesPerLevel;
+    }
+
+    //设置当前内嵌水平所对应的type index
+    public Integer setTypeIndexForCurrentLevel(int typeIndex) {
+        return getTypeIndexesPerLevel().put(this.nestingLevel, typeIndex);
     }
 
     //获取当前内嵌水平所对应的type index
@@ -194,6 +199,28 @@ public class MethodParameter {
         return getTypeIndexesPerLevel().get(nestingLevel);
     }
 
+    public void decreaseNestingLevel() {
+        getTypeIndexesPerLevel().remove(this.nestingLevel);
+        this.nestingLevel--;
+    }
 
+    //copy
+    @Override
+    protected MethodParameter clone() {
+        return new MethodParameter(this);
+    }
 
+    public MethodParameter nested() {
+        MethodParameter nestedParam = this.nestedMethodParameter;
+
+        if (nestedParam != null) {
+            return nestedParam;
+        }
+
+        nestedParam = clone();
+
+        nestedParam.nestingLevel = this.nestingLevel + 1;
+        this.nestedMethodParameter = nestedParam;
+        return nestedParam;
+    }
 }
