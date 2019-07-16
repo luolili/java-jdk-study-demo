@@ -266,4 +266,15 @@ public class MethodParameter {
         }
         return paramAnns;
     }
+
+    //Nullable的类型可能是javax.annotation.Nullable 或findbug.Nullable
+    private boolean hasNullableAnnotation() {
+        for (Annotation ann : getParameterAnnotations()) {
+            if ("Nullable".equals(ann.annotationType().getSimpleName())) {
+                return true;
+            }
+
+        }
+        return false;
+    }
 }
