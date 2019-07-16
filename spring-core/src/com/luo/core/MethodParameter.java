@@ -132,4 +132,34 @@ public class MethodParameter {
     public Member getMember() {
         return this.executable;
     }
+
+
+    //暴露在方法或者构造方法上的注解，而非参数上的注解
+    public AnnotatedElement getAnnotatedElement() {
+        return this.executable;
+    }
+
+    public Executable getExecutable() {
+        return this.executable;
+    }
+
+    //------
+
+    //根据参数的索引来获取参数对象
+    public Parameter getParameter() {
+        //-1 检查索引的范围
+        if (this.parameterIndex < 0) {
+            throw new IllegalStateException("cannot retrieve the parameter descriptor for method return type");
+        }
+        //-2 获取参数对象, 目的是检查该参数对象是否为空
+        Parameter parameter = this.parameter;
+        if (parameter == null) {
+            //从executable中获取参数的数组对象
+            parameter = this.executable.getParameters()[parameterIndex];
+            this.parameter = parameter;
+        }
+
+        return parameter;
+    }
+
 }
