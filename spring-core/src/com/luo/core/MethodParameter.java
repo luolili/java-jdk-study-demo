@@ -248,7 +248,6 @@ public class MethodParameter {
 
     public Annotation[] getParameterAnnotations() {
         Annotation[] paramAnns = this.parameterAnnotations;
-
         if (paramAnns == null) {
             Annotation[][] annotationArray = this.executable.getParameterAnnotations();
             int index = this.parameterIndex;
@@ -268,6 +267,35 @@ public class MethodParameter {
         return paramAnns;
     }
 
+
+    public Type getGenericParameterType() {
+        //-1 先从本类中的属性获取通用type
+        Type paramType = this.genericParameterType;
+
+        //如果获取的type为null
+        if (paramType == null) {
+            if (this.parameterIndex < 0) {
+                Method method = getMethod();
+                paramType = (method != null ? method.getGenericReturnType() : void.class);
+            } else {
+                //从executable获取参数类型的数组
+                Type[] genericParameterTypes = this.executable.getGenericParameterTypes();
+                //参数是内部类的情况
+                int index = this.parameterIndex;
+                if (this.executable instanceof Constructor &&
+                        ClassUtils.isInnerClass(this.executable.getDeclaringClass()) &&
+                        genericParameterTypes.length == this.executable.getParameterCount() - 1) {
+                    index = this.parameterIndex - 1;
+                }
+                //参数索引不在范围之内，返回结果调用的是 getParameterType()
+                paramType = (index >= 0 && index < genericParameterTypes.length ?
+                        genericParameterTypes[index] : getParameterType());
+
+            }
+            this.genericParameterType = paramType;
+        }
+        return paramType;
+    }
     //Nullable的类型可能是javax.annotation.Nullable 或findbug.Nullable
     private boolean hasNullableAnnotation() {
         for (Annotation ann : getParameterAnnotations()) {
