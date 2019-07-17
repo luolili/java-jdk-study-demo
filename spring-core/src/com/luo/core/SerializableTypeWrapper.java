@@ -88,6 +88,26 @@ final class SerializableTypeWrapper {
         public Object getSource() {
             return this.methodParameter;
         }
+
+        private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+            inputStream.defaultReadObject();
+            try {
+                //分为普通方法和构造方法
+                if (methdName != null) {
+                    this.methodParameter = new MethodParameter(this.declaringClass.getDeclaredMethod(
+                            this.methdName, this.parameterTypes
+                    ), this.parameterIndex);
+
+                } else {
+                    this.methodParameter = new MethodParameter(this.declaringClass.getDeclaredConstructor(this.parameterTypes),
+                            this.parameterIndex);
+                }
+            } catch (Throwable ex) {
+                throw new IllegalStateException("Could not find original class structure", ex);
+            }
+
+
+        }
     }
     @SuppressWarnings("serial")
     private class TypeProxyInvocationHandler implements InvocationHandler, Serializable {
