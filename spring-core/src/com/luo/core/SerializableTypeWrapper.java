@@ -60,7 +60,36 @@ final class SerializableTypeWrapper {
 
     }
 
+    @SuppressWarnings("serial")
+    static class MethodParameterTypeProvider implements TypeProvider {
+        //attr
+        private final String methdName;
+        private final Class<?>[] parameterTypes;
+        private final Class<?> declaringClass;
+        private final int parameterIndex;
+        private transient MethodParameter methodParameter;
 
+        //通过methodParameter 来构造MethodParameterTypeProvider
+        //从通过methodParameter可以获取：Method, parameterTypes, declaringClass, parameterIndex
+        public MethodParameterTypeProvider(MethodParameter methodParameter) {
+            this.methdName = (methodParameter.getMethod() != null ? methodParameter.getMethod().getName() : null);
+            this.parameterTypes = methodParameter.getExecutable().getParameterTypes();
+            this.declaringClass = methodParameter.getDeclaringClass();
+            this.parameterIndex = methodParameter.getParameterIndex();
+
+            this.methodParameter = methodParameter;
+        }
+
+        @Override
+        public Type getType() {
+            return null;
+        }
+
+        @Override
+        public Object getSource() {
+            return null;
+        }
+    }
     @SuppressWarnings("serial")
     private class TypeProxyInvocationHandler implements InvocationHandler, Serializable {
         private final TypeProvider provider;
