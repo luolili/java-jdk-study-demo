@@ -24,7 +24,7 @@ final class SerializableTypeWrapper {
 
     }
 
-    public Type forTypeProvider(TypeProvider provider) {
+    static Type forTypeProvider(TypeProvider provider) {
         Type providedType = provider.getType();
         if (providedType == null || providedType instanceof Serializable) {
             return providedType;
@@ -41,13 +41,11 @@ final class SerializableTypeWrapper {
             return cached;
         }
 
-
         for (Class<?> type : SUPPORTED_SERIALIZABLE_TYPES) {
 
             if (type.isInstance(providedType)) {
                 ClassLoader classLoader = providedType.getClass().getClassLoader();
                 Class<?>[] interfaces = {type, SerializableTypeProxy.class, Serializable.class};
-
 
             }
 
@@ -58,7 +56,7 @@ final class SerializableTypeWrapper {
 
     @Nullable
     public static Type forMethodParameter(MethodParameter methodParameter) {
-
+        return forTypeProvider(new MethodParameterTypeProvider(methodParameter));
     }
 
     @SuppressWarnings("serial")
@@ -140,10 +138,28 @@ final class SerializableTypeWrapper {
                 result = ReflectionUtils.invokeMethod(this.method, this.provider.getType());
                 this.result = result;
             }
-            return (result instanceof Type[] ? ((Type[]) result)[index] : (Type) result);
+            return (result instanceof Type[] ? ((Type[]) result)[this.index] : (Type) result);
         }
 
+        @Override
+        @Nullable
+        public Object getSource() {
+            return null;
+        }
 
+        private void readObject(ObjectInputStream inputStream) throws IOException, ClassNotFoundException {
+            inputStream.defaultReadObject();
+            Method method = ReflectionUtils.findMethod(this.declaringClass, this.methodName);
+            if (method == null) {
+                throw new IllegalStateException("Cannot find method on deserialization: " + this.methodName);
+            }
+
+            if (method.getReturnType() != Type.class && method.getReturnType() != Type[].class) {
+                throw new IllegalStateException(
+                        "Invalid return type on deserialized method - needs to be Type or Type[]: " + method);
+            }
+            this.method = method;
+        }
     }
     @SuppressWarnings("serial")
     private class TypeProxyInvocationHandler implements InvocationHandler, Serializable {
