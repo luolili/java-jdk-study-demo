@@ -76,18 +76,17 @@ final class SerializableTypeWrapper {
             this.parameterTypes = methodParameter.getExecutable().getParameterTypes();
             this.declaringClass = methodParameter.getDeclaringClass();
             this.parameterIndex = methodParameter.getParameterIndex();
-
             this.methodParameter = methodParameter;
         }
 
         @Override
         public Type getType() {
-            return null;
+            return this.methodParameter.getGenericParameterType();
         }
 
         @Override
         public Object getSource() {
-            return null;
+            return this.methodParameter;
         }
     }
     @SuppressWarnings("serial")
