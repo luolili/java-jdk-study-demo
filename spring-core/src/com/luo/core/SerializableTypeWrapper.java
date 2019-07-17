@@ -3,6 +3,7 @@ package com.luo.core;
 import com.luo.lang.Nullable;
 import com.luo.util.ConcurrentReferenceHashMap;
 import com.luo.util.ObjectUtils;
+import com.luo.util.ReflectionUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -108,6 +109,41 @@ final class SerializableTypeWrapper {
 
 
         }
+    }
+
+    @SuppressWarnings("serial")
+    static class MethodInvokeTypeProvider implements TypeProvider {
+
+        private final TypeProvider provider;
+
+        private final String methodName;
+        private final Class<?> declaringClass;
+        private final int index;
+        private transient Method method;
+        @Nullable
+        private transient volatile Object result;
+
+        public MethodInvokeTypeProvider(TypeProvider provider, Method method, int index) {
+            this.provider = provider;
+            this.methodName = method.getName();
+            this.declaringClass = method.getDeclaringClass();
+            this.index = index;
+            this.method = method;
+        }
+
+
+        @Override
+        public Type getType() {
+            Object result = this.result;
+            if (result == null) {
+                //在给出的类型上调用给出的方法
+                result = ReflectionUtils.invokeMethod(this.method, this.provider.getType());
+                this.result = result;
+            }
+            return (result instanceof Type[] ? ((Type[]) result)[index] : (Type) result);
+        }
+
+
     }
     @SuppressWarnings("serial")
     private class TypeProxyInvocationHandler implements InvocationHandler, Serializable {
