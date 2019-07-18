@@ -19,6 +19,56 @@ public class ResolvableType implements Serializable {
     //将要被解析的类型
     private final Type type;
 
+    @Nullable
+    private final VariableResolver variableResolver;
+
+    @Nullable
+    private final ResolvableType componentType;
+
+    @Nullable
+    private final Integer hashcode;
+    @Nullable
+    private Class<?> resolved;
+
+    @Nullable
+    private volatile ResolvableType superType;
+
+    @Nullable
+    private volatile ResolvableType[] interfaces;
+
+    @Nullable
+    private volatile ResolvableType[] generics;
+
+
+    //构造方法
+    public ResolvableType(Type type, @Nullable SerializableTypeWrapper.TypeProvider typeProvider, @Nullable VariableResolver variableResolver) {
+        this.type = type;
+        this.typeProvider = typeProvider;
+        this.variableResolver = variableResolver;
+        this.componentType = null;
+        this.resolved = null;
+
+
+    }
+
+    private int calculateHashCode() {
+        int hashcode = ObjectUtils.nullSafeHashCode(this.type);
+        //考虑typeProvider获得的type的hashcode
+        if (this.typeProvider != null) {
+            hashcode = 31 * hashcode + ObjectUtils.nullSafeHashCode(this.typeProvider.getType());
+        }
+
+        if (this.variableResolver != null) {
+            hashcode = 31 * hashcode + ObjectUtils.nullSafeHashCode(this.variableResolver.getSource());
+        }
+        //本类的hashcode
+        if (this.componentType != null) {
+            hashcode = 31 * hashcode + ObjectUtils.nullSafeHashCode(this.componentType);
+        }
+        return hashcode;
+
+
+    }
 
     //实现了java 反射里面的Type接口，这里没有实现里面的方法
     @SuppressWarnings("serial")
@@ -63,11 +113,10 @@ public class ResolvableType implements Serializable {
                 if (ObjectUtils.nullSafeEquals(v1, v2)) {
                     return this.generics[i];
                 }
-
-
             }
             return null;
         }
     }
+
 
 }
