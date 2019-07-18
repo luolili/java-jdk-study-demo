@@ -1,9 +1,11 @@
 package com.luo.core;
 
 import com.luo.lang.Nullable;
+import com.luo.util.ConcurrentReferenceHashMap;
 import com.luo.util.ObjectUtils;
 
 import java.io.Serializable;
+import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
@@ -12,6 +14,12 @@ import java.lang.reflect.TypeVariable;
  */
 @SuppressWarnings("serial")
 public class ResolvableType implements Serializable {
+
+    public static final ResolvableType NONE = new ResolvableType(EmptyType.INSTANCE, null,
+            null, 0);
+
+    private static final ConcurrentReferenceHashMap<ResolvableType, ResolvableType> cache =
+            new ConcurrentReferenceHashMap<>(256);
 
     @Nullable
     private final SerializableTypeWrapper.TypeProvider typeProvider;
@@ -26,7 +34,7 @@ public class ResolvableType implements Serializable {
     private final ResolvableType componentType;
 
     @Nullable
-    private final Integer hashcode;
+    private final Integer hash;
     @Nullable
     private Class<?> resolved;
 
@@ -40,17 +48,97 @@ public class ResolvableType implements Serializable {
     private volatile ResolvableType[] generics;
 
 
-    //构造方法
+    //构造方法:hash有默认的方法计算
     public ResolvableType(Type type, @Nullable SerializableTypeWrapper.TypeProvider typeProvider, @Nullable VariableResolver variableResolver) {
         this.type = type;
         this.typeProvider = typeProvider;
         this.variableResolver = variableResolver;
         this.componentType = null;
+        this.hash = calculateHashCode();
         this.resolved = null;
-
 
     }
 
+    //自定义hash ，resolved
+    public ResolvableType(Type type, @Nullable SerializableTypeWrapper.TypeProvider typeProvider,
+                          @Nullable VariableResolver variableResolver, @Nullable Integer hash) {
+        this.type = type;
+        this.typeProvider = typeProvider;
+        this.variableResolver = variableResolver;
+        this.componentType = null;
+        this.hash = hash;
+        this.resolved = null;
+
+    }
+
+    private ResolvableType(Type type, @Nullable SerializableTypeWrapper.TypeProvider typeProvider,
+                           @Nullable VariableResolver variableResolver, @Nullable ResolvableType componentType) {
+
+        this.type = type;
+        this.typeProvider = typeProvider;
+        this.variableResolver = variableResolver;
+        this.componentType = componentType;
+        this.hash = null;
+        this.resolved = resolveClass();
+    }
+
+    private Class<?> resolveClass() {
+        if (this.type == EmptyType.INSTANCE) {
+            return null;
+        }
+
+        if (this.type instanceof Class) {
+            return (Class<?>) this.type;
+        }
+
+
+        if (this.type instanceof GenericArrayType) {
+
+        }
+    }
+
+    public ResolvableType getComponentType() {
+        if (this == NONE) {
+            return NONE;
+        }
+
+        if (this.componentType != null) {
+            return this.componentType;
+        }
+
+        if (this.type instanceof Class) {
+            Class<?> componentType = ((Class<?>) this.type).getComponentType();
+
+
+        }
+    }
+
+    static ResolvableType forType(
+            @Nullable Type type, @Nullable SerializableTypeWrapper.TypeProvider typeProvider, @Nullable VariableResolver variableResolver) {
+
+        if (type == null && typeProvider != null) {
+            type = SerializableTypeWrapper.forTypeProvider(typeProvider);
+        }
+        if (type == null) {
+            return NONE;
+        }
+
+        if (type instanceof Class) {
+            return new ResolvableType((Class<?>) type, typeProvider, variableResolver, (ResolvableType) null);
+        }
+
+        cache.purgeUnreferenceEntries();
+        ResolvableType resultType = new ResolvableType(type, typeProvider, variableResolver);
+
+        ResolvableType cachedType = cache.get(resultType);
+        if (cachedType == null) {
+            cachedType = new ResolvableType(type, typeProvider, variableResolver, resultType.hash);
+            cache.put(cachedType, cachedType);
+        }
+        resultType.resolved = cachedType.resolved;
+        return resultType;
+
+    }
     private int calculateHashCode() {
         int hashcode = ObjectUtils.nullSafeHashCode(this.type);
         //考虑typeProvider获得的type的hashcode
