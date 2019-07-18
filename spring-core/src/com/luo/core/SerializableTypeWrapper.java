@@ -172,7 +172,6 @@ final class SerializableTypeWrapper {
         @Override
         @Nullable
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-
             if (method.getName().equals("equals") && args != null) {
                 Object other = args[0];
                 if (other instanceof Type) {

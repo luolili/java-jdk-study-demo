@@ -38,6 +38,9 @@ public class TypeDescriptor implements Serializable {
         if (type == null) {
             type = Object.class;
         }
+        //获取类型的描述器
+        TypeDescriptor typeDescriptor = commonTypesCache.get(type);
+
 
         return null;
 
