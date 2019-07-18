@@ -117,11 +117,11 @@ public class ResolvableType implements Serializable {
     }
 
     ResolvableType resolveType() {
+        //-1 type is ParameterizedType
         if (this.type instanceof ParameterizedType) {
             return forType(((ParameterizedType) this.type).getRawType(), this.variableResolver);
         }
-
-
+        //-2 type is WildcardType,有upperBounds and lowerBounds
         if (this.type instanceof WildcardType) {
             Type resolved = resolveBounds(((WildcardType) this.type).getUpperBounds());
             if (resolved == null) {
@@ -130,9 +130,10 @@ public class ResolvableType implements Serializable {
             return forType(resolved, this.variableResolver);
 
         }
-
+        //-3 type is TypeVariable
         if (this.type instanceof TypeVariable) {
             TypeVariable<?> variable = (TypeVariable<?>) this.type;
+            //variableResolver用来解析var
             if (this.variableResolver != null) {
                 ResolvableType resolved = this.variableResolver.resolveVariable(variable);
                 if (resolved != null) {
@@ -140,6 +141,7 @@ public class ResolvableType implements Serializable {
                 }
 
             }
+            //variable.getBounds() return type[]
             return forType(resolveBounds(variable.getBounds()), this.variableResolver);
         }
         return NONE;
