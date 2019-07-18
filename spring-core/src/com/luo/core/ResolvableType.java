@@ -1,6 +1,7 @@
 package com.luo.core;
 
 import com.luo.lang.Nullable;
+import com.luo.util.ObjectUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Type;
@@ -35,6 +36,38 @@ public class ResolvableType implements Serializable {
 
         //接口里面直接引用包含该接口的类
         ResolvableType resolveVariable(TypeVariable<?> variable);
+    }
+
+    //VariableResolver 的默认实现
+    @SuppressWarnings("serial")
+    private static class TypeVariablesVariableResolver implements VariableResolver {
+        private final TypeVariable<?>[] variables;
+        private final ResolvableType[] generics;
+
+        public TypeVariablesVariableResolver(TypeVariable<?>[] variables, ResolvableType[] generics) {
+            this.variables = variables;
+            this.generics = generics;
+        }
+
+        @Override
+        public Object getSource() {
+            return this.generics;
+        }
+
+        @Override
+        @Nullable
+        public ResolvableType resolveVariable(TypeVariable<?> variable) {
+            for (int i = 0; i < this.variables.length; i++) {
+                TypeVariable<?> v1 = SerializableTypeWrapper.unwrap(this.variables[i]);
+                TypeVariable<?> v2 = SerializableTypeWrapper.unwrap(variable);
+                if (ObjectUtils.nullSafeEquals(v1, v2)) {
+                    return this.generics[i];
+                }
+
+
+            }
+            return null;
+        }
     }
 
 }
