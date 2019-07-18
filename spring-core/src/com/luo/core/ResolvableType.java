@@ -5,9 +5,7 @@ import com.luo.util.ConcurrentReferenceHashMap;
 import com.luo.util.ObjectUtils;
 
 import java.io.Serializable;
-import java.lang.reflect.GenericArrayType;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
+import java.lang.reflect.*;
 
 /**
  * 封装java反射中的Type
@@ -108,21 +106,65 @@ public class ResolvableType implements Serializable {
 
         if (this.type instanceof Class) {
             Class<?> componentType = ((Class<?>) this.type).getComponentType();
-
+            return forType(componentType, this.variableResolver);
 
         }
+
+        if (this.type instanceof GenericArrayType) {
+            return forType(((GenericArrayType) this.type).getGenericComponentType(), this.variableResolver);
+        }
+
     }
 
+    ResolvableType resolveType() {
+        if (this.type instanceof ParameterizedType) {
+            return forType(((ParameterizedType) this.type).getRawType(), this.variableResolver);
+        }
+
+
+        if (this.type instanceof WildcardType) {
+            Type resolved = resolveBounds(((WildcardType) this.type).getUpperBounds());
+            if (resolved == null) {
+                resolved = resolveBounds(((WildcardType) this.type).getLowerBounds());
+            }
+            return forType(resolved, this.variableResolver);
+
+        }
+
+        if (this.type instanceof TypeVariable) {
+            TypeVariable<?> variable = (TypeVariable<?>) this.type;
+            if (this.variableResolver != null) {
+                ResolvableType resolved = this.variableResolver.resolveVariable(variable);
+                if (resolved != null) {
+                    return resolved;
+                }
+
+            }
+            return forType(resolveBounds(variable.getBounds()), this.variableResolver);
+        }
+        return NONE;
+    }
+
+    @Nullable
+    private Type resolveBounds(Type[] bounds) {
+        if (bounds.length == 0 || bounds[0] == Object.class) {
+            return null;
+        }
+        return bounds[0];
+    }
+
+    static ResolvableType forType(@Nullable Type type, @Nullable VariableResolver variableResolver) {
+        return forType(type, null, variableResolver);
+    }
     static ResolvableType forType(
             @Nullable Type type, @Nullable SerializableTypeWrapper.TypeProvider typeProvider, @Nullable VariableResolver variableResolver) {
-
+        //SerializableTypeWrapper作用
         if (type == null && typeProvider != null) {
             type = SerializableTypeWrapper.forTypeProvider(typeProvider);
         }
         if (type == null) {
             return NONE;
         }
-
         if (type instanceof Class) {
             return new ResolvableType((Class<?>) type, typeProvider, variableResolver, (ResolvableType) null);
         }
@@ -137,8 +179,8 @@ public class ResolvableType implements Serializable {
         }
         resultType.resolved = cachedType.resolved;
         return resultType;
-
     }
+
     private int calculateHashCode() {
         int hashcode = ObjectUtils.nullSafeHashCode(this.type);
         //考虑typeProvider获得的type的hashcode
