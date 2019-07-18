@@ -93,6 +93,7 @@ public class ResolvableType implements Serializable {
         if (this.type instanceof GenericArrayType) {
 
         }
+        return resolveType().resolve();
     }
 
     public ResolvableType getComponentType() {
@@ -116,6 +117,10 @@ public class ResolvableType implements Serializable {
 
     }
 
+    @Nullable
+    public Class<?> resolve() {
+        return this.resolved;
+    }
     ResolvableType resolveType() {
         //-1 type is ParameterizedType
         if (this.type instanceof ParameterizedType) {
@@ -147,6 +152,7 @@ public class ResolvableType implements Serializable {
         return NONE;
     }
 
+    //解析type[]
     @Nullable
     private Type resolveBounds(Type[] bounds) {
         if (bounds.length == 0 || bounds[0] == Object.class) {
