@@ -295,38 +295,30 @@ public class ResolvableType implements Serializable {
             if (resolved == null) {
                 return null;
             }
+            TypeVariable<? extends Class<?>>[] variables = resolved.getTypeParameters();
+            for (int i = 0; i < variables.length; i++) {
 
+                if (ObjectUtils.nullSafeEquals(variables[i].getName(), variable.getName())) {
+                    Type actualType = parameterizedType.getActualTypeArguments()[i];
+                    return forType(actualType, this.variableResolver);
 
-        }
-    }
-
-    // Generic signature handling
-    private native String getGenericSignature0();
-
-    // Generic info repository; lazily initialized
-    private volatile transient ClassRepository genericInfo;
-
-    // accessor for factory
-    private GenericsFactory getFactory() {
-        // create scope and factory
-        return CoreReflectionFactory.make(this, ClassScope.make(this));
-    }
-
-    public ClassRepository getGenericInfo() {
-        ClassRepository genericInfo = this.genericInfo;
-
-        if (genericInfo == null) {
-            String signature = getGenericSignature0();
-            if (signature == null) {
-                genericInfo = ClassRepository.NONE;
-            } else {
-                genericInfo = ClassRepository.make(signature, getFactory());
+                }
+            }
+            Type ownerType = parameterizedType.getOwnerType();
+            if (ownerType != null) {
+                return forType(ownerType, this.variableResolver).resolveVariable(variable);
             }
 
-            this.genericInfo = genericInfo;
         }
-        return (genericInfo != ClassRepository.NONE ? genericInfo : null);
+        if (this.variableResolver != null) {
+            return this.variableResolver.resolveVariable(variable);
+        }
+        return null;
     }
+
+
+
+
     //实现了java 反射里面的Type接口，这里没有实现里面的方法
     @SuppressWarnings("serial")
     static class EmptyType implements Type, Serializable {
