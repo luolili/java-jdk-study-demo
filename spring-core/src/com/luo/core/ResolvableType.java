@@ -3,6 +3,10 @@ package com.luo.core;
 import com.luo.lang.Nullable;
 import com.luo.util.ConcurrentReferenceHashMap;
 import com.luo.util.ObjectUtils;
+import sun.reflect.generics.factory.CoreReflectionFactory;
+import sun.reflect.generics.factory.GenericsFactory;
+import sun.reflect.generics.repository.ClassRepository;
+import sun.reflect.generics.scope.ClassScope;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
@@ -15,6 +19,7 @@ public class ResolvableType implements Serializable {
 
     public static final ResolvableType NONE = new ResolvableType(EmptyType.INSTANCE, null,
             null, 0);
+    private static final ResolvableType[] EMPTY_TYPES_ARRAY = new ResolvableType[0];
 
     private static final ConcurrentReferenceHashMap<ResolvableType, ResolvableType> cache =
             new ConcurrentReferenceHashMap<>(256);
@@ -211,6 +216,117 @@ public class ResolvableType implements Serializable {
 
     }
 
+
+    //把给定的type转为ResolvableType
+    public ResolvableType as(Class<?> type) {
+        //先检查当前类是不是空类
+        if (this == NONE) {
+            return NONE;
+        }
+        Class<?> resolved = resolve();
+
+        if (resolved == null || type == resolved) {
+            return this;
+        }
+
+    }
+
+    //获取所有被本类实现的接口
+    public ResolvableType[] getInterfaces() {
+        Class<?> resolved = resolve();
+        if (resolved == null) {
+            return EMPTY_TYPES_ARRAY;
+        }
+
+        ResolvableType[] interfaces = this.interfaces;
+        if (interfaces == null) {
+            //从resolved里面获取接口
+            Type[] genericIfcs = resolved.getGenericInterfaces();
+            interfaces = new ResolvableType[genericIfcs.length];//重新构造直接从本类获取到的ResolvableType数组
+            for (int i = 0; i < genericIfcs.length; i++) {
+
+                interfaces[i] = forType(genericIfcs[i], this);
+
+            }
+
+        }
+
+
+    }
+
+    public static ResolvableType forType(@Nullable Type type, @Nullable ResolvableType owner) {
+        VariableResolver variableResolver = null;
+        if (owner != null) {
+
+        }
+        return forType(type, variableResolver);
+
+    }
+
+
+    ResolvableType asVariableResolver() {
+        if (this == NONE) {
+            return null;
+        }
+        return null;
+    }
+
+    @SuppressWarnings("serial")
+    static class DefaultVariableResolver implements VariableResolver {
+        @Override
+        public Object getSource() {
+            return null;
+        }
+
+        @Override
+        public ResolvableType resolveVariable(TypeVariable<?> variable) {
+            return null;
+        }
+    }
+
+    private ResolvableType resolveVariable(TypeVariable<?> variable) {
+        if (this.type instanceof TypeVariable) {
+            return resolveType().resolveVariable(variable);
+        }
+
+        if (this.type instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) this.type;
+            Class<?> resolved = resolve();
+            if (resolved == null) {
+                return null;
+            }
+
+
+        }
+    }
+
+    // Generic signature handling
+    private native String getGenericSignature0();
+
+    // Generic info repository; lazily initialized
+    private volatile transient ClassRepository genericInfo;
+
+    // accessor for factory
+    private GenericsFactory getFactory() {
+        // create scope and factory
+        return CoreReflectionFactory.make(this, ClassScope.make(this));
+    }
+
+    public ClassRepository getGenericInfo() {
+        ClassRepository genericInfo = this.genericInfo;
+
+        if (genericInfo == null) {
+            String signature = getGenericSignature0();
+            if (signature == null) {
+                genericInfo = ClassRepository.NONE;
+            } else {
+                genericInfo = ClassRepository.make(signature, getFactory());
+            }
+
+            this.genericInfo = genericInfo;
+        }
+        return (genericInfo != ClassRepository.NONE ? genericInfo : null);
+    }
     //实现了java 反射里面的Type接口，这里没有实现里面的方法
     @SuppressWarnings("serial")
     static class EmptyType implements Type, Serializable {
