@@ -264,26 +264,27 @@ public class ResolvableType implements Serializable {
     }
 
 
-    ResolvableType asVariableResolver() {
+    VariableResolver asVariableResolver() {
         if (this == NONE) {
             return null;
         }
-        return null;
+        return new DefaultVariableResolver();
     }
 
     @SuppressWarnings("serial")
-    static class DefaultVariableResolver implements VariableResolver {
+    private class DefaultVariableResolver implements VariableResolver {
         @Override
         public Object getSource() {
-            return null;
+            return ResolvableType.this;
         }
 
         @Override
         public ResolvableType resolveVariable(TypeVariable<?> variable) {
-            return null;
+            return ResolvableType.this.resolveVariable(variable);
         }
     }
 
+    //从TypeVariable 获得ResolvableType 通过Type
     private ResolvableType resolveVariable(TypeVariable<?> variable) {
         if (this.type instanceof TypeVariable) {
             return resolveType().resolveVariable(variable);
