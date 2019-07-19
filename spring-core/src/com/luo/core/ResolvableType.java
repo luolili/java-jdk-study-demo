@@ -3,10 +3,6 @@ package com.luo.core;
 import com.luo.lang.Nullable;
 import com.luo.util.ConcurrentReferenceHashMap;
 import com.luo.util.ObjectUtils;
-import sun.reflect.generics.factory.CoreReflectionFactory;
-import sun.reflect.generics.factory.GenericsFactory;
-import sun.reflect.generics.repository.ClassRepository;
-import sun.reflect.generics.scope.ClassScope;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
@@ -228,9 +224,31 @@ public class ResolvableType implements Serializable {
         if (resolved == null || type == resolved) {
             return this;
         }
-
+        for (ResolvableType interfaceType : getInterfaces()) {
+            ResolvableType interfaceAsType = interfaceType.as(type);
+            if (interfaceAsType != NONE) {
+                return interfaceAsType;
+            }
+        }
+        return getSuperType().as(type);
     }
 
+    public ResolvableType getSuperType() {
+        //-1 先获得ResolvableType
+        Class<?> resolved = resolve();
+        if (resolved == null || resolved.getGenericSuperclass() == null) {
+            return NONE;
+        }
+        ResolvableType superType = this.superType;
+
+        if (superType == null) {
+            superType = forType(resolved.getGenericSuperclass(), this);
+            this.superType = superType;
+        }
+        return superType;
+
+
+    }
     //获取所有被本类实现的接口
     public ResolvableType[] getInterfaces() {
         Class<?> resolved = resolve();
