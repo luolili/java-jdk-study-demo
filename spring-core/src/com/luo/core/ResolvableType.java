@@ -91,21 +91,24 @@ public class ResolvableType implements Serializable {
 
 
         if (this.type instanceof GenericArrayType) {
-
+            Class<?> resolvedComponent = getComponentType().resolve();
+            return (resolvedComponent != null ? Array.newInstance(resolvedComponent, 0).getClass() : null);
         }
         return resolveType().resolve();
     }
 
     public ResolvableType getComponentType() {
+        //-1 构造方法
         if (this == NONE) {
             return NONE;
         }
-
+        //-2 字段
         if (this.componentType != null) {
             return this.componentType;
         }
-
+        //-3 解析type
         if (this.type instanceof Class) {
+            //先获取componentType, 从Class.通过componentType 构造ResolvableType
             Class<?> componentType = ((Class<?>) this.type).getComponentType();
             return forType(componentType, this.variableResolver);
 
@@ -114,7 +117,7 @@ public class ResolvableType implements Serializable {
         if (this.type instanceof GenericArrayType) {
             return forType(((GenericArrayType) this.type).getGenericComponentType(), this.variableResolver);
         }
-
+        return resolveType().getComponentType();
     }
 
     @Nullable
