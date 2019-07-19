@@ -244,26 +244,25 @@ public class ResolvableType implements Serializable {
             Type[] genericIfcs = resolved.getGenericInterfaces();
             interfaces = new ResolvableType[genericIfcs.length];//重新构造直接从本类获取到的ResolvableType数组
             for (int i = 0; i < genericIfcs.length; i++) {
-
                 interfaces[i] = forType(genericIfcs[i], this);
 
             }
+            this.interfaces = interfaces;
 
         }
-
-
+        return interfaces;
     }
 
     public static ResolvableType forType(@Nullable Type type, @Nullable ResolvableType owner) {
         VariableResolver variableResolver = null;
         if (owner != null) {
-
+            variableResolver = owner.asVariableResolver();
         }
         return forType(type, variableResolver);
 
     }
 
-
+    @Nullable
     VariableResolver asVariableResolver() {
         if (this == NONE) {
             return null;
