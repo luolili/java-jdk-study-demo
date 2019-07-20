@@ -66,7 +66,7 @@ public class ResolvableType implements Serializable {
         this.variableResolver = variableResolver;
         this.componentType = null;
         this.hash = hash;
-        this.resolved = null;
+        this.resolved = resolveClass();
 
     }
 
@@ -81,6 +81,20 @@ public class ResolvableType implements Serializable {
         this.resolved = resolveClass();
     }
 
+    private ResolvableType(Class<?> clazz) {
+        this.resolved = (clazz != null ? clazz : Object.class);
+        this.type = this.resolved;
+
+        this.typeProvider = null;
+        this.variableResolver = null;
+        this.componentType = null;//如果没有加他，会报他没有被初始化
+        this.hash = null;
+    }
+
+    //获取Type的下属，如果没有就是他自己
+    public Type getType() {
+        return SerializableTypeWrapper.unwrap(this.type);
+    }
     //对Type的解析，结果为Class
     private Class<?> resolveClass() {
         if (this.type == EmptyType.INSTANCE) {
