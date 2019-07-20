@@ -120,7 +120,14 @@ public class ResolvableType implements Serializable {
     public Class<?> toClass() {
         return resolve(Object.class);
     }
-    
+
+    public boolean isArray() {
+        if (this == NONE) {
+            return false;
+        }
+        return ((this.type instanceof Class && ((Class<?>) this.type).isArray() ||
+                (this.type instanceof GenericArrayType || resolveType().isArray())));
+    }
     //对Type的解析，结果为Class
     private Class<?> resolveClass() {
         if (this.type == EmptyType.INSTANCE) {
