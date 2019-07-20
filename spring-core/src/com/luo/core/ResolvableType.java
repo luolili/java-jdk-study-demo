@@ -6,6 +6,7 @@ import com.luo.util.ObjectUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
+import java.util.Map;
 
 /**
  * 封装java反射中的Type
@@ -127,6 +128,78 @@ public class ResolvableType implements Serializable {
         }
         return ((this.type instanceof Class && ((Class<?>) this.type).isArray() ||
                 (this.type instanceof GenericArrayType || resolveType().isArray())));
+    }
+
+    private boolean isAssignableFrom(ResolvableType other) {
+        return isAssignableFrom(other, null);
+    }
+
+    private boolean isAssignableFrom(ResolvableType other, @Nullable Map<Type, Type> mathedBefore) {
+        if (this == NONE || other == NONE) {
+            return false;
+        }
+        if (isArray()) {
+            return (other.isArray() && (getComponentType().equals(other.getComponentType())));
+        }
+        if (mathedBefore != null && mathedBefore.get(this.type) == other.type) {
+            return true;
+        }
+
+        WildcardBounds ourBounds = WildcardBounds.get(this);
+        WildcardBounds typeBounds = WildcardBounds.get(other);
+
+    }
+
+    //inner helper
+    private static class WildcardBounds {
+        private final Kind kind;
+        private final ResolvableType[] bounds;
+
+        public WildcardBounds(Kind kind, ResolvableType[] bounds) {
+            this.kind = kind;
+            this.bounds = bounds;
+        }
+
+
+        public boolean isSameKind(WildcardBounds bounds) {
+            return (this.kind == bounds.kind);
+        }
+
+        private boolean isAssignable(ResolvableType source, ResolvableType from) {
+            return (this.kind == Kind.UPPER ? source.isAssignableFrom(from) : from.isAssignableFrom(source));
+        }
+
+        public ResolvableType[] getBounds() {
+            return this.bounds;
+        }
+
+        @Nullable
+        public static WildcardBounds get(ResolvableType type) {
+            ResolvableType resolveToWildcard = type;
+            while (!(resolveToWildcard.getType() instanceof WildcardType)) {
+                if (resolveToWildcard == NONE) {
+                    return null;
+                }
+                resolveToWildcard = resolveToWildcard.resolveType();
+            }
+
+            WildcardType wildcardType = (WildcardType) resolveToWildcard.type;
+            Kind boundsType = (wildcardType.getLowerBounds().length > 0 ? Kind.LOWER : Kind.UPPER);
+            Type[] bounds = (boundsType == Kind.UPPER ? wildcardType.getUpperBounds() : wildcardType.getLowerBounds());
+            ResolvableType[] resolvableBounds = new ResolvableType[bounds.length];
+            for (int i = 0; i < bounds.length; i++) {
+
+                resolvableBounds[i] = forType(bounds[i], type.variableResolver);
+
+            }
+            return new WildcardBounds(boundsType, resolvableBounds);
+
+
+        }
+
+        enum Kind {
+            UPPER, LOWER
+        }
     }
     //对Type的解析，结果为Class
     private Class<?> resolveClass() {
