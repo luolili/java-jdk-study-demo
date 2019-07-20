@@ -95,6 +95,32 @@ public class ResolvableType implements Serializable {
     public Type getType() {
         return SerializableTypeWrapper.unwrap(this.type);
     }
+
+    //获取type的原生Class
+    public Class<?> getRawClass() {
+        if (this.type == this.resolved) {
+            return this.resolved;
+        }
+        Type rawType = this.type;
+        if (this.type instanceof ParameterizedType) {
+            rawType = ((ParameterizedType) this.type).getRawType();
+        }
+        return (rawType instanceof Class ? (Class<?>) rawType : null);
+    }
+
+    public Object getSource() {
+        Object source = (this.typeProvider != null ? this.typeProvider.getSource() : null);
+        return (source != null ? source : this.type);
+    }
+
+    public Class<?> resolve(Class<?> fallback) {
+        return (this.resolved != null ? this.resolved : fallback);
+    }
+
+    public Class<?> toClass() {
+        return resolve(Object.class);
+    }
+    
     //对Type的解析，结果为Class
     private Class<?> resolveClass() {
         if (this.type == EmptyType.INSTANCE) {
