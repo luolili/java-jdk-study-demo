@@ -10,6 +10,6 @@
      count==0时：--空
      count==-1 -- com
      notice:当字符串里面没有分隔符的时候，返回原来的字符串
-
+-
 二：Oracle的sql*plus:客户端工具
 

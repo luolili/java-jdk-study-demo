@@ -81,6 +81,7 @@ public class ResolvableType implements Serializable {
         this.resolved = resolveClass();
     }
 
+    //对Type的解析，结果为Class
     private Class<?> resolveClass() {
         if (this.type == EmptyType.INSTANCE) {
             return null;
@@ -90,7 +91,9 @@ public class ResolvableType implements Serializable {
             return (Class<?>) this.type;
         }
 
-
+        /**
+         * GenericArrayType 代表一个数组类型，他的成分类型是参数化的类型或类型变量
+         */
         if (this.type instanceof GenericArrayType) {
             Class<?> resolvedComponent = getComponentType().resolve();
             return (resolvedComponent != null ? Array.newInstance(resolvedComponent, 0).getClass() : null);
@@ -98,6 +101,7 @@ public class ResolvableType implements Serializable {
         return resolveType().resolve();
     }
 
+    //通过type 获取componentType
     public ResolvableType getComponentType() {
         //-1 构造方法
         if (this == NONE) {
@@ -110,6 +114,7 @@ public class ResolvableType implements Serializable {
         //-3 解析type
         if (this.type instanceof Class) {
             //先获取componentType, 从Class.通过componentType 构造ResolvableType
+            //Type继承了Class,调用Class的getComponentType方法
             Class<?> componentType = ((Class<?>) this.type).getComponentType();
             return forType(componentType, this.variableResolver);
 
