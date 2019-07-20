@@ -218,6 +218,38 @@ public class ResolvableType implements Serializable {
     }
 
 
+    public ResolvableType[] getGenerics() {
+        if (this == NONE) {
+            return EMPTY_TYPES_ARRAY;
+        }
+        ResolvableType[] generics = this.generics;
+        if (generics == null) {
+            if (this.type instanceof Class) {
+                //TypeVariable接口继承Type
+                Type[] typeParams = ((Class<?>) this.type).getTypeParameters();
+                //初始化generics
+                generics = new ResolvableType[typeParams.length];
+                for (int i = 0; i < generics.length; i++) {
+                    //forType 静态方法
+                    generics[i] = ResolvableType.forType(typeParams[i], this);
+
+                }
+
+            } else if (this.type instanceof ParameterizedType) {
+                Type[] actualTypeArguments = ((ParameterizedType) this.type).getActualTypeArguments();
+                generics = new ResolvableType[actualTypeArguments.length];
+                for (int i = 0; i < actualTypeArguments.length; i++) {
+                    generics[i] = forType(actualTypeArguments[i], this.variableResolver);
+                }
+
+            } else {
+                generics = resolveType().getGenerics();
+            }
+            this.generics = generics;
+        }
+        return generics;
+    }
+
     //把给定的type转为ResolvableType
     public ResolvableType as(Class<?> type) {
         //先检查当前类是不是空类
@@ -360,7 +392,7 @@ public class ResolvableType implements Serializable {
         ResolvableType resolveVariable(TypeVariable<?> variable);
     }
 
-    //VariableResolver 的默认实现
+    //VariableResolver 的实现
     @SuppressWarnings("serial")
     private static class TypeVariablesVariableResolver implements VariableResolver {
         private final TypeVariable<?>[] variables;

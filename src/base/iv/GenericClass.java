@@ -18,7 +18,9 @@ public class GenericClass {
         System.out.println(resolved.getComponentType());//null
         //User不是Object的超类或超接口
         System.out.println(resolved.isAssignableFrom(Object.class));//false
-        System.out.println(resolved.getInterfaces());
+        //System.out.println(resolved.getInterfaces());
+        //[Ljava.lang.reflect.TypeVariable;@15fbaa4
+        System.out.println(resolved.getTypeParameters());
 
 
     }
