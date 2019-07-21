@@ -37,6 +37,7 @@ public class ResolvableType implements Serializable {
 
     @Nullable
     private final Integer hash;
+    //type对应的Class
     @Nullable
     private Class<?> resolved;
 
@@ -101,6 +102,7 @@ public class ResolvableType implements Serializable {
 
     //获取type的原生Class
     public Class<?> getRawClass() {
+        //Type是Class的子接口
         if (this.type == this.resolved) {
             return this.resolved;
         }
@@ -136,13 +138,21 @@ public class ResolvableType implements Serializable {
         return isAssignableFrom(other, null);
     }
 
+    /**
+     * @param other         the type to be checked
+     * @param matchedBefore
+     * @return true the other can be assigned to  this ResolvableType
+     */
     private boolean isAssignableFrom(ResolvableType other, @Nullable Map<Type, Type> matchedBefore) {
+        //-1 当other是空
         if (this == NONE || other == NONE) {
             return false;
         }
+        //-1 this 是数组，还要比较数组里面的元素类型是否一样
         if (isArray()) {
             return (other.isArray() && (getComponentType().equals(other.getComponentType())));
         }
+        //
         if (matchedBefore != null && matchedBefore.get(this.type) == other.type) {
             return true;
         }
@@ -169,7 +179,7 @@ public class ResolvableType implements Serializable {
             if (this.variableResolver != null) {
                 ResolvableType resolved = this.variableResolver.resolveVariable(variable);
                 if (resolved != null) {
-                    ourResolved = resolved.resolved;
+                    ourResolved = resolved.resolve();
                 }
 
             }
@@ -178,7 +188,7 @@ public class ResolvableType implements Serializable {
                 if (other.variableResolver != null) {
                     ResolvableType resolved = other.variableResolver.resolveVariable(variable);
                     if (resolved != null) {
-                        ourResolved = resolved.resolved;
+                        ourResolved = resolved.resolve();
                         checkGenerics = false;
                     }
 
@@ -194,6 +204,7 @@ public class ResolvableType implements Serializable {
         if (ourResolved == null) {
             ourResolved = resolve(Object.class);
         }
+        //获取resolved
         Class<?> otherResolved = other.toClass();
 
         // We need an exact type match for generics
@@ -201,7 +212,7 @@ public class ResolvableType implements Serializable {
         if (exactMatch ? !ourResolved.equals(otherResolved) : !ClassUtils.isAssignable(ourResolved, otherResolved)) {
             return false;
         }
-
+        //比较generics : ResolvableType数组
         if (checkGenerics) {
             ResolvableType[] ourGenerics = getGenerics();
             ResolvableType[] typeGenerics = other.as(ourResolved).getGenerics();
@@ -377,6 +388,8 @@ public class ResolvableType implements Serializable {
     static ResolvableType forType(@Nullable Type type, @Nullable VariableResolver variableResolver) {
         return forType(type, null, variableResolver);
     }
+
+    //利用Type, VariableResolver, TypeProvider构造ResolvableType
     static ResolvableType forType(
             @Nullable Type type, @Nullable SerializableTypeWrapper.TypeProvider typeProvider, @Nullable VariableResolver variableResolver) {
         //SerializableTypeWrapper作用
@@ -386,8 +399,8 @@ public class ResolvableType implements Serializable {
         if (type == null) {
             return NONE;
         }
-        if (type instanceof Class) {
-            return new ResolvableType((Class<?>) type, typeProvider, variableResolver, (ResolvableType) null);
+        if (type instanceof Class) {//type不需要转为Class
+            return new ResolvableType(type, typeProvider, variableResolver, (ResolvableType) null);
         }
 
         cache.purgeUnreferenceEntries();
@@ -454,35 +467,40 @@ public class ResolvableType implements Serializable {
         return generics;
     }
 
-    //把给定的type转为ResolvableType
+    //把给定的Class类型的type转为ResolvableType
     public ResolvableType as(Class<?> type) {
         //先检查当前类是不是空类
         if (this == NONE) {
             return NONE;
         }
+        //获取本类的type的Class
         Class<?> resolved = resolve();
-
+        //当本类的type的Class为空or等于type
         if (resolved == null || type == resolved) {
             return this;
         }
+        //用每个接口来将type转为ResolvableType，一旦有不是空的ResolvableType就返回他
         for (ResolvableType interfaceType : getInterfaces()) {
             ResolvableType interfaceAsType = interfaceType.as(type);
             if (interfaceAsType != NONE) {
                 return interfaceAsType;
             }
         }
+        //对本类的超类进行前面的转换
         return getSuperType().as(type);
     }
 
     public ResolvableType getSuperType() {
-        //-1 先获得ResolvableType
+        //-1 先获得ResolvableType 的tye对应的Class，目的是通过Class确定他是否有超类
         Class<?> resolved = resolve();
         if (resolved == null || resolved.getGenericSuperclass() == null) {
             return NONE;
         }
+        //-2 有超类，先检查本类的属性superType
         ResolvableType superType = this.superType;
 
         if (superType == null) {
+            //用Class作为参数调用静态方法forType：在非静态方法里面调用静态方法
             superType = forType(resolved.getGenericSuperclass(), this);
             this.superType = superType;
         }
