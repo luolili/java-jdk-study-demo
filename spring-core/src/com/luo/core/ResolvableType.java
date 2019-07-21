@@ -1,12 +1,14 @@
 package com.luo.core;
 
 import com.luo.lang.Nullable;
+import com.luo.util.Assert;
 import com.luo.util.ClassUtils;
 import com.luo.util.ConcurrentReferenceHashMap;
 import com.luo.util.ObjectUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
+import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
@@ -146,15 +148,31 @@ public class ResolvableType implements Serializable {
         return isAssignableFrom(other, null);
     }
 
+    //判断obj是不是ResolvableType的实例
     public boolean isInstance(Object obj) {
         return (obj != null && isAssignableFrom(obj.getClass()));
     }
+
+    public ResolvableType asColletion() {
+        return as(Collection.class);
+    }
+
+    public ResolvableType asMap() {
+        return as(Map.class);
+    }
+
+    public boolean hasGeneris() {
+        return getGenerics().length > 0;
+    }
+
     /**
      * @param other         the type to be checked
      * @param matchedBefore
      * @return true the other can be assigned to  this ResolvableType
      */
     private boolean isAssignableFrom(ResolvableType other, @Nullable Map<Type, Type> matchedBefore) {
+        Assert.notNull(other, "ResolvableType must not be null");
+
         //-1 当other是空
         if (this == NONE || other == NONE) {
             return false;
