@@ -738,7 +738,5 @@ public class ResolvableType implements Serializable {
         }
         return true;
 
-
-        return super.equals(obj);
     }
 }
