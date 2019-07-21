@@ -24,4 +24,8 @@ public class GenericClass {
 
 
     }
+
+    public void say(NonPublicClass nonPublicClass, NonPublicClass.He he) {
+
+    }
 }

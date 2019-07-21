@@ -134,10 +134,21 @@ public class ResolvableType implements Serializable {
                 (this.type instanceof GenericArrayType || resolveType().isArray())));
     }
 
+    public static ResolvableType forClass(@Nullable Class<?> clazz) {
+        return new ResolvableType(clazz);
+    }
+
+    private boolean isAssignableFrom(Class<?> other) {
+        return isAssignableFrom(forClass(other), null);
+    }
+
     private boolean isAssignableFrom(ResolvableType other) {
         return isAssignableFrom(other, null);
     }
 
+    public boolean isInstance(Object obj) {
+        return (obj != null && isAssignableFrom(obj.getClass()));
+    }
     /**
      * @param other         the type to be checked
      * @param matchedBefore
