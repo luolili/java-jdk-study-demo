@@ -133,15 +133,16 @@ public class ResolvableType implements Serializable {
                 (this.type instanceof GenericArrayType || resolveType().isArray())));
     }
 
+    //factory method
     public static ResolvableType forClass(@Nullable Class<?> clazz) {
         return new ResolvableType(clazz);
     }
 
-    private boolean isAssignableFrom(Class<?> other) {
+    public boolean isAssignableFrom(Class<?> other) {
         return isAssignableFrom(forClass(other), null);
     }
 
-    private boolean isAssignableFrom(ResolvableType other) {
+    public boolean isAssignableFrom(ResolvableType other) {
         return isAssignableFrom(other, null);
     }
 
@@ -772,5 +773,25 @@ public class ResolvableType implements Serializable {
         }
 
         return result.toString();
+    }
+
+    public static ResolvableType forRawClass(@Nullable Class<?> clazz) {
+        return new ResolvableType(clazz) {
+            @Override
+            public ResolvableType[] getGenerics() {
+                return EMPTY_TYPES_ARRAY;
+            }
+
+            @Override
+            public boolean isAssignableFrom(Class<?> other) {
+                return (clazz == null || ClassUtils.isAssignable(clazz, other));
+            }
+
+            @Override
+            public boolean isAssignableFrom(ResolvableType other) {
+                Class<?> otherClass = other.getRawClass();
+                return (otherClass != null && (clazz == null || ClassUtils.isAssignable(clazz, otherClass)));
+            }
+        };
     }
 }
