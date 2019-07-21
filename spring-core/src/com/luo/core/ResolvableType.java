@@ -1,10 +1,7 @@
 package com.luo.core;
 
 import com.luo.lang.Nullable;
-import com.luo.util.Assert;
-import com.luo.util.ClassUtils;
-import com.luo.util.ConcurrentReferenceHashMap;
-import com.luo.util.ObjectUtils;
+import com.luo.util.*;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
@@ -738,5 +735,42 @@ public class ResolvableType implements Serializable {
         }
         return true;
 
+    }
+
+    @Override
+    public int hashCode() {
+        return (this.hash != null ? this.hash : calculateHashCode());
+    }
+
+    private Object readResolve() {
+        return (this.type == EmptyType.INSTANCE ? NONE : this);
+    }
+
+    @Override
+    public String toString() {
+        if (isArray()) {
+            return getComponentType() + "[]";
+        }
+
+        if (this.resolved == null) {
+            return "?";
+        }
+        if (this.type instanceof TypeVariable) {
+            TypeVariable<?> variable = (TypeVariable<?>) this.type;
+            // Don't bother with variable boundaries for toString()...
+            // Can cause infinite recursions in case of self-references
+            if (this.variableResolver == null || this.variableResolver.resolveVariable(variable) == null) {
+                return "?";
+            }
+        }
+
+        StringBuilder result = new StringBuilder(this.resolved.getName());
+        if (hasGenerics()) {
+            result.append('<');
+            result.append(StringUtils.arrayToDelimitedString(getGenerics(), ", "));
+            result.append('>');
+        }
+
+        return result.toString();
     }
 }
