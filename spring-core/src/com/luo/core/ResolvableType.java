@@ -709,5 +709,36 @@ public class ResolvableType implements Serializable {
         }
     }
 
+    @Override
+    public boolean equals(Object other) {
 
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof ResolvableType)) {
+            return false;
+        }
+
+
+        //类型转化
+        ResolvableType otherType = (ResolvableType) other;
+        //属性type不一样
+        if (!ObjectUtils.nullSafeEquals(this.type, otherType.type)) {
+            return false;
+        }
+        // //属性type一样, 比较typeProvider 和根据typeProvider获得的Type
+
+        if (this.typeProvider != otherType.typeProvider && (this.typeProvider == null || otherType.typeProvider == null) ||
+                !ObjectUtils.nullSafeEquals(this.typeProvider.getType(), otherType.typeProvider.getType())) {
+            return false;
+        }
+        //componentType
+        if (!ObjectUtils.nullSafeEquals(this.componentType, otherType.componentType)) {
+            return false;
+        }
+        return true;
+
+
+        return super.equals(obj);
+    }
 }
