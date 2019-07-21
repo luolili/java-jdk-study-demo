@@ -22,6 +22,8 @@ public class GenericClass {
         //[Ljava.lang.reflect.TypeVariable;@15fbaa4
         System.out.println(resolved.getTypeParameters());
 
+        System.out.println("--" + ((Class) null));
+
 
     }
 
