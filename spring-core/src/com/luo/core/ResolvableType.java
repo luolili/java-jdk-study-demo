@@ -169,6 +169,17 @@ public class ResolvableType implements Serializable {
             return (this.kind == Kind.UPPER ? source.isAssignableFrom(from) : from.isAssignableFrom(source));
         }
 
+        public boolean isAssignableFrom(ResolvableType... types) {
+            for (ResolvableType bound : this.bounds) {
+                for (ResolvableType type : types) {
+                    if (!isAssignable(bound, type)) {
+                        return false;
+                    }
+
+                }
+            }
+            return true;
+        }
         public ResolvableType[] getBounds() {
             return this.bounds;
         }
@@ -193,7 +204,6 @@ public class ResolvableType implements Serializable {
 
             }
             return new WildcardBounds(boundsType, resolvableBounds);
-
 
         }
 
