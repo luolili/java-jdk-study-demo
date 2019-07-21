@@ -815,4 +815,56 @@ public class ResolvableType implements Serializable {
         methodParameter.setContainingClass(implementationClass);
         return forMethodParameter(methodParameter);
     }
+
+
+    public static ResolvableType forMethodParameter(MethodParameter methodParameter) {
+        return forMethodParameter(methodParameter, (Type) null);
+    }
+
+    public static ResolvableType forMethodParameter(MethodParameter methodParameter, @Nullable Type targetType) {
+        Assert.notNull(methodParameter, "MethodParameter must not be null");
+        ResolvableType owner = forType(methodParameter.getContainingClass()).as(methodParameter.getDeclaringClass());
+        return forType(targetType, new SerializableTypeWrapper.MethodParameterTypeProvider(methodParameter), owner.asVariableResolver()).
+                getNested(methodParameter.getNestingLevel(), methodParameter.typeIndexesPerLevel);
+
+    }
+
+    public ResolvableType getNested(int nestingLevel, @Nullable Map<Integer, Integer> typeIndexesPerLevel) {
+        ResolvableType result = this;
+        for (int i = 2; i <= nestingLevel; i++) {
+            if (result.isArray()) {
+                result = result.getComponentType();
+            } else {
+                // Handle derived types
+                while (result != ResolvableType.NONE && !result.hasGenerics()) {
+                    result = result.getSuperType();
+                }
+                Integer index = (typeIndexesPerLevel != null ? typeIndexesPerLevel.get(i) : null);
+                index = (index == null ? result.getGenerics().length - 1 : index);
+                result = result.getGeneric(index);
+            }
+        }
+        return result;
+    }
+
+    public ResolvableType getGeneric(@Nullable int... indexes) {
+        //在indexes==null or indexes.length==0的时候需要用到
+        ResolvableType[] generics = getGenerics();
+        if (indexes == null || indexes.length == 0) {
+            return (generics.length == 0 ? NONE : generics[0]);
+        }
+        //初始化单个generic
+        ResolvableType generic = this;
+        for (int index : indexes) {
+            generics = generic.getGenerics();
+            //index范围检查
+            if (index < 0 || index >= generics.length) {
+                return NONE;
+            }
+            generic = generics[index];
+        }
+        return generic;
+    }
+
+
 }

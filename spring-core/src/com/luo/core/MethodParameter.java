@@ -29,7 +29,7 @@ public class MethodParameter {
     private int nestingLevel = 1;
 
     @Nullable
-    private Map<Integer, Integer> typeIndexesPerLevel;
+    Map<Integer, Integer> typeIndexesPerLevel;
 
     @Nullable
     private volatile Class<?> containingClass;
