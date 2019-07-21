@@ -153,7 +153,7 @@ public class ResolvableType implements Serializable {
         return (obj != null && isAssignableFrom(obj.getClass()));
     }
 
-    public ResolvableType asColletion() {
+    public ResolvableType asCollection() {
         return as(Collection.class);
     }
 
@@ -161,10 +161,26 @@ public class ResolvableType implements Serializable {
         return as(Map.class);
     }
 
-    public boolean hasGeneris() {
+    public boolean hasGenerics() {
         return getGenerics().length > 0;
     }
 
+    public boolean isUnresolvableTypeVariable() {
+        if (this.type instanceof TypeVariable) {
+            //无variableResolver
+            if (this.variableResolver == null) {
+                return true;//可以被解析
+            }
+
+            TypeVariable<?> variable = (TypeVariable<?>) this.type;
+            ResolvableType resolved = this.variableResolver.resolveVariable(variable);
+            if (resolved == null || resolved.isUnresolvableTypeVariable()) {
+                return true;
+            }
+
+        }
+        return false;
+    }
     /**
      * @param other         the type to be checked
      * @param matchedBefore
