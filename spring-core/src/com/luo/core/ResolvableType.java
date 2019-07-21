@@ -794,4 +794,25 @@ public class ResolvableType implements Serializable {
             }
         };
     }
+
+    public static ResolvableType forType(@Nullable Type type) {
+        return forType(type, null, null);
+    }
+
+    static void resolveMethodParameter(MethodParameter methodParameter) {
+        Assert.notNull(methodParameter, "MethodParameter must not be null");
+
+        ResolvableType owner = forType(methodParameter.getContainingClass()).as(methodParameter.getDeclaringClass());
+        methodParameter.setParameterType(forType(null,
+                new SerializableTypeWrapper.MethodParameterTypeProvider(methodParameter), owner.asVariableResolver()).resolve());
+
+
+    }
+
+    public static ResolvableType forMethodReturnType(Method method, Class<?> implementationClass) {
+        Assert.notNull(method, "Method must not be null");
+        MethodParameter methodParameter = new MethodParameter(method, -1);
+        methodParameter.setContainingClass(implementationClass);
+        return forMethodParameter(methodParameter);
+    }
 }
