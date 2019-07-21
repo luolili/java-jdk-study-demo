@@ -181,6 +181,19 @@ public class ResolvableType implements Serializable {
         }
         return false;
     }
+
+    public Class<?>[] resolveGenerics() {
+        ResolvableType[] generics = getGenerics();
+        Class<?>[] resolvedGenerics = new Class<?>[generics.length];
+        for (int i = 0; i < generics.length; i++) {
+
+            resolvedGenerics[i] = generics[i].resolve();
+
+        }
+        return resolvedGenerics;
+
+
+    }
     /**
      * @param other         the type to be checked
      * @param matchedBefore
