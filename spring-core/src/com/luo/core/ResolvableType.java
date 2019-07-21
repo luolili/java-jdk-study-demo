@@ -1,11 +1,13 @@
 package com.luo.core;
 
 import com.luo.lang.Nullable;
+import com.luo.util.ClassUtils;
 import com.luo.util.ConcurrentReferenceHashMap;
 import com.luo.util.ObjectUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 /**
@@ -134,19 +136,91 @@ public class ResolvableType implements Serializable {
         return isAssignableFrom(other, null);
     }
 
-    private boolean isAssignableFrom(ResolvableType other, @Nullable Map<Type, Type> mathedBefore) {
+    private boolean isAssignableFrom(ResolvableType other, @Nullable Map<Type, Type> matchedBefore) {
         if (this == NONE || other == NONE) {
             return false;
         }
         if (isArray()) {
             return (other.isArray() && (getComponentType().equals(other.getComponentType())));
         }
-        if (mathedBefore != null && mathedBefore.get(this.type) == other.type) {
+        if (matchedBefore != null && matchedBefore.get(this.type) == other.type) {
             return true;
         }
 
         WildcardBounds ourBounds = WildcardBounds.get(this);
         WildcardBounds typeBounds = WildcardBounds.get(other);
+
+        if (typeBounds != null) {
+            return (ourBounds != null && ourBounds.isSameKind(typeBounds) &&
+                    ourBounds.isAssignableFrom(typeBounds.getBounds()));
+        }
+
+        if (ourBounds != null) {
+            //other是单个元素，非数组
+            return ourBounds.isAssignableFrom(other);
+        }
+        //nested generic var
+        boolean exactMatch = (matchedBefore != null);
+
+        boolean checkGenerics = true;
+        Class<?> ourResolved = null;
+        if (this.type instanceof TypeVariable) {
+            TypeVariable variable = (TypeVariable) this.type;
+            if (this.variableResolver != null) {
+                ResolvableType resolved = this.variableResolver.resolveVariable(variable);
+                if (resolved != null) {
+                    ourResolved = resolved.resolved;
+                }
+
+            }
+
+            if (ourResolved == null) {
+                if (other.variableResolver != null) {
+                    ResolvableType resolved = other.variableResolver.resolveVariable(variable);
+                    if (resolved != null) {
+                        ourResolved = resolved.resolved;
+                        checkGenerics = false;
+                    }
+
+                }
+            }
+
+            if (ourResolved == null) {
+                // Unresolved type variable, potentially nested -> never insist on exact match
+                exactMatch = false;
+            }
+
+        }
+        if (ourResolved == null) {
+            ourResolved = resolve(Object.class);
+        }
+        Class<?> otherResolved = other.toClass();
+
+        // We need an exact type match for generics
+        // List<CharSequence> is not assignable from List<String>
+        if (exactMatch ? !ourResolved.equals(otherResolved) : !ClassUtils.isAssignable(ourResolved, otherResolved)) {
+            return false;
+        }
+
+        if (checkGenerics) {
+            ResolvableType[] ourGenerics = getGenerics();
+            ResolvableType[] typeGenerics = other.as(ourResolved).getGenerics();
+
+            if (ourGenerics.length != typeGenerics.length) {
+                return false;
+            }
+            if (matchedBefore == null) {
+                matchedBefore = new IdentityHashMap<>(1);
+            }
+            matchedBefore.put(this.type, other.type);
+            for (int i = 0; i < ourGenerics.length; i++) {
+                if (!ourGenerics[i].isAssignableFrom(typeGenerics[i], matchedBefore)) {
+                    return false;
+                }
+            }
+
+        }
+        return true;
 
     }
 
