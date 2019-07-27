@@ -5,6 +5,7 @@ import com.luo.util.*;
 
 import java.io.Serializable;
 import java.lang.reflect.*;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -898,6 +899,145 @@ public class ResolvableType implements Serializable {
 
         }
         return true;
+    }
+
+
+    public boolean hasUnresolvableGenerics() {
+        if (this == NONE) {
+            return false;
+        }
+        ResolvableType[] generics = getGenerics();
+        for (ResolvableType generic : generics) {
+
+            if (generic.isUnresolvableTypeVariable() || generic.isWildcardWithoutBounds()) {
+                return true;//存在
+            }
+
+        }
+
+        Class<?> resolved = resolve();
+
+        if (resolved != null) {
+            for (Type gIfc : resolved.getGenericInterfaces()) {
+
+                if (gIfc instanceof Class) {
+                    if (forClass((Class<?>) gIfc).hasGenerics()) {
+                        return true;//存在
+                    }
+                }
+
+            }
+            return getSuperType().hasUnresolvableGenerics();
+        }
+        return false;
+    }
+
+    private static class SyntheticParameterizedType implements ParameterizedType, Serializable {
+
+        private final Type rawType;
+        private final Type[] typeArguments;
+
+        public SyntheticParameterizedType(Type rawType, Type[] typeArguments) {
+            this.rawType = rawType;
+            this.typeArguments = typeArguments;
+        }
+
+        @Override
+        public Type getOwnerType() {
+            return null;
+        }
+
+        @Override
+        public String getTypeName() {
+            StringBuilder result = new StringBuilder(this.rawType.getTypeName());
+
+            if (this.typeArguments.length > 0) {
+                result.append('<');
+                for (int i = 0; i < typeArguments.length; i++) {
+
+                    if (i > 0) {
+                        result.append(", ");
+                    }
+                    result.append(this.typeArguments[i].getTypeName());
+
+                }
+            }
+            result.append('>');
+            return result.toString();
+        }
+
+        @Override
+        public Type[] getActualTypeArguments() {
+            return this.typeArguments;
+        }
+
+        @Override
+        public Type getRawType() {
+            return this.rawType;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+
+            if (this == other) {
+                return true;
+            }
+
+            if (!(other instanceof ParameterizedType)) {
+                return false;
+            }
+            ParameterizedType otherType = (ParameterizedType) other;
+            //Arrays.equals比较2个数组是否相等
+            return (otherType.getOwnerType() == null && (otherType.getRawType().equals(this.rawType)) &&
+                    Arrays.equals(this.typeArguments, otherType.getActualTypeArguments()));
+        }
+
+        //Arrays.hashCode计算一个数组的hash
+        @Override
+        public int hashCode() {
+            return this.rawType.hashCode() * 31 + Arrays.hashCode(this.typeArguments);
+        }
+
+        @Override
+        public String toString() {
+            return getTypeName();
+        }
+    }
+
+    public static ResolvableType forClassWithGenerics(Class<?> clazz, ResolvableType... generics) {
+
+        Assert.notNull(clazz, "Class must not be null");
+        Assert.notNull(generics, "Generics array must not be null");
+        TypeVariable<? extends Class<?>>[] variables = clazz.getTypeParameters();
+        Assert.isTrue(variables.length == generics.length, "Mismatched number of generics specified");
+        Type[] arguments = new Type[generics.length];
+
+        for (int i = 0; i < generics.length; i++) {
+
+            ResolvableType generic = generics[i];
+            Type argument = (generic != null ? generic.getType() : null);
+            arguments[i] = (argument != null && !(argument instanceof TypeVariable) ? argument : variables[i]);
+
+
+        }
+
+
+        return null;
+    }
+
+    public static ResolvableType forClassWithGenerics(Class<?> clazz, Class<?>... generics) {
+        Assert.notNull(clazz, "Class must not be null");
+        Assert.notNull(generics, "Generics array must not be null");
+        ResolvableType[] resolvableTypes = new ResolvableType[generics.length];
+
+        for (int i = 0; i < generics.length; i++) {
+
+            resolvableTypes[i] = forType(generics[i]);
+
+        }
+        return forClassWithGenerics(clazz, resolvableTypes);
+
+
     }
 
 }

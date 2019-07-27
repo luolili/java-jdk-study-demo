@@ -4,10 +4,7 @@ import com.luo.lang.Nullable;
 import com.luo.util.Assert;
 import com.luo.util.ConcurrentReferenceHashMap;
 
-import java.lang.reflect.Method;
-import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.lang.reflect.WildcardType;
+import java.lang.reflect.*;
 import java.util.Map;
 
 /**
@@ -117,6 +114,41 @@ public final class GenericTypeResolver {
                     if (resolved != null) {
                         return resolved;
                     }
+                }
+            } else if (genericType instanceof ParameterizedType) {
+                //genericType 不是TypeVariable, 是ParameterizedType
+                ResolvableType resolvedType = ResolvableType.forType(genericType);
+                if (resolvedType.hasUnresolvableGenerics()) {
+                    ParameterizedType parameterizedType = (ParameterizedType) genericType;
+
+                    Class<?>[] generics = new Class<?>[parameterizedType.getActualTypeArguments().length];
+                    Type[] typeArguments = parameterizedType.getActualTypeArguments();
+                    //循环类型参数
+
+                    for (int i = 0; i < typeArguments.length; i++) {
+                        Type typeArgument = typeArguments[i];
+                        if (typeArgument instanceof TypeVariable) {
+                            ResolvableType resolvedTypeArgument =
+                                    resolveVarivale((TypeVariable<?>) typeArgument, ResolvableType.forClass(contextClass));
+                            if (resolvedTypeArgument != ResolvableType.NONE) {
+                                generics[i] = resolvedTypeArgument.resolve();
+                            } else {
+                                generics[i] = ResolvableType.forType(typeArgument).resolve();
+                            }
+
+                        } else {//typeArgument 不是TypeVariable
+                            generics[i] = ResolvableType.forType(typeArgument).resolve();
+                        }
+
+
+                    }
+
+                    Class<?> rawClass = resolvedType.getRawClass();
+                    if (rawClass != null) {
+
+                    }
+
+
                 }
 
 
