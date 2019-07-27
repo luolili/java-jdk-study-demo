@@ -104,7 +104,6 @@ public final class GenericTypeResolver {
     }
 
     public static Type resolveType(Type genericType, @Nullable Class<?> contextClass) {
-
         if (contextClass != null) {
             if (genericType instanceof TypeVariable) {
                 ResolvableType resolvableTypeVariable =
@@ -142,18 +141,15 @@ public final class GenericTypeResolver {
 
 
                     }
-
                     Class<?> rawClass = resolvedType.getRawClass();
                     if (rawClass != null) {
-
+                        ResolvableType.forClassWithGenerics(rawClass, generics).getType();
                     }
 
-
                 }
-
-
             }
         }
+        return genericType;
     }
 }
 

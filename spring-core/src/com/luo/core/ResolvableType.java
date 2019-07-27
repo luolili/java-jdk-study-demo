@@ -1014,13 +1014,12 @@ public class ResolvableType implements Serializable {
         Type[] arguments = new Type[generics.length];
 
         for (int i = 0; i < generics.length; i++) {
-
             ResolvableType generic = generics[i];
             Type argument = (generic != null ? generic.getType() : null);
             arguments[i] = (argument != null && !(argument instanceof TypeVariable) ? argument : variables[i]);
 
         }
-        SyntheticParameterizedType syntheticParameterizedType = new SyntheticParameterizedType(clazz, arguments);
+        ParameterizedType syntheticParameterizedType = new SyntheticParameterizedType(clazz, arguments);
 
         return forType(syntheticParameterizedType, new TypeVariablesVariableResolver(variables, generics));
     }
