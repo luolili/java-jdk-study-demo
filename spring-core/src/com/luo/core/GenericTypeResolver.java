@@ -1,5 +1,6 @@
 package com.luo.core;
 
+import com.luo.lang.Nullable;
 import com.luo.util.Assert;
 import com.luo.util.ConcurrentReferenceHashMap;
 
@@ -72,6 +73,55 @@ public final class GenericTypeResolver {
         }
         return resolvableType.resolveGenerics(Object.class);
 
+    }
+
+    public static ResolvableType resolveVarivale(TypeVariable<?> typeVariable, ResolvableType contextType) {
+        ResolvableType resolvedType;
+        if (contextType.hasGenerics()) {
+            //通过 Type 和ResolvableType 获得ResolvableType
+            resolvedType = ResolvableType.forType(typeVariable, contextType);
+            if (resolvedType.resolve() != null) {
+                return resolvedType;
+            }
+        }
+
+        //没有generics
+
+        ResolvableType superType = contextType.getSuperType();
+        if (superType != ResolvableType.NONE) {
+            resolvedType = resolveVarivale(typeVariable, superType);
+            if (resolvedType.resolve() != null) {
+                return resolvedType;
+            }
+        }
+        //contextType.getInterfaces() 始终不是null
+        for (ResolvableType ifc : contextType.getInterfaces()) {
+            resolvedType = resolveVarivale(typeVariable, ifc);
+            if (resolvedType.resolve() != null) {
+                return resolvedType;
+            }
+
+        }
+        return ResolvableType.NONE;
+
+    }
+
+    public static Type resolveType(Type genericType, @Nullable Class<?> contextClass) {
+
+        if (contextClass != null) {
+            if (genericType instanceof TypeVariable) {
+                ResolvableType resolvableTypeVariable =
+                        resolveVarivale((TypeVariable<?>) genericType, ResolvableType.forClass(contextClass));
+                if (resolvableTypeVariable != ResolvableType.NONE) {
+                    Class<?> resolved = resolvableTypeVariable.resolve();
+                    if (resolved != null) {
+                        return resolved;
+                    }
+                }
+
+
+            }
+        }
     }
 }
 
