@@ -153,5 +153,34 @@ public final class GenericTypeResolver {
         }
         return genericType;
     }
+
+    @SuppressWarnings({"serial", "rawtypes"})
+    private static class TypeVariableMapVariableResolver implements ResolvableType.VariableResolver {
+
+        private final Map<TypeVariable, Type> typeVariableMap;
+
+        public TypeVariableMapVariableResolver(Map<TypeVariable, Type> typeVariableMap) {
+            this.typeVariableMap = typeVariableMap;
+        }
+
+        @Override
+        public Object getSource() {
+            return this.typeVariableMap;
+        }
+
+        @Override
+        @Nullable
+        public ResolvableType resolveVariable(TypeVariable<?> variable) {
+            Type type = typeVariableMap.get(variable);
+
+            return (type != null ? ResolvableType.forType(type) : null);
+        }
+    }
+
+    @SuppressWarnings("rawtypes")
+    public static Class<?> resolveType(Type genericType, Map<TypeVariable, Type> map) {
+        return ResolvableType.forType(genericType, new TypeVariableMapVariableResolver(map)).toClass();
+    }
+
 }
 

@@ -1030,12 +1030,9 @@ public class ResolvableType implements Serializable {
         ResolvableType[] resolvableTypes = new ResolvableType[generics.length];
 
         for (int i = 0; i < generics.length; i++) {
-
             resolvableTypes[i] = forType(generics[i]);
-
         }
         return forClassWithGenerics(clazz, resolvableTypes);
-
 
     }
 
