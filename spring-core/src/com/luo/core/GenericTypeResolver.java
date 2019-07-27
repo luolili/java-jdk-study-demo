@@ -6,6 +6,7 @@ import com.luo.util.ConcurrentReferenceHashMap;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.lang.reflect.WildcardType;
 import java.util.Map;
 
 /**
@@ -41,5 +42,15 @@ public final class GenericTypeResolver {
                 "] but found " + resolvableType.getGenerics().length);
 
         return resolvableType.getGeneric().resolve();
+    }
+
+    public static Class<?> resolveReturnTypeArgument(Method method, Class<?> genericIfc) {
+        Assert.notNull(method, "Method must be not null");
+        ResolvableType resolvableType = ResolvableType.forMethodReturnType(method).as(genericIfc);
+
+        if (!resolvableType.hasGenerics() || resolvableType.getType() instanceof WildcardType) {
+            return null;
+        }
+        return getSingleGeneric(resolvableType);
     }
 }
