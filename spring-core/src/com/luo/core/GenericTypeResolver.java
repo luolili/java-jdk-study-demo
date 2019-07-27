@@ -34,4 +34,12 @@ public final class GenericTypeResolver {
         Assert.notNull(clazz, "Class must be not null");
         return ResolvableType.forMethodReturnType(method, clazz).resolve(method.getReturnType());
     }
+
+    public static Class<?> getSingleGeneric(ResolvableType resolvableType) {
+        Assert.isTrue(resolvableType.getGenerics().length == 1, "" +
+                "Expected 1 type argument on generic inteface [" + resolvableType +
+                "] but found " + resolvableType.getGenerics().length);
+
+        return resolvableType.getGeneric().resolve();
+    }
 }
