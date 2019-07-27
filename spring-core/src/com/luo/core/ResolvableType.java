@@ -943,6 +943,7 @@ public class ResolvableType implements Serializable {
         }
 
         @Override
+        @Nullable
         public Type getOwnerType() {
             return null;
         }
@@ -988,7 +989,7 @@ public class ResolvableType implements Serializable {
             }
             ParameterizedType otherType = (ParameterizedType) other;
             //Arrays.equals比较2个数组是否相等
-            return (otherType.getOwnerType() == null && (otherType.getRawType().equals(this.rawType)) &&
+            return (otherType.getOwnerType() == null && (this.rawType.equals(otherType.getRawType())) &&
                     Arrays.equals(this.typeArguments, otherType.getActualTypeArguments()));
         }
 
@@ -1018,11 +1019,10 @@ public class ResolvableType implements Serializable {
             Type argument = (generic != null ? generic.getType() : null);
             arguments[i] = (argument != null && !(argument instanceof TypeVariable) ? argument : variables[i]);
 
-
         }
+        SyntheticParameterizedType syntheticParameterizedType = new SyntheticParameterizedType(clazz, arguments);
 
-
-        return null;
+        return forType(syntheticParameterizedType, new TypeVariablesVariableResolver(variables, generics));
     }
 
     public static ResolvableType forClassWithGenerics(Class<?> clazz, Class<?>... generics) {
