@@ -816,6 +816,11 @@ public class ResolvableType implements Serializable {
     }
 
 
+    public static ResolvableType forMethodReturnType(Method method) {
+        Assert.notNull(method, "Method must not be null");
+        return forMethodParameter(new MethodParameter(method, -1));
+    }
+
     public static ResolvableType forMethodParameter(MethodParameter methodParameter) {
         return forMethodParameter(methodParameter, (Type) null);
     }
