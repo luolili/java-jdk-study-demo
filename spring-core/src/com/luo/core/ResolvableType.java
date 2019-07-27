@@ -890,6 +890,7 @@ public class ResolvableType implements Serializable {
             return false;
         }
         ResolvableType[] generics = getGenerics();
+        //检查每个ResolvableType 是否可解析和当他是WildcardType时，是否有bounds
         for (ResolvableType generic : generics) {
             if (!generic.isUnresolvableTypeVariable() && !generic.isWildcardWithoutBounds()) {
                 return false;

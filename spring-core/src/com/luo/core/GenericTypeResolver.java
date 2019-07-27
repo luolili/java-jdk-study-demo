@@ -67,10 +67,10 @@ public final class GenericTypeResolver {
     public static Class<?>[] resolveTypeArguments(Class<?> clazz, Class<?> genericIfc) {
         //由clazz 和genericIfc 获取ResolvableType
         ResolvableType resolvableType = ResolvableType.forClass(clazz).as(genericIfc);
-        if (!resolvableType.hasGenerics() || resolvableType.isE) {
+        if (!resolvableType.hasGenerics() || resolvableType.isEntirelyUnresolvable()) {
             return null;
         }
-        return getSingleGeneric(resolvableType);
+        return resolvableType.resolveGenerics(Object.class);
 
     }
 }
