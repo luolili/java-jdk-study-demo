@@ -104,6 +104,7 @@ public final class GenericTypeResolver {
     }
 
     public static Type resolveType(Type genericType, @Nullable Class<?> contextClass) {
+        // -1 利用genericType contextClass 获取ResolvableType 的Class
         if (contextClass != null) {
             if (genericType instanceof TypeVariable) {
                 ResolvableType resolvableTypeVariable =
@@ -114,16 +115,17 @@ public final class GenericTypeResolver {
                         return resolved;
                     }
                 }
-            } else if (genericType instanceof ParameterizedType) {
+            }
+            //
+            else if (genericType instanceof ParameterizedType) {
                 //genericType 不是TypeVariable, 是ParameterizedType
                 ResolvableType resolvedType = ResolvableType.forType(genericType);
                 if (resolvedType.hasUnresolvableGenerics()) {
                     ParameterizedType parameterizedType = (ParameterizedType) genericType;
-
+                    //初始化generics 通过parameterizedType.getActualTypeArguments()
                     Class<?>[] generics = new Class<?>[parameterizedType.getActualTypeArguments().length];
                     Type[] typeArguments = parameterizedType.getActualTypeArguments();
                     //循环类型参数
-
                     for (int i = 0; i < typeArguments.length; i++) {
                         Type typeArgument = typeArguments[i];
                         if (typeArgument instanceof TypeVariable) {
@@ -139,11 +141,11 @@ public final class GenericTypeResolver {
                             generics[i] = ResolvableType.forType(typeArgument).resolve();
                         }
 
-
                     }
                     Class<?> rawClass = resolvedType.getRawClass();
                     if (rawClass != null) {
-                        ResolvableType.forClassWithGenerics(rawClass, generics).getType();
+                        //用到已经初始化的generics
+                        return ResolvableType.forClassWithGenerics(rawClass, generics).getType();
                     }
 
                 }
