@@ -53,4 +53,25 @@ public final class GenericTypeResolver {
         }
         return getSingleGeneric(resolvableType);
     }
+
+    public static Class<?> resolveTypeArgument(Class<?> clazz, Class<?> genericIfc) {
+        //由clazz 和genericIfc 获取ResolvableType
+        ResolvableType resolvableType = ResolvableType.forClass(clazz).as(genericIfc);
+        if (!resolvableType.hasGenerics()) {
+            return null;
+        }
+        return getSingleGeneric(resolvableType);
+
+    }
+
+    public static Class<?>[] resolveTypeArguments(Class<?> clazz, Class<?> genericIfc) {
+        //由clazz 和genericIfc 获取ResolvableType
+        ResolvableType resolvableType = ResolvableType.forClass(clazz).as(genericIfc);
+        if (!resolvableType.hasGenerics() || resolvableType.isE) {
+            return null;
+        }
+        return getSingleGeneric(resolvableType);
+
+    }
 }
+
