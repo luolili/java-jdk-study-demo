@@ -3,6 +3,7 @@ package com.luo.core;
 import com.luo.util.Assert;
 import com.luo.util.ConcurrentReferenceHashMap;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.Map;
@@ -26,5 +27,11 @@ public final class GenericTypeResolver {
         ResolvableType.resolveMethodParameter(methodParameter);
         return methodParameter.getParameterType();
 
+    }
+
+    public static Class<?> resolveReturnType(Method method, Class<?> clazz) {
+        Assert.notNull(method, "Method must be not null");
+        Assert.notNull(clazz, "Class must be not null");
+        return ResolvableType.forMethodReturnType(method, clazz).resolve(method.getReturnType());
     }
 }

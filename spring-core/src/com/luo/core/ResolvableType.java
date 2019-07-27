@@ -806,7 +806,6 @@ public class ResolvableType implements Serializable {
         methodParameter.setParameterType(forType(null,
                 new SerializableTypeWrapper.MethodParameterTypeProvider(methodParameter), owner.asVariableResolver()).resolve());
 
-
     }
 
     public static ResolvableType forMethodReturnType(Method method, Class<?> implementationClass) {
