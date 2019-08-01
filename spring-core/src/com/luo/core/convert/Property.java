@@ -25,7 +25,7 @@ public final class Property {
     private final Method writeMethod;
 
     private final String name;
-    private final MethodParameter methodParameter;
+    //private final MethodParameter methodParameter;
 
     @Nullable
     private Annotation[] annotations;
@@ -46,7 +46,7 @@ public final class Property {
     }
 
     private MethodParameter resolveParameterType() {
-
+        return null;
     }
 
     public MethodParameter resolveReadMethodParameter() {
@@ -54,6 +54,7 @@ public final class Property {
             return null;
         }
 
+        return null;
 
     }
 
