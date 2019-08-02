@@ -3,7 +3,11 @@ package base.jvm.ch07;
 /**
  * 不会初始化子类
  * 1. 子类引用父类的静态字段,不会导致子类初始化
- */
+ *
+ * 接口的初始化和类的初始化的不同：
+ * 当一个类在初始化的时候，要求其父类全部被都已经初始化；
+ * 接口没有这个要求，只有在真正用到父接口的时候才会初始化
+ *  */
 public class NotInit {
     public static void main(String[] args) {
         //condition 1: 子类引用父类的静态字段,不会导致子类初始化
