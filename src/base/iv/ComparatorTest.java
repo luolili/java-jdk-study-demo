@@ -15,12 +15,12 @@ public class ComparatorTest {
 
         nums.sort(Comparator.naturalOrder());
         System.out.println(nums);//[-2, 0, 1, 3, 5]
-        //对字符串拍下
+        //对字符串排序
         List<String> cites = Arrays.asList("Milan", "Lo", "San");
 
         cites.sort(Comparator.naturalOrder());
         System.out.println(cites);//[Lo, Milan, San]
-        
+
 
     }
 }
