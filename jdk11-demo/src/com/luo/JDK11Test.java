@@ -3,7 +3,8 @@ package com.luo;
 import java.lang.reflect.Field;
 
 /**
- *
+ *嵌套访问
+ * 配置java compiler为11
  */
 public class JDK11Test {
 
