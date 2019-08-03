@@ -3,6 +3,7 @@ package base.iv;
 public class StringEquals {
 
     public static void main(String[] args) {
+        //分配到堆内存
         String s = new String("Test");
         if (s == "Test") {
             System.out.println("ff");
@@ -17,6 +18,7 @@ public class StringEquals {
 
         //--
         System.out.println("----");
+        //分配到常量池
         String m = "ed";
         String m2 = new String("ed");
         System.out.println(m == m2);//false
@@ -26,9 +28,9 @@ public class StringEquals {
         String m4 = "d";
         String m5 = "e" + "d";
         String m6 = m3 + m4;
-
         //-1
         System.out.println(m == m5);//true
+        System.out.println("-n-" + (m2 == m5));//false
         System.out.println(m == m6);//false
         System.out.println(m == m2.intern());//true
         System.out.println(m == m6.intern());//true
