@@ -28,5 +28,9 @@ public class TimeTest {
         DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime dateTime = LocalDateTime.parse(re, df);
         System.out.println(dateTime);//2019-08-01T16:01:40
+        //
+       /* try{
+            System.out.println();
+        }*/
     }
 }

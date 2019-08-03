@@ -13,3 +13,15 @@
 -
 二：Oracle的sql*plus:客户端工具
 
+--------java基础面试题
+1. java里面有没有指针？
+有指针，但隐藏了，由jvm来操作指针
+
+2. 构造方法可不可以重写override
+构造方法不能被继承,不能重写
+
+3. JAVA为什么需要接口？
+他弥补了java单继承的缺点
+
+4.Try.catch.finally是必须要存在的吗？
+try catch必须存在
