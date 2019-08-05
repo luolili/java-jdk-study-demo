@@ -11,4 +11,5 @@
 
 #http
 1. URI: 统一资源标识符：uniform resource identifier
-包含URL:定位符：locator + 
+包含URL:定位符：locator + 统一资源名称：uniform resource name
+2.
