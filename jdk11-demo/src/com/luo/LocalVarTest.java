@@ -7,6 +7,7 @@ import java.util.Map;
 
 /**
  * lmd的参数本地化
+ * 类型 推导，可以不用直接申明类型，减少冗余代码
  */
 public class LocalVarTest {
     public static void main(String[] args) {

@@ -4,3 +4,11 @@
 
 2. 不实现个性化的equals和hashCode方法的坏处：
 不重写hashCode会降低map等集合的索引速度； equals相等的2个对象， 它们的hashCode也是一样的。
+
+#clean code
+1. 如果方法参数多于3个，用类来封装
+2. 用最简单的方式解决
+
+#http
+1. URI: 统一资源标识符：uniform resource identifier
+包含URL:定位符：locator + 
