@@ -12,4 +12,20 @@
 #http
 1. URI: 统一资源标识符：uniform resource identifier
 包含URL:定位符：locator + 统一资源名称：uniform resource name
-2.
+2. status code:
+
+ 1XX: informatioal :信息性状态码，接受的请求正在处理
+ 
+ 2XX： Succeeded，请求ok,处理完毕
+ 
+ 204: no conntent: 只需要客户端向服务端发送信息，
+ 不需要服务端返回数据
+ 206：partial content: 客户端进行了范围请求，
+ 响应报文包含的只是Content-Range所指定的范围
+ 的实体内容
+ 
+ 3XX： redirection, 需要进行附加操作来完成请求
+ 
+ 4XX：client err,客户端错误，服务器无法处理请求
+ 
+ 5XX: server err
