@@ -25,7 +25,16 @@
  的实体内容
  
  3XX： redirection, 需要进行附加操作来完成请求
+ 301: moved permanently:永久性redirect
+ 302:Found:临时性redirect，使用Get
+ 303: See other,要求客户端必须使用Get请求获得资源
+ 
+ 304: not modified: 请求报文里面包含
+ 如：if-Match, if-Modified-Since,若不满足这些条件，
+ 会有304
  
  4XX：client err,客户端错误，服务器无法处理请求
+ 400：bad request: 请求里面存在语法错误
+ 401：Unauthorized:发送的请求需要有认证信息
  
  5XX: server err
