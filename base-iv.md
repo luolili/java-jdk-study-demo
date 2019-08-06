@@ -62,5 +62,5 @@
   #ORM
   1. mybatis里面的#与$ 符号的区别
   mybatis会把sql里面的#{} 替换为?
-  2. RowBounds是一次性擦汗寻全部结果吗？
+  2. RowBounds是一次性查询全部结果吗？
   不是。Fetch Size配置了每次可以取出多少条数据。
