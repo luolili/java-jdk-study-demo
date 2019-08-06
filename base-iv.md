@@ -38,3 +38,23 @@
  401：Unauthorized:发送的请求需要有认证信息
  
  5XX: server err
+ 
+ #spring
+ 1. spring 里面的bean 是线程安全的吗？
+ spring没用对单例模式的bena做多线程的封装处理；
+ 对于dao层，因为他是不存储数据的，所以他是无状态的，
+ 从某种程度上说，他是安全的；
+ 对于VO层来说他是要村塾数据的，也就是有状态的，
+ 需要使用多例模式保证线程安全。
+ 
+ 2. spring的bean的作用域有哪些？
+ request: 每次HTTP请求都会重新创建一个bean；
+ session: 同一个HTTP session共享一个bean
+ singleton/prototype/global-session
+ 
+ 3. spring的自动装配方式有哪几种？
+ 1. byName
+ 2. byType
+ 3.构造方法
+ 4. no --默认，使用显示bean引用
+ 5.autodetect: 先用构造方法 + @Autowired装配，不行用byType
