@@ -48,13 +48,19 @@
  需要使用多例模式保证线程安全。
  
  2. spring的bean的作用域有哪些？
- request: 每次HTTP请求都会重新创建一个bean；
- session: 同一个HTTP session共享一个bean
- singleton/prototype/global-session
+  1. request: 每次HTTP请求都会重新创建一个bean；
+  2. session: 同一个HTTP session共享一个bean
+  3. singleton/prototype/global-session
  
  3. spring的自动装配方式有哪几种？
- 1. byName
- 2. byType
- 3.构造方法
- 4. no --默认，使用显示bean引用
- 5.autodetect: 先用构造方法 + @Autowired装配，不行用byType
+  1. byName
+  2. byType
+  3.构造方法
+  4. no --默认，使用显示bean引用
+  5.autodetect: 先用构造方法 + @Autowired装配，不行用byType
+  
+  #ORM
+  1. mybatis里面的#与$ 符号的区别
+  mybatis会把sql里面的#{} 替换为?
+  2. RowBounds是一次性擦汗寻全部结果吗？
+  不是。Fetch Size配置了每次可以取出多少条数据。
