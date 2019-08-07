@@ -17,6 +17,9 @@
  -- 没用返回值，也不能用void 声明构造方法
  -- 不需要调用
  
+#Collection
+1.对于ArrayList,优先使用普通for循环； LinkedList:优先使用foreach/iterator
+
 #clean code
 1. 如果方法参数多于3个，用类来封装
 2. 用最简单的方式解决
@@ -26,11 +29,11 @@
 包含URL:定位符：locator + 统一资源名称：uniform resource name
 2. status code:
 
- 1XX: informatioal :信息性状态码，接受的请求正在处理
+ 1XX: informational :信息性状态码，接受的请求正在处理
  
  2XX： Succeeded，请求ok,处理完毕
  
- 204: no conntent: 只需要客户端向服务端发送信息，
+ 204: no content: 只需要客户端向服务端发送信息，
  不需要服务端返回数据
  206：partial content: 客户端进行了范围请求，
  响应报文包含的只是Content-Range所指定的范围
