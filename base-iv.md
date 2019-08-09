@@ -32,6 +32,11 @@
 1. 5.5版本之前用的是myisam引擎， 他不支持事务和行级锁,外键；崩溃后无法安全恢复；5.5之后用innoDB
 2. 索引：btree索引+ hash索引。
 innoDB的btree: 树的叶节点data保存的是数据记录， 索引的key是表的主键。一个叶节点包含key和data
+3. sql一直很慢的原因：
+select * from t where c-2=11
+上面再等号左边使用了运算导致索引没用上，select * from c=10+2是可以的
+select * from where pow(c, 2) =1000
+上面等号左边有函数操作导致没用索引
 
 #clean code
 1. 如果方法参数多于3个，用类来封装
