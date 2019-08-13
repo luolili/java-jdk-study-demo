@@ -129,6 +129,32 @@ select * from where pow(c, 2) =1000
  
  5XX: server err
  
+ 3. springboot如何解析http参数？
+ -- 在后台直接写参数名，或者加@RequestParam注解
+ 这种是直接从HttpServletRequest对象里面获取值:request.getParameter("t")
+ 
+ -- 前端用post请求，把参数的json格式放在Body里面，在后台需要加
+ @RequestBody注解。
+ {
+ "id":1,
+ "name":lx
+ }
+ 
+ 如果不是spring环境，那么要通过request.getReader()来获取Body里面的数据，
+ 然后通过json工具类把他转为java bean.
+ code:
+ BufferedReader reader = request.getReader();
+ 
+ StringBuilder builder = new StringBuilder();
+ 
+ String line;
+ 
+ while( (line=reader.readLine()) != null ) {
+ 
+ builder.append(line);
+ }
+ 
+ SysUser user = JSONObject.parseObject(builder.toString(), SysUser.class)
  #spring
  1. spring 里面的bean 是线程安全的吗？
  spring没用对单例模式的bena做多线程的封装处理；
@@ -156,3 +182,22 @@ select * from where pow(c, 2) =1000
   不是。Fetch Size配置了每次可以取出多少条数据。
 
   3. 获取上一次自动生成的id： select last _insert_id()
+  
+  #concurrent--并发
+  1. 实现Thread有几种方法？
+  -- 实现Runnable接口
+  -- 继承Thread
+  
+  2. 如何启动Thread?
+  
+  3. 如何停止Thread？
+  
+  4. 线程的一生？
+  
+  5. Thread/Object方法
+  
+  6.Thread的各个属性？
+  
+  7. 未捕获Exception怎么处理？
+  
+  8. 多Thread会导致的问题？
