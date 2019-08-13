@@ -3,8 +3,16 @@ package threadcoreknowledge.createthread;
 /**
  * 用Runnable创建Thread
  * 我们传入了Runnable对象，对应源码的target,
- * r若target不为空，就调用target的run方法
+ * 若target不为空，就调用target的run方法
  *
+ *private Runnable target;
+ *
+ *  @Override
+ *     public void run() {
+ *         if (target != null) {
+ *             target.run();
+ *         }
+ *     }
  * Runnable更好的原因  ：
  *和Thread类解耦了；
  * 减少创建和销毁Thread的性能损耗；
