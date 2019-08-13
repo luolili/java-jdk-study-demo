@@ -2,6 +2,7 @@ package threadcoreknowledge.createthread;
 
 /**
  * 用Thread创建Thread
+ * ThreadStyle 重写了run方法
  */
 public class ThreadStyle extends Thread {
 
