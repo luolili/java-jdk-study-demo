@@ -58,9 +58,9 @@ select * from where pow(c, 2) =1000
 #Redis
 1. 缓存雪崩：redis缓存挂掉了，请求跑到数据库。
 解决方法：
- -- 事发前：实现redis的高可用：redis集群，redis cluster
- --事发中：设置本地缓存：ehcache+限流hystrix,这样可以避免数据库挂掉
- --事发后：做redis的持久化，在重启后从磁盘加载数据，快速恢复缓存数据
+ - 事发前：实现redis的高可用：redis集群，redis cluster
+ - 事发中：设置本地缓存：ehcache+限流hystrix,这样可以避免数据库挂掉
+ - 事发后：做redis的持久化，在重启后从磁盘加载数据，快速恢复缓存数据
  
  2. 缓存穿透： 查询一个一定不存在的数据，如果数据库也不存在这个数据，
  那么就不会写入缓存。每次查询这个不存在的数据都会请求数据库，
@@ -68,24 +68,24 @@ select * from where pow(c, 2) =1000
  
  如每次请求的id都是负数，每次都要查询数据库，返回空对象。
  解决方法：
-   -- 使用布隆 过滤器Bloom Filter or 压缩filter提前拦截不合法
+   - 使用布隆 过滤器Bloom Filter or 压缩filter提前拦截不合法
    的请求参数；
-   -- 把空对象写入缓存，给他设置一个较短的过期时间。
+   - 把空对象写入缓存，给他设置一个较短的过期时间。
    
    
    5. 如果有大量的key设置同一过期时间，需要注意什么？
 在时间上加一个随机值，让过期时间分散一些，避免redis出现短暂的卡顿。
 
 6. redis的持久化方案？
-  -- RDB： 快照形式，定期把数据存放到磁盘里面。服务器断电的时候会丢失部分数据
-  -- AOF: append only file: 把所有对redis操作的命令，保存到文件里面，
+  - RDB： 快照形式，定期把数据存放到磁盘里面。服务器断电的时候会丢失部分数据
+  - AOF: append only file: 把所有对redis操作的命令，保存到文件里面，
      重新执行这些文件里面的命令来恢复数据， 速度慢。
 7. 主从模式的作用是什么？
-   -- 数据的冗余备份
+   - 数据的冗余备份
      即便我们开启了RDB or AOF也不能保证数据不丢失，当硬盘损坏了，数据也就丢失了；
     在slave上进行数据备份， 提高数据的抗灾能力。当slave要删除旧的数据，加载新的数据的时候，
    slave会阻塞连接的请求。
-   -- 完成读写分离
+   - 完成读写分离
     master不做持久化，做查询 ；slave只读，不进行修改操作。
     
 
@@ -96,17 +96,17 @@ select * from where pow(c, 2) =1000
   
   
 #clean code
-1. 如果方法参数多于3个，用类来封装
-2. 用最简单的方式解决
+ - 如果方法参数多于3个，用类来封装
+ - 用最简单的方式解决
 
 #http
 1. URI: 统一资源标识符：uniform resource identifier
 包含URL:定位符：locator + 统一资源名称：uniform resource name
 2. status code:
 
- 1XX: informational :信息性状态码，接受的请求正在处理
+ - 1XX: informational :信息性状态码，接受的请求正在处理
  
- 2XX： Succeeded，请求ok,处理完毕
+ - 2XX： Succeeded，请求ok,处理完毕
  
  204: no content: 只需要客户端向服务端发送信息，
  不需要服务端返回数据
@@ -114,26 +114,26 @@ select * from where pow(c, 2) =1000
  响应报文包含的只是Content-Range所指定的范围
  的实体内容
  
- 3XX： redirection, 需要进行附加操作来完成请求
- 301: moved permanently:永久性redirect
- 302:Found:临时性redirect，使用Get
- 303: See other,要求客户端必须使用Get请求获得资源
+ - 3XX： redirection, 需要进行附加操作来完成请求
+   - 301: moved permanently:永久性redirect
+   - 302:Found:临时性redirect，使用Get
+   - 303: See other,要求客户端必须使用Get请求获得资源
  
- 304: not modified: 请求报文里面包含
+   - 304: not modified: 请求报文里面包含
  如：if-Match, if-Modified-Since,若不满足这些条件，
  会有304
  
- 4XX：client err,客户端错误，服务器无法处理请求
- 400：bad request: 请求里面存在语法错误
- 401：Unauthorized:发送的请求需要有认证信息
+ - 4XX：client err,客户端错误，服务器无法处理请求
+   - 400：bad request: 请求里面存在语法错误
+   - 401：Unauthorized:发送的请求需要有认证信息
  
  5XX: server err
  
  3. springboot如何解析http参数？
- -- 在后台直接写参数名，或者加@RequestParam注解
+ - 在后台直接写参数名，或者加@RequestParam注解
  这种是直接从HttpServletRequest对象里面获取值:request.getParameter("t")
  
- -- 前端用post请求，把参数的json格式放在Body里面，在后台需要加
+ - 前端用post请求，把参数的json格式放在Body里面，在后台需要加
  @RequestBody注解。
  {
  "id":1,
@@ -164,16 +164,16 @@ select * from where pow(c, 2) =1000
  需要使用多例模式保证线程安全。
  
  2. spring的bean的作用域有哪些？
-  1. request: 每次HTTP请求都会重新创建一个bean；
-  2. session: 同一个HTTP session共享一个bean
-  3. singleton/prototype/global-session
+  - request: 每次HTTP请求都会重新创建一个bean；
+  - session: 同一个HTTP session共享一个bean
+  - singleton/prototype/global-session
  
  3. spring的自动装配方式有哪几种？
-  1. byName
-  2. byType
-  3.构造方法
-  4. no --默认，使用显示bean引用
-  5.autodetect: 先用构造方法 + @Autowired装配，不行用byType
+  - byName
+  - byType
+  - 构造方法
+  -  no --默认，使用显示bean引用
+  - autodetect: 先用构造方法 + @Autowired装配，不行用byType
   
   #ORM
   1. mybatis里面的#与$ 符号的区别
@@ -185,8 +185,8 @@ select * from where pow(c, 2) =1000
   
   #concurrent--并发
   1. 实现Thread有几种方法？
-  -- 实现Runnable接口
-  -- 继承Thread
+  - 实现Runnable接口
+  - 继承Thread
   
   2. 如何启动Thread?
   
