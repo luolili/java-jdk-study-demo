@@ -137,7 +137,7 @@ select * from where pow(c, 2) =1000
  @RequestBody注解。
  {
  "id":1,
- "name":lx
+ "name": "lx"
  }
  
  如果不是spring环境，那么要通过request.getReader()来获取Body里面的数据，
