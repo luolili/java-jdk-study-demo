@@ -88,6 +88,11 @@ select * from where pow(c, 2) =1000
    - 完成读写分离
     master不做持久化，做查询 ；slave只读，不进行修改操作。
     
+    
+    8. 如何发现热key?
+    -- 热key就是突然有几百万个请求去访问redis撒行的同一个key，导致redis崩掉，从而接下来的请求就到数据库了。
+    秒杀的商品；
+    
 
   #Docker
   1.docker的镜像和容器有什么区别？
@@ -137,7 +142,7 @@ select * from where pow(c, 2) =1000
  @RequestBody注解。
  {
  "id":1,
- "name":lx
+ "name": "lx"
  }
  
  如果不是spring环境，那么要通过request.getReader()来获取Body里面的数据，
