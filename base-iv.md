@@ -87,10 +87,9 @@ select * from where pow(c, 2) =1000
    slave会阻塞连接的请求。
    - 完成读写分离
     master不做持久化，做查询 ；slave只读，不进行修改操作。
-    
-    
-    8. 如何发现热key?
-    -- 热key就是突然有几百万个请求去访问redis撒行的同一个key，导致redis崩掉，从而接下来的请求就到数据库了。
+      
+8. 如何发现热key?
+    - 热key就是突然有几百万个请求去访问redis撒行的同一个key，导致redis崩掉，从而接下来的请求就到数据库了。
     秒杀的商品；
     
 
@@ -148,6 +147,7 @@ select * from where pow(c, 2) =1000
  如果不是spring环境，那么要通过request.getReader()来获取Body里面的数据，
  然后通过json工具类把他转为java bean.
  code:
+ ```
  BufferedReader reader = request.getReader();
  
  StringBuilder builder = new StringBuilder();
@@ -160,6 +160,8 @@ select * from where pow(c, 2) =1000
  }
  
  SysUser user = JSONObject.parseObject(builder.toString(), SysUser.class)
+ 
+ ```
  #spring
  1. spring 里面的bean 是线程安全的吗？
  spring没用对单例模式的bena做多线程的封装处理；
