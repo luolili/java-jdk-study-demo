@@ -207,6 +207,8 @@ select * from where pow(c, 2) =1000
   
   4. 线程的一生？
   
+  6个。new -- runnable -- terminated
+  --blocked--waiting--timed waiting
   5. Thread/Object方法
   
   6.Thread的各个属性？
