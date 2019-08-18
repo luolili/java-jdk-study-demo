@@ -198,6 +198,12 @@ select * from where pow(c, 2) =1000
   2. 如何启动Thread?
   
   3. 如何停止Thread？
+  用interrupt.
+  
+  被停止的一方在每次循环中or适当的时候检查终端信号；
+  优先在方法层面抛出Exception; 
+  volatile的boolean无法处理长时间的阻塞情况
+  
   
   4. 线程的一生？
   
