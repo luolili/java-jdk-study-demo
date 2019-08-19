@@ -225,3 +225,9 @@ select * from where pow(c, 2) =1000
   7. 未捕获Exception怎么处理？
   
   8. 多Thread会导致的问题？
+
+
+#ES
+1.ES和lucence关系？
+ES基于lucence实现，进行了扩展，提供了更多的查询语句，
+通过rest api 与底层交互。
