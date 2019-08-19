@@ -32,7 +32,7 @@
  9. 为什么String is final?
  - String 对象是缓存在String池里面，是共享的，所以始终存在风险，，所以让他不可变
  - 从hash map的角度看，对于键值来说，重要的是它们的不可变，用它们来查询它们对应的value对象。
- 
+ ---
  10. java的泛型是什么？
   - 其本质是参数化类型，有泛型类，泛型方法，泛型接口
   java5之前 是通过Object的引用来实现参数的任意化，
@@ -51,18 +51,19 @@
   可以写成
   ```
     List<String> list = new ArrayList<>();
-    ```
+   ```
+   ---
 #Collection
 1.对于ArrayList,优先使用普通for循环； LinkedList:优先使用foreach/iterator
 
-
+---
 #并发
 1. 进程：是程序运行的基本单位，是程序的一次执行过程。
 当运行main方法的时候，就启动了一个jvm进程，main方法是一个主线程；
 每个线程有自己的程序计数器，虚拟机战，本地方法站。
 一个Java查询的运行包含main线程和其他线程的执行。
 
-
+---
 #mysql
 1. 5.5版本之前用的是myisam引擎， 他不支持事务和行级锁,外键；崩溃后无法安全恢复；5.5之后用innoDB
 2. 索引：btree索引+ hash索引。
@@ -83,6 +84,7 @@ select * from where pow(c, 2) =1000
 通过索引查询一条数据而非遍历索引记录；
 效率是二分查找效率
 
+---
 #Redis
 1. 缓存雪崩：redis缓存挂掉了，请求跑到数据库。
 解决方法：
@@ -120,17 +122,18 @@ select * from where pow(c, 2) =1000
     - 热key就是突然有几百万个请求去访问redis撒行的同一个key，导致redis崩掉，从而接下来的请求就到数据库了。
     秒杀的商品；
     
-
+---
   #Docker
   1.docker的镜像和容器有什么区别？
   镜像是个只读的模板，一个独立的文件系统，叫统一文件系统，union file system,镜像可以基于dockerfile来构建；
   docker镜像创建的实例就是容器，容器是用来运行app。每个容器是相互隔离的。
   
-  
+  ---
 #clean code
  - 如果方法参数多于3个，用类来封装
  - 用最简单的方式解决
 
+---
 #http
 1. URI: 统一资源标识符：uniform resource identifier
 包含URL:定位符：locator + 统一资源名称：uniform resource name
@@ -190,6 +193,8 @@ select * from where pow(c, 2) =1000
  SysUser user = JSONObject.parseObject(builder.toString(), SysUser.class)
  
  ```
+ 
+ ---
  #spring
  1. spring 里面的bean 是线程安全的吗？
  spring没用对单例模式的bena做多线程的封装处理；
@@ -210,6 +215,7 @@ select * from where pow(c, 2) =1000
   -  no --默认，使用显示bean引用
   - autodetect: 先用构造方法 + @Autowired装配，不行用byType
   
+  ---
   #ORM
   1. mybatis里面的#与$ 符号的区别
   mybatis会把sql里面的#{} 替换为?
@@ -218,6 +224,7 @@ select * from where pow(c, 2) =1000
 
   3. 获取上一次自动生成的id： select last _insert_id()
   
+  ---
   #concurrent--并发
   1. 实现Thread有几种方法？
   - 实现Runnable接口
@@ -245,7 +252,7 @@ select * from where pow(c, 2) =1000
   
   8. 多Thread会导致的问题？
 
-
+---
 #ES
 1.ES和lucence关系？
 ES基于lucence实现，进行了扩展，提供了更多的查询语句，
