@@ -257,3 +257,8 @@ select * from where pow(c, 2) =1000
 1.ES和lucence关系？
 ES基于lucence实现，进行了扩展，提供了更多的查询语句，
 通过rest api 与底层交互。
+
+elasticsearch.bat启动ES。
+
+安装kibana:用来连接ES.
+安装ik分词器
