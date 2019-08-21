@@ -293,7 +293,10 @@ channel.txCommit
   6个。new -- runnable -- terminated
   --blocked--waiting--timed waiting
   5. Thread/Object方法
-  
+  调用wait/notifyAll之前，当前线程必须具有sync锁；
+  notify：唤醒多个线程中的其中一个,选择方式由jvm决定；
+  不可被重写，他们是native/finakl;
+  相似功能：Condition.
   6.Thread的各个属性？
   
   7. 未捕获Exception怎么处理？
@@ -308,5 +311,24 @@ ES基于lucence实现，进行了扩展，提供了更多的查询语句，
 
 elasticsearch.bat启动ES。
 
-安装kibana:用来连接ES.
-安装ik分词器
+安装kibana:用来连接ES，注意：kibana版本要和ES版本一样.
+安装ik分词器，注意：kibana版本要和ES版本一样，解压
+目录的下面是config等文件。
+测试IK：
+```
+POST _analyze 
+{
+"analyzer": "ik_max_word",
+"text": "我是一个人"
+}
+
+```
+concept:
+
+- 索引集合：index--database
+  - 类型：type-- table
+    - 文档：document--Row
+      - 字段：field--column
+      
+分片：分成多个部分；备份：replica
+  
