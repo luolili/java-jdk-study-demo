@@ -255,6 +255,14 @@ channel.txCommit
   -  no --默认，使用显示bean引用
   - autodetect: 先用构造方法 + @Autowired装配，不行用byType
   
+4. spring为什么默认是单例模式bean?
+- 创建bean的时候，先看配置是否是单例，是单例，先从缓存中取，没有创建，指挥创建一次。
+- 减少新生成实例的消耗
+- 减少jvm垃圾回收
+- 可以快速获取到bean
+- 不能做到线程安全：在有状态的情况下。
+
+
   ---
   #ORM
   1. mybatis里面的#与$ 符号的区别
