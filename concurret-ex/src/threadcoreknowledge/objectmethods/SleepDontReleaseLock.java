@@ -11,7 +11,7 @@ public class SleepDontReleaseLock implements Runnable {
         lock.lock();
         System.out.println("线程获取到了锁");
         try {
-            Thread.sleep(200);
+            Thread.sleep(200);//不释放锁，进入waiting状态，不占用cpu
             System.out.println("wake");
         } catch (InterruptedException e) {
             e.printStackTrace();
