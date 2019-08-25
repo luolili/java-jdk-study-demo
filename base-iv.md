@@ -298,6 +298,7 @@ channel.txCommit
   不可被重写，他们是native/finakl;
   相似功能：Condition.
   6.Thread的各个属性？
+  id;名字;守护线程：daemon；优先级。
   
   7. 未捕获Exception怎么处理？
   
