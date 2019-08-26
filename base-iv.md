@@ -306,7 +306,7 @@ channel.txCommit
   
   7. 未捕获Exception怎么处理？
   
-  
+  如何处理全局异常？
   8. 多Thread会导致的问题？
 
 ---
