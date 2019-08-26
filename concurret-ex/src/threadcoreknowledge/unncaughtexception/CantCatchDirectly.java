@@ -8,7 +8,7 @@ public class CantCatchDirectly implements Runnable {
 
     public static void main(String[] args) throws InterruptedException {
         try {
-            //try是针对主线程的，无法捕获到子线程的ex
+            //try是针对主线程的，无法捕获到子线程的ex,可以在run里面tc
             new Thread(new CantCatchDirectly(), "t1").start();
             Thread.sleep(100);
             new Thread(new CantCatchDirectly(), "t2").start();
@@ -24,6 +24,10 @@ public class CantCatchDirectly implements Runnable {
 
     @Override
     public void run() {
-        throw new RuntimeException();
+        try {
+            throw new RuntimeException();
+        } catch (Exception e) {
+            System.out.println("caught ex");
+        }
     }
 }
