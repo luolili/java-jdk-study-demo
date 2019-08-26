@@ -299,8 +299,13 @@ channel.txCommit
   相似功能：Condition.
   6.Thread的各个属性？
   id;名字;守护线程：daemon；优先级。
+  10个优先级，默认5。
+  我们不需要设置守护thread;
+  不要用thread优先级来帮助程序运行。
+  不同的OS：操作系统的优先级不同。
   
   7. 未捕获Exception怎么处理？
+  
   
   8. 多Thread会导致的问题？
 
