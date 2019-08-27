@@ -308,6 +308,10 @@ channel.txCommit
   
   如何处理全局异常？
   8. 多Thread会导致的问题？
+  什么是thread-safe: 多个thread访问同一个对象，不需要
+  进行额外的同步，不考虑多thread的调度和交替执行，调用
+  这个对象的方法都可以获得正确的结果，
+  说这个对象是thread-safe。
 
 ---
 #ES
