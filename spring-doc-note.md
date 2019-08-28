@@ -45,3 +45,18 @@ singletonFactories 里面装的就是ObjectFacory,用他来创建单例对象，
 - addSingleton
 
 
+# spring如何获取bean? 
+方法： protected <T> T doGetBean(final String name, @Nullable final Class<T> requiredType,
+			@Nullable final Object[] args, boolean typeCheckOnly) throws BeansException 
+  
+  - 对传进来的bean名字进行解析
+  如果该bean是一个工厂bean，九八他的前缀标识符& 去掉;如果有别名，把别名作为bean的名字。
+  
+  - 调用上面的getsingleton方法：从bean的缓存里面获取name对应的bean对象，当获取的对象不为空以及参数args是空时，
+  这个bean可能还在创建中，没有完全被初始化。
+  - 对获取到的 sharedInstance Bean 进行分类讨论
+   - sharedInstance  不是 FactoryBean--》直接返回 sharedInstance
+   - 如果是 FactoryBean ， 调用 protected Object getCachedObjectForFactoryBean(String beanName) 从工厂缓存里面获取。
+  
+  
+   
