@@ -10,5 +10,6 @@ public class Id {
 
         System.out.println(Thread.currentThread().getId());//1
         System.out.println(thread.getId());// 13
+
     }
 }
