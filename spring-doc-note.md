@@ -58,7 +58,7 @@ singletonFactories 里面装的就是ObjectFacory,用他来创建单例对象，
    - sharedInstance  不是 FactoryBean--》直接返回 sharedInstance
    - 如果是 FactoryBean ， 调用 protected Object getCachedObjectForFactoryBean(String beanName) 从工厂缓存里面获取。
    
-  #AbstractBeanFactory 看i面的主要方法
+  #AbstractBeanFactory 的主要方法
   
   重要字段：
   - private final Map<String, RootBeanDefinition> mergedBeanDefinitions = new ConcurrentHashMap<>(256); 
@@ -68,6 +68,7 @@ singletonFactories 里面装的就是ObjectFacory,用他来创建单例对象，
   
   - private final Set<String> alreadyCreated = Collections.newSetFromMap(new ConcurrentHashMap<>(256));
 	把已经创建的 bean or 将要被创建的 bean 放到Set里面。
+	
 	他对应的方法：protected void markBeanAsCreated(String beanName) ;在把他标记为created之前，
 	要同步 mergedBeanDefinitions： 目的是要清除之前的bean的配置，
 	因为可能 bean的配置已经在这个时候发生了变化，不是最新的bean配置。
@@ -75,11 +76,15 @@ singletonFactories 里面装的就是ObjectFacory,用他来创建单例对象，
 # spring如何创建bean 实例对象？
 核心方法： 	protected abstract Object createBean(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)
 			throws BeanCreationException;  
+			
 			这方法在AbstractBeanFactory只有方法体，没有实现，实现是在同包support下面的AbstractAutowireCapableBeanFactory
 
 内部方法：
 - protected Class<?> resolveBeanClass(final RootBeanDefinition mbd, String beanName, final Class<?>... typesToMatch)
-			throws CannotLoadBeanClassException ;这个方法在调用的时候，不需要传第三个参数，
+			throws CannotLoadBeanClassException ;
+			
+			这个方法在调用的时候，不需要传第三个参数，
+			
 			也可以通过编译。把这个 bean 对应的配置的 class属性解析出来 成为一个 Object。
 			如果结果resolvedClass不是空，但是孩子的 bean 定义里面有 id 属性， 没有 class属性。
 			那么需要把解析出来的 class 设置到 这个 bean 定义里面。
@@ -90,7 +95,10 @@ protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, 
 			此时 resolveBeforeInstantiation 方法返回的是  实例化的 bean , 他是一个 proxy, 但似乎没有看到实例化对象的部分.  实例化之前的这次后置处理失败了；若这个 proxy 是 null, 则往下走。
 			
 - protected Object doCreateBean(final String beanName, final RootBeanDefinition mbd, final @Nullable Object[] args)
-			throws BeanCreationException ; 用 BeanWrapper 来实例化 bean  ， 
+			throws BeanCreationException ; 
+			
+			用 BeanWrapper 来实例化 bean  ， 
+			
 			如果 bean 的定义是单例的话，删除 beanName对应的 BeanWrapper . 如果之前没有对应的 BeanWrapper， 
 			就调用 protected BeanWrapper createBeanInstance(String beanName, RootBeanDefinition mbd, @Nullable Object[] args) ；从 BeanWrapper 里面获得 bean. 开始初始化 bean , 
 			调用 protected void populateBean(String beanName, RootBeanDefinition mbd, @Nullable BeanWrapper bw) 来实现属性的注入
