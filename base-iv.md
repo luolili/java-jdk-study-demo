@@ -264,6 +264,18 @@ channel.txCommit
 
 
   ---
+  
+ 1. Transactional注解不回滚怎么办？
+ ```
+ @Transactional(rollbackFor=Exception.class)
+ 
+``` 
+
+2. @transactional注解在什么情况下会失效?
+ - 方法必须是public才有作用
+ - 是uncheked exception:编译器检查不到
+ 
+ ---
   #ORM
   1. mybatis里面的#与$ 符号的区别
   mybatis会把sql里面的#{} 替换为?
