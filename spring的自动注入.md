@@ -67,5 +67,21 @@ AutowireCapableBeanFactory 接口定义了
 			throws Throwable
       
      调用 afterPropertiesSet(); 调用个性化的初始化方法。
+
+## Object createBean(Class<?> beanClass, int autowireMode, boolean dependencyCheck) throws BeansException;
+利用这个三个参数 构造 bd, 调用 createBean(beanClass.getName(), bd, null);
+
+ ---
  
- 
+ ##Object autowire(Class<?> beanClass, int autowireMode, boolean dependencyCheck) throws BeansException;
+ 利用这个三个参数 构造 bd, 从bd里面 解析自动注入的类型，
+ 如果是构造方法注入， 调用 
+ protected BeanWrapper autowireConstructor(
+			String beanName, RootBeanDefinition mbd, @Nullable Constructor<?>[] ctors, @Nullable Object[] explicitArgs)
+			
+否则调用实例化的策略来实例化 bean，再调用 populateBean(beanClass.getName(), bd, new BeanWrapperImpl(bean)); 返回bean。
+
+## public void autowireBeanProperties(Object existingBean, int autowireMode, boolean dependencyCheck)
+			throws BeansException
+	 
+这个方法不允许注入类型为构造方法，创建 BeanWrapperImpl ，调用  populateBean(beanClass.getName(), bd, new BeanWrapperImpl(bean)); 
