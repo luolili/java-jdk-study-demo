@@ -35,6 +35,7 @@ public class MultiThreadsError implements Runnable {
         }*/
         for (int i = 0; i < 100000; i++) {
             try {
+                cyclicBarrier1.reset();
                 cyclicBarrier1.await();
             } catch (InterruptedException e) {
                 //e.printStackTrace();
@@ -42,6 +43,14 @@ public class MultiThreadsError implements Runnable {
                 //e.printStackTrace();
             }
             index++;
+            try {
+                cyclicBarrier2.reset();
+                cyclicBarrier2.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
+            }
             realIndex.incrementAndGet();
             synchronized (instance) {//需要同步
                 if (marked[index]) {
