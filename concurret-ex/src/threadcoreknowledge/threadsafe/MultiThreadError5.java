@@ -5,7 +5,6 @@ package threadcoreknowledge.threadsafe;
  * 发布: 监听器; 观察者模式
  */
 public class MultiThreadError5 {
-
     int count;
 
     public MultiThreadError5(MySource mySource) {
