@@ -47,13 +47,13 @@ public class MultiThreadsError implements Runnable {
                 cyclicBarrier2.reset();
                 cyclicBarrier2.await();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             } catch (BrokenBarrierException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
             realIndex.incrementAndGet();
             synchronized (instance) {//需要同步
-                if (marked[index]) {
+                if (marked[index] && marked[index - 1]) {
                     System.out.println("发生了error：" + index);
                     wrongIndex.incrementAndGet();
                 }
