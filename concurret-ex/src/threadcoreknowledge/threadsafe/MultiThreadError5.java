@@ -11,13 +11,13 @@ public class MultiThreadError5 {
     public MultiThreadError5(MySource mySource) {
         mySource.registerListener(new EventListener() {
             @Override
-            public void onEvent() {
+            public void onEvent(Event e) {
                 System.out.println("count: " + count);
             }
         });
 
-        for (int i = 0; i < 10; i++) {
-            System.out.print("i: " + i);
+        for (int i = 0; i < 10000; i++) {
+            System.out.print(i);
         }
         count = 100;
     }
@@ -51,13 +51,15 @@ public class MultiThreadError5 {
 
         void eventCome(Event e) {
             if (eventListener != null) {
-                eventListener.onEvent();
+                eventListener.onEvent(e);
+            } else {
+                System.out.println("no");
             }
         }
     }
 
     interface EventListener {
-        void onEvent();
+        void onEvent(Event e);
     }
 
     interface Event {
