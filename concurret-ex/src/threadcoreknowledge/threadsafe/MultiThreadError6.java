@@ -7,8 +7,6 @@ import java.util.Map;
  * 发布:
  */
 public class MultiThreadError6 {
-
-
     private Map<String, String> states;
 
     public MultiThreadError6() {
