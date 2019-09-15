@@ -322,7 +322,7 @@ channel.txCommit
    java对象模型：对象：
    jvm会给类创建一个innstanceKlass,用来在jvm里面表示java类，
    保存在方法区；当用new create一个对象时，jvm会create一个
-   innstanceOopDesc对象：里面包含对象头+实例数据
+   instanceOopDesc对象：里面包含对象头+实例数据
    
    
    java内存模型：并发：
