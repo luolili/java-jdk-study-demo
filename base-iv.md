@@ -325,7 +325,9 @@ channel.txCommit
    innstanceOopDesc对象：里面包含对象头+实例数据
    
    
-   java内存模型：并发。
+   java内存模型：并发：
+   为什么需要他？
+   
 ---
 #ES
 1.ES和lucence关系？
