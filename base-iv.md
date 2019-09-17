@@ -320,13 +320,14 @@ channel.txCommit
    thread共享：方法区，堆；
    thread私有：栈，本地方法栈，PC：program counter
    java对象模型：对象：
-   jvm会给类创建一个innstanceKlass,用来在jvm里面表示java类，
+   jvm会给类创建一个instanceKlass,用来在jvm里面表示java类，
    保存在方法区；当用new create一个对象时，jvm会create一个
    instanceOopDesc对象：里面包含对象头+实例数据
    
    
    java内存模型：并发：
-   为什么需要他？
+   为什么需要他？C语言没有内存模型，不同的处理器结果不一样。
+   JMM是一个规范。
    
 ---
 #ES
