@@ -2,6 +2,7 @@ package base.set;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -30,5 +31,16 @@ public class CommonError {
         }
 
         System.out.println("foreach:" + arrList3);
+        //right
+        Iterator<String> it = arrList3.iterator();
+        while (it.hasNext()) {
+            String s = it.next();//先调用next,再调用remove
+            if (s.equals("a")) {
+                it.remove();
+            }
+        }
+
+
     }
+
 }
