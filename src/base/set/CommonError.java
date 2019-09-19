@@ -41,6 +41,16 @@ public class CommonError {
         }
 
 
+        //
+        List<String> list4 = new ArrayList<>();
+        add(list4, 2);
+        String re = list4.get(0);
+
+
     }
 
+
+    public static void add(List list, Object o) {
+        list.add(o);
+    }
 }
