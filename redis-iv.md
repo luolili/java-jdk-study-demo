@@ -71,3 +71,23 @@
  查到的还是旧数据，然后又把他放到缓存里面，最后数据库修改成功，但是数据库和缓存里面的数据就不一致了。
  
  只有再对数据再并发读写的时候，才会出现这个问题。
+ 
+ 
+2.如何用redis实现排行榜？
+
+- 使用redis的zset
+- 命令zadd:  zadd page_rank 10 google.com
+page_rank:key; 10:排名；google.com:value
+
+zrange page_rank 0 -1 : 显示所有的排名
+
+zrank page_rank google.com : 获取google.com的排名：从0开始
+
+- 取反：zset默认是从小到大排序
+
+````
+public Double getScore(Long oneDayGoldBean){
+String score = String.valueOf(oneDayGoldBean)
+return -Double.valueOf(score);
+}
+```
