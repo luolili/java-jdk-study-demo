@@ -4,6 +4,22 @@ import java.util.concurrent.CountDownLatch;
 
 /**
  * 重新排序
+ * 好处：提高处理速度
+ * a=3;  load a, set to 3, store a
+ * b=2;
+ * a=a+1;
+ *
+ * a=3;
+ * a=a+1; load a,set to 3,set to 4, store a
+ * b=2
+ *
+ * 发生重排序的3个情况：
+ * 1. 编译器优化： jvm,jit等；
+ *
+ * 2.cpu
+ *
+ * 3. 内存的重排序：线程A的修改内容，对于线程B 不可见；可见性
+ *
  */
 public class OutOfOrderExecution {
     private static int x = 0, y = 0;
@@ -50,7 +66,12 @@ public class OutOfOrderExecution {
             one.join();
             two.join();
             System.out.println("第：" + count);
-            if (x == 1 && y == 1) {
+          /*  if (x == 1 && y == 1) {
+                System.out.println("x:" + x + ", y:" + y);
+                break;
+            }*/
+            //x=b 先于a=1执行， 重排序
+            if (x == 0 && y == 0) {
                 System.out.println("x:" + x + ", y:" + y);
                 break;
             } else {
