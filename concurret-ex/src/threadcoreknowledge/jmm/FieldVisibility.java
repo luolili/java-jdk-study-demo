@@ -1,7 +1,7 @@
 package threadcoreknowledge.jmm;
 
 /**
- *
+ *Visibility 
  */
 public class FieldVisibility {
 
