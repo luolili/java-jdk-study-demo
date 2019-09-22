@@ -1,7 +1,7 @@
 package threadcoreknowledge.singleton;
 
 /**
- * singleton03:  加volatile，thread-safe, double check
+ * singleton06 plus:  加volatile，thread-safe, double check
  * 创建对象不是原子操作：
  * 1. 构造一个空对象
  * 2. 调用构造方法：比较耗时

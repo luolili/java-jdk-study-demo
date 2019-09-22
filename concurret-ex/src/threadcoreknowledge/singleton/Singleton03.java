@@ -14,7 +14,7 @@ public class Singleton03 {
     /**
      * 2 个 thread同时访问他，创建2个对象 而返回
      *
-     * @return
+     * @return INSTANCE
      */
     public static Singleton03 getInstance() {
         if (INSTANCE == null) {

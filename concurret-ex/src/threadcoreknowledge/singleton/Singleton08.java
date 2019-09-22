@@ -5,7 +5,7 @@ package threadcoreknowledge.singleton;
  */
 public enum Singleton08 {
 
-    INSTANCE;
+    INSTANCE;//懒加载，避免反序列化破坏单例
 
     public static void main(String[] args) {
 

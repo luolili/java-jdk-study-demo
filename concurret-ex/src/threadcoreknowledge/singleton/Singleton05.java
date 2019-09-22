@@ -14,7 +14,7 @@ public class Singleton05 {
     /**
      * 多个instance 被创建
      *
-     * @return
+     * @return INSTANCE
      */
     public static Singleton05 getInstance() {
         if (INSTANCE == null) {

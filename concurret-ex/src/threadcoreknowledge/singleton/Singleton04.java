@@ -14,7 +14,7 @@ public class Singleton04 {
     /**
      * 效率低
      *
-     * @return
+     * @return INSTANCE
      */
     public synchronized static Singleton04 getInstance() {
         if (INSTANCE == null) {
