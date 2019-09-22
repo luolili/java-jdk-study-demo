@@ -15,7 +15,11 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 哪些方法可以做到可见性？
  * 1. syn/lock/thread-safe class/join/start
  * 2. happens-before 原则
- * 3. 
+ *
+ * 具有原子性的操作
+ * 1. 基本类型的赋值，除了long/double
+ * 2. 引用的赋值：reference
+ * 3.Atomic* class
  */
 public class NoVolatile implements Runnable {
 
