@@ -1,7 +1,7 @@
 package threadcoreknowledge.singleton;
 
 /**
- * singleton03:  懒汉，thread-safe, double check
+ * singleton03:  thread-unsafe, double check
  */
 public class Singleton06 {
 
