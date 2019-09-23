@@ -34,3 +34,7 @@ note:如果想对右表进行限制，则一定要在on条件中进行，若在w
 ```
 User getByUsername(String username);
 ```
+
+# jpa 的 getOne 和 findById 方法的区别？
+- getOne返回一个实体的引用，无结果会抛出异常；EntityNotFoundException, no session
+- findById返回一个Optional对象；no value root..
