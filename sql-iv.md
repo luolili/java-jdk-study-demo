@@ -38,3 +38,7 @@ User getByUsername(String username);
 # jpa 的 getOne 和 findById 方法的区别？
 - getOne返回一个实体的引用，无结果会抛出异常；EntityNotFoundException, no session
 - findById返回一个Optional对象；no value root..
+
+# mybatis接口绑定的方式
+- 注解：@Select,@Update
+- xml:当sql比较长的时候

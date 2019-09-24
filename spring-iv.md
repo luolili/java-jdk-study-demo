@@ -105,6 +105,17 @@ protected Object applyBeanPostProcessorsBeforeInstantiation(Class<?> beanClass, 
 			- 核心语句： 	PropertyValues pvs = (mbd.hasPropertyValues() ? mbd.getPropertyValues() : null); 获得属性值对象。 	protected Object initializeBean(final String beanName, final Object bean, @Nullable RootBeanDefinition mbd)
 			
 			
+---
+1.spring lifecycle
+
+- 实例化 bean ,容器调用createBean
+- 设置对象属性：实例化的对象存在于BeanWrapper里面，
+spring根据 BeanDefinition 和BeanWrapper的设置属性的接口
+完成 ioc
+- 处理Aware接口
+- 后置处理
+- 初始化方法
+- 销毁
 	
 	
 	
