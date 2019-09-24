@@ -30,3 +30,10 @@ happens-before
 2. 线程安全的类：CountDownLatch,Semaphore,线程池
 
 3. 锁操作：syn/lock
+
+---
+spring如何处理并发问题？
+- 无状态的bean 用单例模式
+- ThreadLocal: 空间换时间，为每个thread提供一个
+独立的var copy,从而隔离了多个thread对同一个数据的
+访问conflict,把不安全的var放入thread local.
