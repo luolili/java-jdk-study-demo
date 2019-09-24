@@ -31,6 +31,10 @@ happens-before
 
 3. 锁操作：syn/lock
 
+4.start方法与run方法区别
+调用start方法可以让线程启动，让线程进入
+就绪状态；run方法只是Thread的一个普通方法，
+还是在主thread里面执行。
 ---
 spring如何处理并发问题？
 - 无状态的bean 用单例模式
