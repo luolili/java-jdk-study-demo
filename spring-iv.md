@@ -116,6 +116,18 @@ spring根据 BeanDefinition 和BeanWrapper的设置属性的接口
 - 后置处理
 - 初始化方法
 - 销毁
+
+
+# spring 如何实现静态变量的注入？
+- 静态成员是属于类的，不属于对象，在类被加载字节码的时候变量已经初始化了; 需要在属性的非静态set方法上加@Autowired
+```
+private static IOptionService optionService;
+
+    @Autowired
+    public void setOptionService(IOptionService optionService) {
+        Commons.optionService = optionService;
+    }
+```
 	
 	
 	
