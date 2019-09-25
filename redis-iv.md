@@ -1,4 +1,4 @@
-#Redis
+# Redis
 1. 缓存雪崩：redis缓存挂掉了，请求跑到数据库。
 解决方法：
  - 事发前：实现redis的高可用：redis集群，redis cluster
@@ -91,3 +91,24 @@ String score = String.valueOf(oneDayGoldBean)
 return -Double.valueOf(score);
 }
 ```
+
+3. Hash 的实现方式？
+- 存储用户信息对象：包含用户id，name，age,birthday,通过用户id获取该用户的name，age.
+hash 内部的value 是一个 HashMap ，他的key是属性，value 是属性的值，通过key:用户id+field(redis 把hashmap的key称为field)
+获取对应的属性数据。
+
+- 当 hashmap的成员比较少的时候，用的是类似一维数组，而不是真正的 hashmap结构，这个时候，对应的value的redisObject的encoding是zipmap;
+当成员数量大的时候，是ht
+
+4.list 的实现方式？
+- 关注列表，粉丝列表用 list存储
+- list 是一个双向的链表，可以反向查找和遍历
+
+5. set？
+- 可以自动排序，其value永远为 null的 HashMap,通过计算hash来快速排序
+
+6. sorted set?
+- 可以通过用户提供的 优先级：score 来为成员排序，插入有序的， 以发表时间作为 score 来排序
+- 用hashmap来存储，用skipList 排序；hashmap是存放成员到 score的映射，跳跃表 是存放所有的成员
+
+
