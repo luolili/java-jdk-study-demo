@@ -69,3 +69,9 @@ Myisam 与Innodb区别：
 - Myisam 是表级锁，不支持事务；Indb支持事务，支持全文索引（v5.6),行级锁
 
 select * from user where sex='f': 不需要为sex字段建立索引，因为sex只有2个值
+
+---
+1.mybatis如何 分页？
+- 使用 RowBounds 进行分页，针对ResultSet 结果集进行 内存分页，而非物理分页；
+- 可以使用 插件 物理分页，拦截待执行的 sql ,然后重写 sql， 根据dialect ,添加
+对应的物理分页参数和语句 
