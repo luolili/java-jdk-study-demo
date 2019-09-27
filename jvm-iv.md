@@ -15,3 +15,11 @@ old:从Young区存活的对象，会到 old区，这些对象生命周期很长�
 
 持久代：存放静态文件，如java类，方法。对于像 hibernate 会动态生成一些 class ,需要
 给持久代 分配更大空间。
+
+---
+1. 什么时候GC？
+- Scavenge GC:当新对象生成，并且Eden 申请空间fail,会发生 Scavenge GC,swap非存活对象，
+把存活对象 copy 到 Survivor. Eden区 的空间小，GC频繁，GC算法效率高
+
+- Full GC: 对整个 Heap进行 GC，包括三个分代。比Scavenge GC 慢，对 jvm的调优，多是
+对于 Full GC 的调节。年老代 被写满，持久代 被写满，显示 调用 System.gc()
