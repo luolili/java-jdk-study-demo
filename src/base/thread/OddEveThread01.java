@@ -1,7 +1,8 @@
 package base.thread;
 
 /**
- * 试下交替打印odd/even
+ * 交替打印odd/even
+ * 频繁的阻塞和唤醒
  * wait/notify
  */
 public class OddEveThread01 {
