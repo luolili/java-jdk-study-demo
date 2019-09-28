@@ -21,3 +21,8 @@
 - volatile 的使用规则
 - happens-before:操作a 必然先行在b之前
 
+# syn 与 volatile 区别？
+- syn用于 方法和代码块；vol 用于 var
+- 用syn会有阻塞，vol 没有阻塞
+- syn有可见性 和 原子性，vol：可见性
+- syn性能比vol差
