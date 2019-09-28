@@ -65,8 +65,11 @@ select * from user where name='xc'
 - 根据 name 的值 找到 树下叶子的 name索引+主键值
 - 用找到的主键值，去主键索引树找到这条数据
 
+总结：主键索引 和 普通索引 的区别：普通索引需要多扫描一颗索引树。
+> Innodb:每行的记录的隐藏列：row_id,transaction_id,roll_pointer
+
 Myisam 与Innodb区别：
-- Myisam 是表级锁，不支持事务；Indb支持事务，支持全文索引（v5.6),行级锁
+- Myisam 是表级锁，不支持事务；Innodb支持事务，支持全文索引（v5.6),行级锁
 
 select * from user where sex='f': 不需要为sex字段建立索引，因为sex只有2个值
 
@@ -89,3 +92,7 @@ select * from user where sex='f': 不需要为sex字段建立索引，因为sex�
 - 不能，根据接口的全限定名+方法名来寻找
 - 使用 jdk代理，为mapper 接口 生成 Proxy，Proxy拦截接口方法，
 去执行 MapperStatement所代表的sql,把 执行结果返回
+
+---
+1.如何查出 n高的工资？
+select distinct(salary) from emp order by salary desc limit n-1,1
