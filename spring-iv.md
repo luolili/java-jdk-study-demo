@@ -128,6 +128,16 @@ private static IOptionService optionService;
         Commons.optionService = optionService;
     }
 ```
+---
+1.springmvc执行流程？
+- DispatcherServlet 接受请求
+- 进入HandlerMapping :根据url 查找handler
+- HandlerAdapter 适配到 对应的 handler，对handler封装，去执行handler
+- handler 返回model and view 给 DispatcherServlet
+- 进入ViewResolver,解析 出 view 
+- 把view返回给 DispacterServlet，对模型数据 进行 渲染
+- 客户端 得到响应，如html,xml,json,pdf,image
+
 	
 	
 	

@@ -79,3 +79,8 @@ select * from user where sex='f': 不需要为sex字段建立索引，因为sex�
 2. 当数据库中列名与java类的属性不一样的时候 怎么处理？
 - 别名：select order_id id,order_price price from order where order_id=#{id} 
 - ResultMap:property=id,column=order_id
+
+3.mapper 如何处理多个参数？
+- 用#{0},#{1}这种从0 开始的参数下标
+- 在参数上 加 @Param
+- 把 参数封装成 map
