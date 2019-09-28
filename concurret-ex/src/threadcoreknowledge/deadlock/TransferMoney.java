@@ -39,7 +39,7 @@ public class TransferMoney implements Runnable {
             try {
                 Thread.sleep(600);
             } catch (InterruptedException e) {
-                 
+
             }
             synchronized (to) {
                 if (from.balance - amount < 0) {
