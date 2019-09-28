@@ -23,3 +23,6 @@ old:从Young区存活的对象，会到 old区，这些对象生命周期很长�
 
 - Full GC: 对整个 Heap进行 GC，包括三个分代。比Scavenge GC 慢，对 jvm的调优，多是
 对于 Full GC 的调节。年老代 被写满，持久代 被写满，显示 调用 System.gc()
+
+2.String等常量信息是在哪里？
+- java6: 方法区；java7：堆
