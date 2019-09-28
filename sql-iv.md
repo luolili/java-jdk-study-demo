@@ -90,9 +90,9 @@ select * from user where sex='f': 不需要为sex字段建立索引，因为sex�
 
 4. mapper 接口里面的方法可以 overload吗?
 - 不能，根据接口的全限定名+方法名来寻找
-- 使用 jdk代理，为mapper 接口 生成 Proxy，Proxy拦截接口方法，
-去执行 MapperStatement所代表的sql,把 执行结果返回
+- 使用 jdk代理，为 mapper 接口 生成 Proxy，Proxy拦截接口方法，
+去执行 MapperStatement 所代表的sql,把 执行结果返回
 
 ---
-1.如何查出 n高的工资？
+1.如何查出 第 n 高的工资？
 select distinct(salary) from emp order by salary desc limit n-1,1
