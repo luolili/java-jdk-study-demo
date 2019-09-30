@@ -111,4 +111,24 @@ hash 内部的value 是一个 HashMap ，他的key是属性，value 是属性的
 - 可以通过用户提供的 优先级：score 来为成员排序，插入有序的， 以发表时间作为 score 来排序
 - 用hashmap来存储，用skipList 排序；hashmap是存放成员到 score的映射，跳跃表 是存放所有的成员
 
+---
+1. 对于设置了过期时间的key的注意事项？
+> 导致 key 过期时间被删除的操作
+- del/set/getset 等命令 会清楚过期时间
+- persist操作会清楚过期时间，把 key 转为 一个持久化的 key
+- 使用 expire/pexpire 设置的过期时间 为 负数 或者是  过去的时间；expire 可以更新 过期时间
+- rename 导致旧的 key 的过期时间 将会转移到 新的key
+- incr / lpush/hset 不会删除 过期时间
+
+2.redis 的数据结构的应用？
+- String : 缓存，限流，计数器，分布式锁，分布式Session
+- hash: 用户信息，用户主页访问量，组合查询
+- list: 微博关注人时间轴 列表
+- Set: 赞，标签，好友关系，踩
+- zset:排行榜
+
+大促销：扣减库存：
+> redis 扣减库存 --记录扣减日志 --同步worker--库存DB
+
+
 
