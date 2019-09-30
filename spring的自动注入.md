@@ -1,7 +1,7 @@
 # AbstractAutowireCapableBeanFactory 实现了 AutowireCapableBeanFactory接口
 
 AutowireCapableBeanFactory 接口定义了 
-- 注入类型的常量字段： autowaire_by_name, autowaire_by_type, autowaire_no, autowaire_constructor.
+- 注入类型的常量字段： autowire_by_name, autowaire_by_type, autowire_no, autowire_constructor.
 - <T> T createBean(Class<T> beanClass) throws BeansException; 仅仅通过class 创建 bean 
 - void autowireBean(Object existingBean) throws BeansException; 注入 bean
 - Object configureBean(Object existingBean, String beanName) throws BeansException; 配置 bean
@@ -73,7 +73,7 @@ AutowireCapableBeanFactory 接口定义了
 
  ---
  
- ##Object autowire(Class<?> beanClass, int autowireMode, boolean dependencyCheck) throws BeansException;
+ ## Object autowire(Class<?> beanClass, int autowireMode, boolean dependencyCheck) throws BeansException;
  利用这个三个参数 构造 bd, 从bd里面 解析自动注入的类型，
  如果是构造方法注入， 调用 
  protected BeanWrapper autowireConstructor(

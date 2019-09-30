@@ -30,7 +30,6 @@ public class OddEvenThread02 {
             @Override
             public void run() {
                 while (true) {
-
                     while (loopForEven) {
 
                     }

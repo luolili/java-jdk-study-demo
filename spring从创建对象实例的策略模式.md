@@ -25,12 +25,12 @@ Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory
 			Constructor<?> ctor, @Nullable Object... args) throws BeansException;
       
  ```
+  ```
  Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner,
 			@Nullable Object factoryBean, Method factoryMethod, @Nullable Object... args)
 			throws BeansException;
       
  ```
- 
  
  它们3个在实例化失败的时候会出现 BeansException 。
  
@@ -39,6 +39,7 @@ Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory
  ## SimpleInstantiationStrategy 分析
  不支持方法的注入： method injection.
  原因：
+ 
  ```
  	protected Object instantiateWithMethodInjection(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner) {
 		throw new UnsupportedOperationException("Method Injection not supported in SimpleInstantiationStrategy");
@@ -53,7 +54,7 @@ Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory
  
  对于Java语言，直接调用 ctor.newInstance(args).
  
- 对于第二个具有构造器惨呼的方法来说，本质和第一个方法是一样的，区别在于第二个方法各异指定具体的构造方法来创建实例对象。
+ 对于第二个具有构造器参数的方法来说，本质和第一个方法是一样的，区别在于第二个方法各异指定具体的构造方法来创建实例对象。
  
  第三个方法 ： Object result = factoryMethod.invoke(factoryBean, args);
  
