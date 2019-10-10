@@ -60,7 +60,8 @@ protected <T> List<T> getDefaultStrategies(ApplicationContext context, Class<T> 
 				try {
         // 通过 DispatcherServlet 的类加载器 来加载这三个类
 					Class<?> clazz = ClassUtils.forName(className, DispatcherServlet.class.getClassLoader());
-					Object strategy = createDefaultStrategy(context, clazz);
+			 
+					Object strategy = createDefaultStrategy(context, clazz);// 调用 bf creatreBean
 					strategies.add((T) strategy);
 				}
 				catch (ClassNotFoundException ex) {
