@@ -28,4 +28,5 @@ public enum EnumDemo {
     public static void main(String[] args) {
 
     }
+    
 }
