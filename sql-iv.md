@@ -68,8 +68,10 @@ select * from user where name='xc'
 总结：主键索引 和 普通索引 的区别：普通索引需要多扫描一颗索引树。
 > Innodb:每行的记录的隐藏列：row_id,transaction_id,roll_pointer
 
-Myisam 与Innodb区别：
-- Myisam 是表级锁，不支持事务；Innodb支持事务，支持全文索引（v5.6),行级锁
+# Myisam 与Innodb区别：
+- Myisam 是表级锁，不支持事务；Innodb 支持事务，支持全文索引（v5.6),行级锁
+- Innodb 是对 索引加锁，部署针对记录 加锁，当你不是用索引来检索数据的时候，他用的是表锁
+- 对于一些很小的表，他认为全表扫描的效率更高，那么他不会使用 索引，会使用 表锁
 
 select * from user where sex='f': 不需要为sex字段建立索引，因为sex只有2个值
 
@@ -96,3 +98,24 @@ select * from user where sex='f': 不需要为sex字段建立索引，因为sex�
 ---
 1.如何查出 第 n 高的工资？
 select distinct(salary) from emp order by salary desc limit n-1,1
+
+# 索引的优化
+- 等号左边 不要出现运算
+- select * from s where order_id=1 and user_id=2 . 最好给order_id 和 user_id 设置为多列索引
+- 让选择性最强的索引在最前面：选择性：不重复的索引值 和总的记录的条数的比值
+- 前缀索引：对于blob, varchar,text
+- 覆盖索引：查询的列都包含在索引的集合里面
+- insert/update/delete 会改变索引树
+- 唯一性 太差，频繁更新的字段不要作为索引
+- 条件 or，要使用上索引必须在字段上加索引
+
+# char varchar text区别
+- char 定长：char(11) 不足的用空格 填充，效率高
+- varchar 不会空格自动填充，他的实际长度是文本长度 + 1，这个字节用于保存文本的长度
+- text 没有默认值，检索的时候，不会进行大小写的转换
+
+# sql 实战
+1. 子查询： select * from emp where hire_date = (select max(hire_date) from emp) ：最晚到的员工
+
+2. select * from emp where hire_date = (select max(hire_date) from emp order by deschire_date limit 2,1) ：
+查找入职员工时间排名倒数第三的员工所有信息

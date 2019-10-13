@@ -41,3 +41,13 @@ spring如何处理并发问题？
 - ThreadLocal: 空间换时间，为每个thread提供一个
 独立的var copy,从而隔离了多个thread对同一个数据的
 访问conflict,把不安全的var放入thread local.
+
+# jd
+1.  什么样的对象会直接进入 老年代？
+ - 大对象
+ - 长期存活的对象
+ - 动态对象年龄判断：所占内存大于Survivor的一半
+ 
+2. JVM中线程共享的区域和非共享的区域
+- 线程共享： 方法区+heap
+- stack：虚拟机stack+ native ,程序计数器
