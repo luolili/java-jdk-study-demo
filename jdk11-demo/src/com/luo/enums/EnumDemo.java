@@ -22,6 +22,7 @@ public enum EnumDemo {
         this.sex = sex;
     }
 
+    
     //抽象方法必须被实现
     public abstract void tellSex();
 
