@@ -17,7 +17,6 @@ public class Test {
 
         //v4:setter
         Me me = new Me();
-
         me.setCourse(new JavaCourse());
         me.studyITCourse();
     }
