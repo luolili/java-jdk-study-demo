@@ -1,4 +1,4 @@
-package com.luo.princple.depinversion;
+package com.luo.principle.depinversion;
 
 //高层模块
 public class Test {

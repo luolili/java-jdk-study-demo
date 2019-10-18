@@ -1,4 +1,4 @@
-package com.luo.princple.depinversion;
+package com.luo.principle.depinversion;
 
 public class FECourse implements ICourse {
     public void studyCourse() {
