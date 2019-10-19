@@ -38,3 +38,11 @@
 ---
 1. 工厂方法：创建 对象 需要大量重复代码；
 客户端不需要知道其实现细节。
+```
+Collection iterator()
+```
+
+```
+URLStreamHandlerFactory
+createURLStreamHandler()
+```
