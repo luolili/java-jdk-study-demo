@@ -22,12 +22,17 @@ public class Test {
         HungrySingleton hungrySingleton = (HungrySingleton) ois.readObject();
         System.out.println(instance==hungrySingleton);*/
 
-        Class objectClass = HungrySingleton.class;
+    /*    Class objectClass = HungrySingleton.class;
         Constructor constructor = objectClass.getDeclaredConstructor();
         constructor.setAccessible(true);
         HungrySingleton instance = HungrySingleton.getInstance();
-
         HungrySingleton newInstance = (HungrySingleton) constructor.newInstance();
         System.out.println(instance == newInstance);//false
+*/
+        Thread t1 = new Thread(new T());
+        Thread t2 = new Thread(new T());
+        t1.start();
+        t2.start();
+        System.out.println("");
     }
 }
