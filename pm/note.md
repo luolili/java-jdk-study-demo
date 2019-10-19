@@ -46,3 +46,10 @@ Collection iterator()
 URLStreamHandlerFactory
 createURLStreamHandler()
 ```
+
+2.抽象工厂：关注产品group
+```
+SqlSessionFactory
+```
+
+3.构建者模式：构建：多个step 与表现分离
