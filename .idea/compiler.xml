@@ -11,7 +11,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="jdk11-demo" target="11" />
-      <module name="pm" target="1.5" />
+      <module name="pm" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>
