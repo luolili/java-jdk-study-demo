@@ -17,4 +17,14 @@ public class Test {
     }
 
     static int i = 2;
+
+    public static void main(String[] args) {
+        Class<? super A> superclass = A.class.getSuperclass();
+        Class<? super Object> superObj = Object.class.getSuperclass();
+
+        System.out.println("interface: " + superclass);//null
+        System.out.println("Object: " + superObj);//null
+        System.out.println(superclass == null);//true
+        System.out.println(superclass == Object.class);//false
+    }
 }
