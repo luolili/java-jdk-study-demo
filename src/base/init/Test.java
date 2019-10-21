@@ -21,9 +21,11 @@ public class Test {
     public static void main(String[] args) {
         Class<? super A> superclass = A.class.getSuperclass();
         Class<? super Object> superObj = Object.class.getSuperclass();
+        Class<?> superArr = new int[]{1}.getClass().getSuperclass();
 
         System.out.println("interface: " + superclass);//null
         System.out.println("Object: " + superObj);//null
+        System.out.println("arr: " + superArr);//null
         System.out.println(superclass == null);//true
         System.out.println(superclass == Object.class);//false
     }
