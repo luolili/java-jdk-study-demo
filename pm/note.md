@@ -61,4 +61,4 @@ BeanDefinitionBuilder
 Runtime,ErrorContext:mybatis
 
 5. 原型模式：类初始化消耗资源多；在循环体产生
-很多对象；构造方法复杂。
+很多对象；构造方法复杂。ArrayList,HashMap
