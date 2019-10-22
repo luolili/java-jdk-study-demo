@@ -64,3 +64,5 @@ Runtime,ErrorContext:mybatis
 很多对象；构造方法复杂。ArrayList,HashMap
 
 6.外观模式：jdbcUtils
+
+7.dcorator:BufferedReader
