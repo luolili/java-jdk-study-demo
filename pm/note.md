@@ -65,4 +65,6 @@ Runtime,ErrorContext:mybatis
 
 6.外观模式：jdbcUtils
 
-7.dcorator:BufferedReader
+7.decorator:BufferedReader
+
+8.adapter:设计时不考虑。
