@@ -67,4 +67,6 @@ Runtime,ErrorContext:mybatis
 
 7.decorator:BufferedReader
 
-8.adapter:设计时不考虑。
+8.adapter:设计时不考虑。XmlAdapter,AdvisorAdapter,
+
+9.cache/pool:享元。内/外部状态。
