@@ -70,3 +70,5 @@ Runtime,ErrorContext:mybatis
 8.adapter:设计时不考虑。XmlAdapter,AdvisorAdapter,
 
 9.cache/pool:享元。内/外部状态。
+
+10.组合：把对象组合为树形结构。Map:putAll
