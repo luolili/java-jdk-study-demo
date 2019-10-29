@@ -72,3 +72,5 @@ Runtime,ErrorContext:mybatis
 9.cache/pool:享元。内/外部状态。
 
 10.组合：把对象组合为树形结构。Map:putAll
+
+11.桥接：抽象部分和细节分开，独立的变化，+组合。
