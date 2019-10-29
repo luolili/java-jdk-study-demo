@@ -74,3 +74,6 @@ Runtime,ErrorContext:mybatis
 10.组合：把对象组合为树形结构。Map:putAll
 
 11.桥接：抽象部分和细节分开，独立的变化，+组合。
+jdbc.Driver:mysql driver, other driver,DriverManager
+
+12.代理：目标对象：真实被调用。

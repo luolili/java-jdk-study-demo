@@ -9,7 +9,7 @@ public class ABCBank extends Bank {
     @Override
     Account openAccount() {
         System.out.println("open alg acc");
-        account.openAccount();
+        account.openAccount();//委托给 account 实现 openAccount
         return account;
     }
 }
