@@ -5,7 +5,7 @@ import com.luo.ptn.struct.proxy.Order;
 import com.luo.ptn.struct.proxy.OrderServiceImpl;
 import com.luo.ptn.struct.proxy.db.DataSourceContextHolder;
 
-public class OrderServiceProxy {
+public class OrderServiceStaticProxy {
     private IOrderService orderService;//target,增强里面的save方法
 
     public int save(Order order) {
