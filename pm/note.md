@@ -76,4 +76,5 @@ Runtime,ErrorContext:mybatis
 11.桥接：抽象部分和细节分开，独立的变化，+组合。
 jdbc.Driver:mysql driver, other driver,DriverManager
 
-12.代理：目标对象：真实被调用。
+12.代理：目标对象：真实被调用。ProxyFactoryBean:getObject()
+mybatis:MapperProxyFactory
