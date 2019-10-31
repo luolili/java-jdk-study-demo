@@ -78,3 +78,5 @@ jdbc.Driver:mysql driver, other driver,DriverManager
 
 12.代理：目标对象：真实被调用。ProxyFactoryBean:getObject()
 mybatis:MapperProxyFactory
+
+13.template：hook
