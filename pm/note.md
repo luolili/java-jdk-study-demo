@@ -80,3 +80,5 @@ jdbc.Driver:mysql driver, other driver,DriverManager
 mybatis:MapperProxyFactory
 
 13.template：hook
+
+14.iterater:不必暴露集合的内部表示。
