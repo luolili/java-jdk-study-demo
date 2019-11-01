@@ -81,4 +81,6 @@ mybatis:MapperProxyFactory
 
 13.template：hook
 
-14.iterater:不必暴露集合的内部表示。
+14.iterator:不必暴露集合的内部表示。
+
+15.strategy:处理if else.
