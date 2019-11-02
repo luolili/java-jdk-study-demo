@@ -84,3 +84,7 @@ mybatis:MapperProxyFactory
 14.iterator:不必暴露集合的内部表示。
 
 15.strategy:处理if else.
+
+16.解释器：某类问题，经常发生，如日志
+
+17.观察者：关联行为，触发机制。
