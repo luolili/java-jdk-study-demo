@@ -18,6 +18,7 @@ public class Teacher implements Observer {
         this.teacherName = teacherName;
     }
 
+    //通过 消息队列 变为异步的
     @Override
     public void update(Observable o, Object arg) {
         Course course = (Course) o;
