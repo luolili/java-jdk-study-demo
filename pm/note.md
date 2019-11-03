@@ -93,3 +93,9 @@ mybatis:MapperProxyFactory
 
 19.命令：把不同的请求 封装为不同的对象。
 Runnable:Command,
+
+20:中介：封装一组对象，解决复杂的引用关系，
+交互的公共行为。聊天室。Timer:中介，TimeTask:User
+
+21:责任链：一个请求的处理
+需要一个或者多个对象协调处理。
