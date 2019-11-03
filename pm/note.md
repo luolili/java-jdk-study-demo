@@ -98,4 +98,6 @@ Runnable:Command,
 交互的公共行为。聊天室。Timer:中介，TimeTask:User
 
 21:责任链：一个请求的处理
-需要一个或者多个对象协调处理。
+需要一个或者多个对象协调处理。Filter,FilterChain
+
+22.访问者：封装 操作。针对 数据结构。
