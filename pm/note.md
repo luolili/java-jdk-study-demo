@@ -90,3 +90,6 @@ mybatis:MapperProxyFactory
 17.观察者：关联行为，触发机制。
 
 18.备忘录：保存对象的状态：属性，为了恢复对象。
+
+19.命令：把不同的请求 封装为不同的对象。
+Runnable:Command,
