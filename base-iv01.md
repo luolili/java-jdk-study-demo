@@ -1,3 +1,6 @@
+
+>> 最令人怀念的那些东西几乎都是在那些不起眼的时候获得的
+
 1. 反射中，Class.forName 和 ClassLoader 区别:
 前者会不仅会加载.class文件到jvm里面，还会对类进行解释， 执行类里面的static块； 后者只是加载.class文件，
 只有在调用了newInstance方法之后，才会去执行static块
@@ -47,7 +50,6 @@
   ```
   List<String> list = new ArrayList<String>();
   ```
-  
   可以写成
   ```
     List<String> list = new ArrayList<>();
@@ -85,11 +87,6 @@ select * from where pow(c, 2) =1000
 效率是二分查找效率
 
 ---
-
-  
-  
-  
-  
  #MQ
  1. 数据丢失的3中情况？
  - 生产者在传消息的时候，消息丢失了
@@ -227,8 +224,7 @@ channel.txCommit
 - 可以快速获取到bean
 - 不能做到线程安全：在有状态的情况下。
 
-
-  ---
+ ---
   
  1. Transactional注解不回滚怎么办？
  ```
@@ -238,7 +234,7 @@ channel.txCommit
 
 2. @transactional注解在什么情况下会失效?
  - 方法必须是public才有作用
- - 是uncheked exception:编译器检查不到
+ - 是unchecked exception:编译器检查不到
  
  ---
   #ORM
