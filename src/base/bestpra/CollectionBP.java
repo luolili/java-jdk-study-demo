@@ -24,7 +24,6 @@ public class CollectionBP {
         Iterator<Integer> it = list.iterator();
         while (it.hasNext()) {
             Integer next = it.next();
-
             it.remove();
         }
         System.out.println(list);
