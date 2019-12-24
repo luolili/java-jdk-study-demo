@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 /**
  * nio Paths
  */
 public class PathsUse {
-
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         Path path =
                 Paths.get("E:\\电子书\\SharingMaterial\\BJLive.md");
 
@@ -50,6 +50,17 @@ public class PathsUse {
         System.out.println("file exists:" + exists);
         System.out.println("file isDirectory:" + isDirectory);
 
+        System.out.println("------read");
+        List<String> lines = Files.readAllLines(path);
+        byte[] bytes = Files.readAllBytes(path);
+        System.out.println(lines);
+        System.out.println(bytes);
+
+        Path path4 =
+                Paths.get("E:\\电子书\\SharingMaterial\\aa.txt");
+        Files.newBufferedWriter(path4).write("for good");
+        List<String> strings = Files.readAllLines(path4);
+        System.out.println(strings);
 
     }
 }
