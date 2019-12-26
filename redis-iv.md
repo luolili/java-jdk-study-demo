@@ -85,7 +85,7 @@ zrank page_rank google.com : 获取google.com的排名：从0开始
 
 - 取反：zset默认是从小到大排序
 
-````
+```
 public Double getScore(Long oneDayGoldBean){
 String score = String.valueOf(oneDayGoldBean)
 return -Double.valueOf(score);
@@ -130,5 +130,24 @@ hash 内部的value 是一个 HashMap ，他的key是属性，value 是属性的
 大促销：扣减库存：
 > redis 扣减库存 --记录扣减日志 --同步worker--库存DB
 
+---
+
+点赞实现：
+
+redis 存2类数据：
+- 点赞人，c，点赞状态
+- 每个用户被点赞的次数
+
+用 hash 结构，因为hash 里的数据都是存在一个 key 里，也可存成 k-v的形式，
+点赞人id：likedPostId,  被点赞人id：likedUserId,状态：1：点赞，0：取消。
+
+用户点赞：
+key:likedPostId::likedUserId,
+value: 状态。
+
+用户取消点赞：
+key:likedUserId::likedPostId,
+
+定义RedisService
 
 
