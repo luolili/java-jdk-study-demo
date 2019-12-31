@@ -14,6 +14,12 @@ public class StrChange {
         int y = 9;
         change(x, y);
         System.out.println("x:" + x + "," + "y:" + y);
+        System.out.println("--------");
+        String t1 = "as";
+        String t2 = new String("as");
+        System.out.println(t1 == t2);
+        System.out.println(t1.equals(t2));
+
     }
 
     public static void change(String s) {
