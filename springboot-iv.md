@@ -12,7 +12,8 @@
 
 4. @Bean 代替xml里面的bean配置
 
-5. @ConditionalOnMissingBean： 当classpath没有注解指定的类的试哈，这配置生效。
+5. @ConditionalOnMissingBean： 当classpath没有注解指定的类的时候，这配置生效。@ConditionalOnMissingClass,
+@ConditionalOnMissingProperty
 
 6. @EnableJpaRepositories(basePackages= {"com.luo"}: 扫描和发现指定包及其子包中的Repository定义
 

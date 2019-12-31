@@ -3,7 +3,7 @@
 ```
 	WebDataBinderFactory binderFactory = getDataBinderFactory(handlerMethod);
 ```
-WebDataBinderFactory 是一个工厂接口，木木是 创建web 数据绑定 实例，给有名字的目标对象： named target obj.
+WebDataBinderFactory 是一个工厂接口，是 创建web 数据绑定 实例，给有名字的目标对象： named target obj.
 ServletRequestDataBinderFactory ，	return new ExtendedServletRequestDataBinder(target, objectName);
 
 方法：

@@ -6,7 +6,7 @@
 
 2.获取 bean 的时候
 
-创建 bean 的时候：在 AbstrtactBeanFactory 里面的抽象方法 createBean 方法的实现类 AbstractAutowireCapableBeanFactory里面
+创建 bean 的时候：在 AbstractBeanFactory 里面的抽象方法 createBean 方法的实现类 AbstractAutowireCapableBeanFactory里面
 的 doCreateBean 方法 里面：
 ```
 boolean earlySingletonExposure = (mbd.isSingleton() && this.allowCircularReferences &&
