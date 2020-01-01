@@ -55,3 +55,7 @@ public Matcher matcher(CharSequence input) {
 
 锁粗化：减少对锁的请求和同步次数，特别是在循环
 >轻量级锁是在无竞争的情况下使用CAS操作来代替互斥量的使用，从而实现同步；而偏向锁是在无竞争的情况下完全取消同步。
+
+3.java 锁机制？
+
+jvm 的 syn+jdk 的 lock 接口

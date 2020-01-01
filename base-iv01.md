@@ -14,7 +14,7 @@
 4. 成员变量和局部变量的几个区别？
   -- 成员变量是属于类的，局部变量是定义在方法里面的或者是方法的参数；局部变量不能加访问修饰符和static。它们都可以加final
   -- 局部变量是存在堆栈上
-  -- 局部变量不会自动赋值；没用被final修饰的成员变量有默认的初始化的值，被final修饰的成员变量必须显示的赋值。
+  -- 局部变量不会自动赋值；没被final修饰的成员变量有默认的初始化的值，被final修饰的成员变量必须显示的赋值。
   
 5. 构造方法的特点？
  -- 没用返回值，也不能用void 声明构造方法
@@ -199,7 +199,7 @@ channel.txCommit
  ---
  #spring
  1. spring 里面的bean 是线程安全的吗？
- spring没用对单例模式的bena做多线程的封装处理；
+ spring没用对单例模式的bean做多线程的封装处理；
  对于dao层，因为他是不存储数据的，所以他是无状态的，
  从某种程度上说，他是安全的；
  对于VO层来说他是要村塾数据的，也就是有状态的，
@@ -218,7 +218,7 @@ channel.txCommit
   - autodetect: 先用构造方法 + @Autowired装配，不行用byType
   
 4. spring为什么默认是单例模式bean?
-- 创建bean的时候，先看配置是否是单例，是单例，先从缓存中取，没有创建，指挥创建一次。
+- 创建bean的时候，先看配置是否是单例，是单例，先从缓存中取，没有创建，只创建一次。
 - 减少新生成实例的消耗
 - 减少jvm垃圾回收
 - 可以快速获取到bean
@@ -231,7 +231,6 @@ channel.txCommit
  @Transactional(rollbackFor=Exception.class)
  
 ``` 
-
 2. @transactional注解在什么情况下会失效?
  - 方法必须是public才有作用
  - 是unchecked exception:编译器检查不到
@@ -268,7 +267,7 @@ channel.txCommit
   5. Thread/Object方法
   调用wait/notifyAll之前，当前线程必须具有sync锁；
   notify：唤醒多个线程中的其中一个,选择方式由jvm决定；
-  不可被重写，他们是native/finakl;
+  不可被重写，他们是native/final;
   相似功能：Condition.
   6.Thread的各个属性？
   id;名字;守护线程：daemon；优先级。
