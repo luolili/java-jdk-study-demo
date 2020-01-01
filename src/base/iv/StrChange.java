@@ -1,7 +1,7 @@
 package base.iv;
 
 /**
- * value dedivery for java
+ * value didivery for java
  */
 public class StrChange {
 

@@ -6,7 +6,7 @@
 只有在调用了newInstance方法之后，才会去执行static块
 
 2. 不实现个性化的equals和hashCode方法的坏处：
-不重写hashCode会降低map等集合的索引速度； equals相等的2个对象， 它们的hashCode也是一样的。
+不重写hashCode会降低map等集合的索引速度:不会覆盖而会形成链表； equals相等的2个对象， 它们的hashCode也是一样的。
 
 3. 为什么不能在静态方法里面调用非静态成员？
 因为静态方法的调用是不依赖类的实例对象的，而非静态成员的调用要依赖类的实例对象。
