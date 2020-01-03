@@ -119,3 +119,12 @@ select distinct(salary) from emp order by salary desc limit n-1,1
 
 2. select * from emp where hire_date = (select max(hire_date) from emp order by deschire_date limit 2,1) ：
 查找入职员工时间排名倒数第三的员工所有信息
+
+3.查询 一个班 所有课程分数都大于80的学生姓名？
+
+select s.name from stu s group by s.name having
+min(s.score)>=80
+
+select distinct s.name from stu s 
+where s.name not in(
+select distinct a.name from stu a WHERE a.score <80)

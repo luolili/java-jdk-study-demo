@@ -59,3 +59,17 @@ protected final void registerBeanDefinitionParser(String elementName, BeanDefini
 	}
 
 ```
+
+AbstractAutoProxyCreator：
+```$xslt
+@Override
+	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+		if (bean != null) {
+			Object cacheKey = getCacheKey(bean.getClass(), beanName);
+			if (!this.earlyProxyReferences.contains(cacheKey)) {
+				return wrapIfNecessary(bean, beanName, cacheKey);
+			}
+		}
+		return bean;
+	}
+```
