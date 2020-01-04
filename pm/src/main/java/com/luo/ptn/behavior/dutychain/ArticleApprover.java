@@ -13,7 +13,6 @@ public class ArticleApprover extends Approver {
             }
         } else {
             System.out.println(course.getName() + " no 手记,no 批准,end");
-            return;
         }
 
     }

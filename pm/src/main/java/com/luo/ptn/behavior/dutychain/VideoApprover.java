@@ -13,7 +13,6 @@ public class VideoApprover extends Approver {
             }
         } else {
             System.out.println(course.getName() + "no video,no 批准,end");
-            return;
         }
 
     }
