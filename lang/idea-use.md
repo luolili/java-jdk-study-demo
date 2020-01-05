@@ -9,3 +9,10 @@
 5.mute breakpoint
 6.refactor:enter之后，可以exclude 不想refactor的地方。
 7.ctrl+alt+shift+J
+
+8.git:commit-->amend 追加提交
+
+## plugin
+1.sequenceDiagram:在函数上右键-》sequence diagram
+
+2.auto filling java call args:自动填充方法参数

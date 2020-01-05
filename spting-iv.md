@@ -59,3 +59,26 @@ protected Object getSingleton(String beanName, boolean allowEarlyReference) {
  
  实例化--属性注入--设置 bean name-- 设置 bean factory--beanPostProcessor 的前置初始化--InitializingBean de afterProperties 方法--
  beanPostProcessor 的后置初始化-- init-method --Disposable 销毁
+
+## 依赖注入的方式
+1.构造方法：设置大量的属性
+
+2.setter：设置少量的属性
+
+3.接口
+
+在 spring 里，只用 构造方法注入和 setter 注入。
+
+##BeanFactory 和 ApplicationContext 区别
+1.前：用懒加载；后：及时加载
+
+2.前：不支持国际化；后：支持国际化
+
+3.前：不支持基于依赖的注解；后：支持基于依赖的注解
+##ioc 实现机制
+工厂模式+反射
+
+## 什么是 spring 装配？自动装配的方式
+构造容器里面多个 bean 的依赖关系。
+
+1.byName/Type,autodetect,no

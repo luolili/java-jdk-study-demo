@@ -25,10 +25,7 @@ public class NoteBook {
 
         TwoPlugAdapterExtends adapter = new TwoPlugAdapterExtends();
 
-
         NoteBook noteBook = new NoteBook(adapter);
         noteBook.charge();
-
-
     }
 }
