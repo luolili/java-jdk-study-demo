@@ -27,3 +27,5 @@ git pull origin luoli:luoli
 出现：
 warning:no common commits,
 remote:enumerating objects:27 done--
+
+6.删除远程分支：git push origin --delete branch-name
