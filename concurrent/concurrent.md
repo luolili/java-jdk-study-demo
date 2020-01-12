@@ -59,3 +59,17 @@ public Matcher matcher(CharSequence input) {
 3.java 锁机制？
 
 jvm 的 syn+jdk 的 lock 接口
+
+4.volatile
+
+他如何做到可见性？
+
+read,load,use 是连续的操作；assign,store,write是连续的操作
+
+为什么他不是原子性的，use和assign不是一个连续性的原子操作。
+
+有序性（禁止指令重拍）：在指令之间插入内存屏障（lock前缀指令），保证按特定顺序执行。
+
+他做到线程安全的2个条件：
+> 运算结果不依赖变量的当前值，保证单一线程修改变量；变量不需要与其他变量参与不变约束
+
