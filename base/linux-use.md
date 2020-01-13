@@ -30,3 +30,23 @@
 16.统计文件内容：wc,wc -c （字节数,char），wc -l（行数,line），wc -w（字数：word）
 
 17.grep [^st] filename:ctr+f
+
+18.查看后台任务：job -l
+
+19.查看用过的命令：history
+
+20.看网络是否连通：netstat
+
+21.看ip：ipconfig
+
+22.看环境：env ,看某个 env $HOME
+
+23.显示目录/文件大小：du,df:看文件系统数据
+
+24.打印系统支持的所有命令：compgen -c 
+
+25.打印目录：dirs
+
+26.一页一页的看文件内容：cat dd.txt | more
+
+27.看命令的用法：whatisc:看c的用法

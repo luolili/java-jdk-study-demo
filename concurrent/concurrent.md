@@ -73,3 +73,13 @@ read,load,use 是连续的操作；assign,store,write是连续的操作
 他做到线程安全的2个条件：
 > 运算结果不依赖变量的当前值，保证单一线程修改变量；变量不需要与其他变量参与不变约束
 
+5.syn 和lock/ReentrantLock的区别？
+
+可以响应中断：在一个线程迟迟没有获得锁的情况下，可以不用等待，避免死锁（tryLock实现限时等待，若没获得锁，返回 false,使用于非常激烈的竞争）,syn适合不激烈的竞争；
+
+重入锁可以绑定多个Condition,这些Condition 可通过await/asinal实现线程之间通信；
+
+syn是非公平锁，lock默认也是非公平锁，ReentrantLock(true) 可实现公平锁；
+
+6.ReentrantLock是 如何实现可重入的？
+
