@@ -84,6 +84,28 @@ mark-sweep:标记清除，会产生很多碎片+效率额低；copying:把可用
 
 7.什么是分布式垃圾回收(DGC)？它是如何工作的？
 
+8.jvm什么区会抛出oom？
+
+方法区+运行时常量池+堆。
+
+方法区是所有线程共享的，他存放类信息+常量+静态变量+JIT 编译后的代码。
+
+运行时常量池：属于方法区的一部分。存放：字面量（文本string+final）+符号引用（字段+方法）
 
 
+堆上出现oom:堆的大小分配不合理。
+
+虚拟机stack:如果线程起高球的stack 大于 所分配的stack,出现stackoverflow;若虚拟机stack是可以动态扩容的，可能oom
+
+直接内存不够：oom
+
+堆（新生代+老年代+（元空间）永久代）+Virtual空间：对象优先在Eden，jvm为每个 Thread 分配了一个私有的缓存区（Thread local allocation buffer），目的是避免多线程 同时分配内存需要加锁等机制减慢分配速度。Eden区不够会 触发 minor gc，也叫新生代gc，在minor gc存活下来的对象会被复制 到 Survivor（避免过早进行 full gc和内存碎片，减慢向老年带复制存活对象） 
+
+Virtual空间：Xms （初始值）小于Xmx（最大值）时，差值这部分内存
+
+-XX:NewSize:指定新生代的大小；
+
+-XX:NewRatio:老年代/新生代，默认是2，老年代太大，full gc虽然不那么频繁，但每次需要的时间很长；
+
+-XX:SurvivorRation:Eden/Survivor
 

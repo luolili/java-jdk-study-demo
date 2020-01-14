@@ -1,3 +1,6 @@
+##在线linux环境
+http://cb.vu/
+
 1.查看当前进程：ps
 
 2.退出：exit
