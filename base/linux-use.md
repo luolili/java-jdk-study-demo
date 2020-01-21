@@ -53,3 +53,9 @@ http://cb.vu/
 26.一页一页的看文件内容：cat dd.txt | more
 
 27.看命令的用法：whatisc:看c的用法
+
+28.man -ls:显示命令的帮助信息
+
+29.top: 任务管理器
+
+30. ps -ef:系统运行状态
