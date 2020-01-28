@@ -15,6 +15,14 @@
 
 8.spring 和springmvc配置文件都扫描了service层
 
+##Runtime
+每个 java 程序都有 一个 Runtime实例；
 
+他可以得到系统内存信息+系统环境变量+执行外部程序+获得 jdk版本信息
+
+##项目里用到的设计模式
+1.模板方法：
+
+打印 报表；代码见pm.iv
 
 
