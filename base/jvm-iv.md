@@ -95,7 +95,7 @@ mark-sweep:标记清除，会产生很多碎片+效率额低；copying:把可用
 
 堆上出现oom:堆的大小分配不合理。
 
-虚拟机stack:如果线程起高球的stack 大于 所分配的stack,出现stackoverflow;若虚拟机stack是可以动态扩容的，可能oom
+虚拟机stack:如果线程请求的stack 大于 所分配的stack,出现stackoverflow;若虚拟机stack是可以动态扩容的，可能oom
 
 直接内存不够：oom
 
@@ -109,3 +109,5 @@ Virtual空间：Xms （初始值）小于Xmx（最大值）时，差值这部分
 
 -XX:SurvivorRation:Eden/Survivor
 
+##为什么用双亲委派机制
+防止内存里面存在多分一样的字节码。保证类的唯一性。
