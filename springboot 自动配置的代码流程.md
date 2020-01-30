@@ -1,6 +1,6 @@
 #sb 是如何进行自动配置的？
 
-@SpringBootApplication 包含 注解 @EnableAutoConfiguration，他只能写在类上面，可以执行一些配置类，吧她们排除。
+@SpringBootApplication 包含 注解 @EnableAutoConfiguration，他只能写在类上面，可以执行一些配置类，把他们排除。
 
 @AutoConfigurationPackage ：自动导入包的配置。
 ```
