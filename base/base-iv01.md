@@ -1,6 +1,8 @@
 
 >> 最令人怀念的那些东西几乎都是在那些不起眼的时候获得的
 
+jvm+设计模式+数据结构+算法+多线程
+
 1. 反射中，Class.forName 和 ClassLoader 区别:
 前者会不仅会加载.class文件到jvm里面，还会对类进行解释， 执行类里面的static块； 后者只是加载.class文件，
 只有在调用了newInstance方法之后，才会去执行static块
