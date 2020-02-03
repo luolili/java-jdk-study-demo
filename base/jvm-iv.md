@@ -43,7 +43,7 @@ system: 加载 classpath/java.class.path 下面的类
 3.GC 内存分配？
 
 对象 优先分配到 Eden 区；
-大对象直接进入 老年代：-XX:PretenureSizeThreshold=2 设置大对象的最小值；
+大对象直接进入 老年代：-XX:PretenureSizeThreshold=2 设置大对象的最小值；Xms:堆的初始化大小，Xmx:堆最大大小
 
 ```
 -verbose:gc -Xms20M -Xmx20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8 -XX:PretenureSizeThreshold=3145728`
@@ -54,7 +54,7 @@ system: 加载 classpath/java.class.path 下面的类
 -Xms20M -Xmx20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8 -XX:MaxTenuringThreshold=1
 
 ```
-动态年龄判断；
+动态年龄判断：Survivor空间相同年龄所有对象的大小的和大于Survivor空间的一半，年龄大于等于该年龄的对象可以进老年代；
 空间分配担保
 
 4.为什么要有GC？
@@ -91,7 +91,6 @@ mark-sweep:标记清除，会产生很多碎片+效率额低；copying:把可用
 方法区是所有线程共享的，他存放类信息+常量+静态变量+JIT 编译后的代码。
 
 运行时常量池：属于方法区的一部分。存放：字面量（文本string+final）+符号引用（字段+方法）
-
 
 堆上出现oom:堆的大小分配不合理。
 
