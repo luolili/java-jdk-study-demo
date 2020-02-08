@@ -41,24 +41,25 @@ read,load,use 必须连续出现；assign,store,write 必须连续出现。
 DCL：单利的双重检查，必须用volitile 修饰单利。
 
 因为：
-```aidl
+```
 Singleton singleton = new Singleton();
 ```
 他不是原子操作：
 
-```aidl
+```
 memory = allocate();
 initInstance(memory);
 instance = memory;
 ```
 他可能是这个顺序执行：
-```aidl
+```
 memory = allocate();
 instance = memory;
 initInstance(memory);
 ```
-
 这是一个没有完成初始化（仅仅指向了一块内存空间）的半个对象。
-
+##synchronizedMap 和 ConcurrentHashMap 区别
+synchronizedMap 的 put/get方法都是封装 HashMap 的，都加了互斥锁；  
+ConcurrentHashMap 是 由 HashEntry 数组+链表+红黑树，性能更高；get方法没有加锁，性能更好。
 
 

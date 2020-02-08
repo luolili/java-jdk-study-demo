@@ -5,3 +5,8 @@
 3.每周一个算法题，读一篇英文技术文章，一个技术技巧，分享一篇技术文章
 ##声明式编程
 强调要什么，不强调怎么要，如 sql 表达要什么数据，html 表达 要什么样的页面。告诉机器 要什么，让机器自己想 how to do .与命令式编程对应
+##设计模式分类
+根据目的：  
+创建型:创建对象；Builder  
+结构型：类或对象组合；  Adapter/composite/proxy
+行为型：类 或 对象如何交互；chain of responsibility/strategy/template method
