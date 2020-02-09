@@ -1,10 +1,25 @@
 package base.alg;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public class LenOfLongestSubstring {
-
+    public int lengthOfLongestSubstringV3(String s) {
+        int res = 0;
+        int n = s.length();
+        Map<Character, Integer> map = new HashMap<>();
+        int i = 0, j = 0;
+        for (j = 0; j < n; j++) {
+            if (map.containsKey(s.charAt(j))) {
+                i = Math.max(map.get(s.charAt(j)), i);
+            }
+            res = Math.max(res, j - i + 1);
+            map.put(s.charAt(j), j + 1);
+        }
+        return res;
+    }
     /**
      * 滑动窗口
      *

@@ -1,11 +1,16 @@
 package base.alg;
 
+import java.util.Date;
+
 public class TwoSum {
 
 
     public static void main(String[] args) {
         int[] nums = {2, 3, 4, 5, 6, 7, 8};
         int[] res = twoSum(nums, 6);
+        //02/08/20
+        System.out.printf("%tD%n", new Date());
+
 
     }
 
