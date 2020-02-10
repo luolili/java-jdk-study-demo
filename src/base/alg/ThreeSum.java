@@ -8,6 +8,9 @@ public class ThreeSum {
 
     public static void main(String[] args) {
 
+        int[] nums = {-1, 0, 1, 2, -1, -4};
+        List<List<Integer>> lists = threeSumV2(nums);
+
     }
 
     /**
@@ -17,15 +20,15 @@ public class ThreeSum {
      * @param nums
      * @return
      */
-    public List<List<Integer>> threeSumV2(int[] nums) {
+    public static List<List<Integer>> threeSumV2(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         // 对数组排序
         Arrays.sort(nums);
         int len = nums.length;
-        if (nums[0] > 0) {
-            return null;
-        }
         for (int k = 0; k < len - 2; k++) {
+            if (nums[0] > 0) {
+                break;
+            }
             if (k > 0 && nums[k] == nums[k - 1]) {
                 continue;
             }
@@ -33,6 +36,7 @@ public class ThreeSum {
             while (i < j) {
                 int sum = nums[k] + nums[i] + nums[j];
                 if (sum < 0) {
+                    //若相等，就跳过
                     while (i < j && nums[i] == nums[++i]) {
 
                     }
@@ -52,6 +56,30 @@ public class ThreeSum {
                     }
                 }
             }
+        }
+        return res;
+    }
+
+    public int threeSumClosest(int[] nums, int target) {
+        int res = nums[0];
+        int len = nums.length;
+        for (int i = 0; i < len - 2; i++) {
+            int start = i + 1;
+            int end = len - 1;
+            int sum = nums[i] + nums[start] + nums[end];
+            if (Math.abs(target - sum) < Math.abs(target - res)) {
+                //sum 比初始的 res 小
+                res = sum;
+            }
+            if (target - sum > 0) {
+                start++;
+            } else if (target - sum < 0) {
+                end--;
+            } else {
+                // 相等
+                return res;
+            }
+
         }
         return res;
     }
