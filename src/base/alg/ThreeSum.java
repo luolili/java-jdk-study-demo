@@ -61,25 +61,29 @@ public class ThreeSum {
     }
 
     public int threeSumClosest(int[] nums, int target) {
-        int res = nums[0];
+        Arrays.sort(nums);
+        int res = nums[0] + nums[1] + nums[2];
         int len = nums.length;
-        for (int i = 0; i < len - 2; i++) {
+        int sum;
+        for (int i = 0; i < len; i++) {
             int start = i + 1;
             int end = len - 1;
-            int sum = nums[i] + nums[start] + nums[end];
-            if (Math.abs(target - sum) < Math.abs(target - res)) {
-                //sum 比初始的 res 小
-                res = sum;
+            while (start < end) {
+                // 优化 定义 sum的地方
+                sum = nums[i] + nums[start] + nums[end];
+                if (Math.abs(target - sum) < Math.abs(target - res)) {
+                    //sum 比初始的 res 小
+                    res = sum;
+                }
+                if (target - sum > 0) {
+                    start++;
+                } else if (target - sum < 0) {
+                    end--;
+                } else {
+                    // 相等
+                    return res;
+                }
             }
-            if (target - sum > 0) {
-                start++;
-            } else if (target - sum < 0) {
-                end--;
-            } else {
-                // 相等
-                return res;
-            }
-
         }
         return res;
     }
