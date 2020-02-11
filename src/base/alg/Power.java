@@ -15,9 +15,9 @@ public class Power {
         double cur = x;
         for (long i = n; i > 0; i /= 2) {
             if (i % 2 == 1) {
-                res = res * x;
+                res = res * cur;
             }
-            res = x * x;
+            cur = cur * cur;
         }
         return res;
     }
