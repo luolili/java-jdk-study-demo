@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+/**
+ * deep-first search 深度优先搜索
+ */
 public class InorderTraveral {
 
     public List<Integer> inorderTraveral(TreeNode root) {

@@ -10,3 +10,5 @@
 创建型:创建对象；Builder  
 结构型：类或对象组合；  Adapter/composite/proxy
 行为型：类 或 对象如何交互；chain of responsibility/strategy/template method
+##分号
+java 等语言里面的分号是给机器看的，不是给人看到，也包括大括号，括号，三目运算符，指针，去除了与逻辑无关的语法
