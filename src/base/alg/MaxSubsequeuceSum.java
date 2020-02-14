@@ -1,7 +1,37 @@
 package base.alg;
 
 public class MaxSubsequeuceSum {
+    /**
+     * dp
+     *
+     * @param nums
+     * @return
+     */
+    public int getMaxSequenceV3(int[] nums) {
+        int max = nums[0];
+        int sum = 0;
+        for (int num : nums) {
+            if (sum > 0) {
+                sum += num;
+            } else {
+                sum = num;
+            }
+            max = getMax(max, sum);
+        }
+        return max;
+    }
 
+    public int getMaxSequenceV2(int[] nums) {
+        int len = nums.length;
+        int max = nums[0];
+        for (int i = 1; i < len; i++) {
+            if (nums[i - 1] > 0) {
+                nums[i] = nums[i - 1];
+                max = getMax(nums[i], max);
+            }
+        }
+        return max;
+    }
     /**
      * 贪心：
      * 当前元素
