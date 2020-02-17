@@ -120,3 +120,7 @@ Class.forName;new;调用静态方法/变量；当虚拟机启动的时候，初�
 双亲委派：parent-children关系是实例之间的parent-children，不是继承上的parent-children
 
 缓存：先从缓存里加载。
+##内存泄露如何解决
+使用集合 大对象 后 设置为 null  
+避免死循环 创建对象或对集合加元素  
+少用静态集合  即使关闭流/文件
