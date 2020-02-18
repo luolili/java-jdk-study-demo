@@ -23,7 +23,9 @@ public class IsSymmetric {
             if (t1 == null || t2 == null) {
                 return false;
             }
-            if (t1.value != t2.value) return false;
+            if (t1.value != t2.value) {
+                return false;
+            }
             // 队列的连续2个元素是对称的/相等的/一样的
             ((LinkedList<TreeNode>) q).add(t1.left);
             ((LinkedList<TreeNode>) q).add(t2.right);
