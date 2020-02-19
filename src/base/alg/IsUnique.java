@@ -20,9 +20,7 @@ public class IsUnique {
                 return false;
             }
         }
-
         return true;
-
     }
 
     public static boolean isUnique(String astr) {
@@ -31,8 +29,20 @@ public class IsUnique {
                 return false;
             }
         }
-
         return true;
+    }
 
+    public static char firstUniqueChar(String s) {
+        char[] chars = new char[26];
+        char[] chars1 = s.toCharArray();
+        for (char c : chars1) {
+            chars[c - 'a']++;
+        }
+        for (char c : chars1) {
+            if (chars[c - 'a'] == 1) {
+                return c;
+            }
+        }
+        return ' ';
     }
 }

@@ -22,3 +22,7 @@ select * from cinema  where description!='boring' and mod(id,2)=1 order by ratin
  when 'm' then 'f'
  else 'm'
  end;
+ 
+##员工工资比他的经理多
+
+select a.Name as Employee  from Employee as a,Employee as b where a.ManagerId = b.id and a.Salary>b.Salary
