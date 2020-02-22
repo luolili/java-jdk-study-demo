@@ -1,6 +1,16 @@
 package base.alg;
 
 public class MaxSubsequeuceSum {
+    public int getMaxSequenceV4(int[] nums) {
+        int max = nums[0];
+        int sum = 0;
+        for (int num : nums) {
+            sum = Math.max(sum + num, num);
+            max = Math.max(sum, max);
+        }
+        return max;
+    }
+
     /**
      * dp
      *
@@ -32,6 +42,7 @@ public class MaxSubsequeuceSum {
         }
         return max;
     }
+
     /**
      * 贪心：
      * 当前元素
