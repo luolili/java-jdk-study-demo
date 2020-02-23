@@ -6,6 +6,18 @@ import java.util.Map;
 import java.util.Set;
 
 public class LenOfLongestSubstring {
+
+    public int lengthOfLongestSubstringV4(String s) {
+        Map<Character, Integer> map = new HashMap<>();
+        int len = s.length(), res = 0, start = 0;
+        for (int i = 0; i < len; i++) {
+            start = Math.max(start, map.getOrDefault(s.charAt(i), -1) + 1);
+            map.put(s.charAt(i), i);
+            res = Math.max(res, i - start + 1);
+        }
+        return res;
+    }
+
     public int lengthOfLongestSubstringV3(String s) {
         int res = 0;
         int n = s.length();
@@ -20,6 +32,7 @@ public class LenOfLongestSubstring {
         }
         return res;
     }
+
     /**
      * 滑动窗口
      *
@@ -45,7 +58,6 @@ public class LenOfLongestSubstring {
     public int lengthOfLongestSubstring(String s) {
         int res = 0;
         int n = s.length();
-
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 if (allUnique(s, i, j)) {

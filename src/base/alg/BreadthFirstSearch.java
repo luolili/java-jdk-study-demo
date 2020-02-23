@@ -67,4 +67,61 @@ public class BreadthFirstSearch {
             helper(root.right, level + 1, levels);
         }
     }
+
+    //层序遍历：从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。
+
+    public int[] levelOrder(TreeNode root) {
+        //NPE
+        if (root == null) {
+            return new int[0];
+        }
+        List<Integer> list = new ArrayList<>();
+        Queue<TreeNode> q = new LinkedList<>();
+        ((LinkedList<TreeNode>) q).add(root);
+        while (!q.isEmpty()) {
+            TreeNode node = q.poll();
+            list.add(node.value);
+            if (node.left != null) {
+                q.offer(node.left);
+            }
+            if (node.right != null) {
+                q.offer(node.right);
+            }
+        }
+        int[] res = new int[list.size()];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = list.get(i);
+        }
+        return res;
+    }
+
+    public List<List<Integer>> levelOrderX(TreeNode root) {
+        List<List<Integer>> res = new LinkedList<>();
+        Deque<TreeNode> q = new LinkedList<>();
+        if (root == null) {
+            return res;
+        }
+        if (root != null) {
+            q.offer(root);
+        }
+        TreeNode flag = root;
+        List<Integer> row = new ArrayList<>();
+        while (!q.isEmpty()) {
+            TreeNode node = q.poll();
+            row.add(node.value);
+            if (node.left != null) {
+                q.offer(node.left);
+            }
+            if (node.right != null) {
+                q.offer(node.right);
+            }
+            if (flag == node) {
+                flag = q.peekLast();
+                res.add(row);
+                row = new ArrayList<>();
+            }
+
+        }
+        return res;
+    }
 }

@@ -6,7 +6,6 @@ public class TreeTraversal {
         TreeNode[] treeNodes = new TreeNode[10];
         for (int i = 0; i < 10; i++) {
             treeNodes[i] = new TreeNode(i);
-
         }
         for (int i = 0; i < 10; i++) {
             if (i * 2 + 1 < 10) {
