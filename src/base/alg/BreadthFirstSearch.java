@@ -128,12 +128,48 @@ public class BreadthFirstSearch {
 
     List<List<Integer>> res = new ArrayList<>();
 
-    public List<List<Integer>> levelORder3(TreeNode root) {
+    /**
+     * 请实现一个函数按照之字形顺序打印二叉树，即第一行按照从左到右的顺序打印，
+     * 第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。
+     */
+    public List<List<Integer>> levelOrder3(TreeNode root) {
         if (root == null) {
             return new ArrayList<>();
         }
         helper3(root, 0);
         return res;
+    }
+
+    public List<List<Integer>> levelOrder3V(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        List<List<Integer>> ans = new ArrayList<>();
+        Deque<TreeNode> q = new LinkedList<>();
+        q.addLast(root);
+        int level = 0;
+        while (!q.isEmpty()) {
+            int len = q.size();
+            ans.add(new ArrayList<>());
+            for (int i = 0; i < len; i++) {
+
+                TreeNode node = q.pollFirst();
+
+                if (level % 2 == 0) {
+                    ans.get(i).add(node.value);
+                } else {
+                    ans.get(i).add(0, node.value);
+                }
+                if (node.left != null) {
+                    q.addLast(node.left);
+                }
+                if (node.right != null) {
+                    q.addLast(node.right);
+                }
+            }
+            level++;
+        }
+        return ans;
     }
 
     public void helper3(TreeNode node, int level) {
