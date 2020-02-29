@@ -19,6 +19,14 @@ public class StrChange {
         String t2 = new String("as");
         System.out.println(t1 == t2);
         System.out.println(t1.equals(t2));
+        System.out.println("------");
+        String m1 = "halo";
+        String m2 = "ha" + "lo";
+        String m3 = new String("halo");
+        //true
+        System.out.println(m1 == m2);
+        //false
+        System.out.println(m1 == m3);
 
     }
 

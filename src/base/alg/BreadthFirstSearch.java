@@ -95,6 +95,7 @@ public class BreadthFirstSearch {
         return res;
     }
 
+    //从上到下按层打印二叉树，同一层的节点按从左到右的顺序打印，每一层打印到一行。
     public List<List<Integer>> levelOrderX(TreeNode root) {
         List<List<Integer>> res = new LinkedList<>();
         Deque<TreeNode> q = new LinkedList<>();
@@ -124,4 +125,33 @@ public class BreadthFirstSearch {
         }
         return res;
     }
+
+    List<List<Integer>> res = new ArrayList<>();
+
+    public List<List<Integer>> levelORder3(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<>();
+        }
+        helper3(root, 0);
+        return res;
+    }
+
+    public void helper3(TreeNode node, int level) {
+        if (res.size() == level) {
+            res.add(new ArrayList<>());
+        }
+
+        if (level % 2 == 0) {
+            res.get(level).add(node.value);
+        } else {
+            res.get(level).add(0, node.value);
+        }
+        if (node.left != null) {
+            helper3(node.left, level + 1);
+        }
+        if (node.right != null) {
+            helper3(node.right, level + 1);
+        }
+    }
+
 }
