@@ -36,3 +36,5 @@ where l1 = l2-1
 and l2 = l3-1
 and l1.Num = l2.Num
 and l2.Num = l3.Num
+##找重复的邮箱
+select Email from Person group by Email  having count(Email)>1
