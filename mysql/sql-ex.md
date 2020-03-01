@@ -26,3 +26,13 @@ select * from cinema  where description!='boring' and mod(id,2)=1 order by ratin
 ##员工工资比他的经理多
 
 select a.Name as Employee  from Employee as a,Employee as b where a.ManagerId = b.id and a.Salary>b.Salary
+##连续出现的数字
+编写一个 SQL 查询，查找所有至少连续出现三次的数字。
+
+select distinct l1.Num AS ConsecutiveNums  
+ from Logs l1,Logs l2,Logs l3
+
+where l1 = l2-1
+and l2 = l3-1
+and l1.Num = l2.Num
+and l2.Num = l3.Num

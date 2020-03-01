@@ -26,7 +26,6 @@ public class MaxDepth {
                 if (node.right != null) {
                     q.add(node.right);
                 }
-
             }
             level++;
         }
@@ -47,4 +46,10 @@ public class MaxDepth {
         int maxRightDepth = maxDepth(root.right);
         return Math.max(maxLeftDepth, maxRightDepth) + 1;
     }
+
+    //一行代码
+    public int maxDepthV3(TreeNode root) {
+        return (root == null) ? 0 : Math.max(maxDepthV3(root.left), maxDepthV3(root.right)) + 1;
+    }
+
 }
