@@ -152,9 +152,7 @@ public class BreadthFirstSearch {
             int len = q.size();
             ans.add(new ArrayList<>());
             for (int i = 0; i < len; i++) {
-
                 TreeNode node = q.pollFirst();
-
                 if (level % 2 == 0) {
                     ans.get(i).add(node.value);
                 } else {
