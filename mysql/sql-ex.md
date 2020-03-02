@@ -38,3 +38,8 @@ and l1.Num = l2.Num
 and l2.Num = l3.Num
 ##找重复的邮箱
 select Email from Person group by Email  having count(Email)>1
+##从未订购的客户
+Customers,ORders  
+select c.Name as Customers from Customers left join Orders o on c.id=o.CustomerId where o.CustomerId is null
+
+select c.Name as Customers from Customers  where c.id not in (select CustomerId from Orders)
