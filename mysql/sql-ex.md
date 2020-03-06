@@ -36,6 +36,22 @@ where l1 = l2-1
 and l2 = l3-1
 and l1.Num = l2.Num
 and l2.Num = l3.Num
+
+其他方法：  
+select distinct a.Num AS ConsecutiveNums  from Logs a
+left join Logs b on a.Num=b.Num
+left join Logs c on c.Num = a.Num
+where a.Id=b.Id-1
+and b.Id=c.Id-1
+
+select distinct a.Num AS ConsecutiveNums  from Logs a
+inner join Logs b on a.Num=b.Num
+inner join Logs c on c.Num = a.Num
+where a.Id=b.Id-1
+and b.Id=c.Id-1
+
+
+
 ##找重复的邮箱
 select Email from Person group by Email  having count(Email)>1
 ##从未订购的客户

@@ -2,7 +2,7 @@
 intro: 继承了HierarchicalBeanFactory接口和SingletonBeanRegistry。
 
 HierarchicalBeanFactory的作用
-- BeanFactory getParentBeanFactory(); 获取他的父亲facotry类，如果没有就返回null
+- BeanFactory getParentBeanFactory(); 获取他的父亲factory类，如果没有就返回null
 - boolean containsLocalBean(String name);根据传入的bean名字，在当前的工厂里面找是否有这bean，
 不会在他的父亲工厂类里面去找
 

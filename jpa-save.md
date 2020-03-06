@@ -3,7 +3,7 @@
 > entityInformation 具有 entityName, id元数据，model元数据，domainClass: name 属性：类的全限定名；versionAttribute:版本属性，值是Optional.Empty
 
 
-- entityInformation 调用他的isNew方法，嗲用他的父类 ： AbstractEntityInformation 的 isNew(T entity)
+- entityInformation 调用他的isNew方法，调用他的父类 ： AbstractEntityInformation 的 isNew(T entity)
 ```
 public boolean isNew(T entity) {
 
@@ -29,7 +29,7 @@ public boolean isNew(T entity) {
 public ID getId(T entity) {
 
 		BeanWrapper entityWrapper = new DirectFieldAccessFallbackBeanWrapper(entity);//entityWrapper 有 WrappedObject 封装要保存的对象
-    // id元数据 保存了jpaEntutyName: User, hasIdentifierProperty=true, isVersioned=false,version=null,id=null,hasIdClass=false
+    // id元数据 保存了jpaEntityName: User, hasIdentifierProperty=true, isVersioned=false,version=null,id=null,hasIdClass=false
     //attributes: name=id, javaType=String
 		if (idMetadata.hasSimpleId()) {//判断 attributes 的size==1
 			return (ID) entityWrapper.getPropertyValue(idMetadata.getSimpleIdAttribute().getName());
