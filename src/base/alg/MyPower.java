@@ -1,12 +1,12 @@
 package base.alg;
 
-public class Power {
+public class MyPower {
     public static void main(String[] args) {
         double res = myPowV3(2, 2);
     }
 
     /**
-     * 实现函数double Power(double base, int exponent)，求base的exponent次方。不得使用库函数，同时不需要考虑大数问题。
+     * 实现函数double MyPower(double base, int exponent)，求base的exponent次方。不得使用库函数，同时不需要考虑大数问题。
      *
      * @param x
      * @param n
@@ -92,5 +92,10 @@ public class Power {
             res *= x;
         }
         return res;
+    }
+
+    public double myPowV(double x, int n) {
+
+        return Math.pow(x, n);
     }
 }

@@ -73,3 +73,10 @@ and prod_price > 2
 select * from product where (vend_id = 'D1' or vend_id = 'D3')  
 and prod_price > 2  
 ## in 一般 比 一组 or 要快,in 可包含其他 select 语句（in 最大优点）
+通配符  
+##方括号 [] 匹配单个字符
+select prod_name from product where prod_name like '[JM]%'  
+select prod_name from product where prod_name like '[^JM]%' 
+## 别名 保留字 as 是可选的，但最好加上，别名最好是一个单词
+数据处理函数  
+##用函数的问题：兼容性 

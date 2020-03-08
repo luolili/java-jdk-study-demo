@@ -20,4 +20,13 @@ public class ReverseString {
             s[left++] ^= s[right--];
         }
     }
+
+    public static void reverseStringV2(char[] s) {
+        char tmp;
+        for (int left = 0, right = s.length - 1; left < right; left++, right--) {
+            tmp = s[left];
+            s[left] = s[right];
+            s[right] = tmp;
+        }
+    }
 }

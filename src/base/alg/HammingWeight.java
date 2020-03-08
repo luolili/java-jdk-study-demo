@@ -13,4 +13,19 @@ public class HammingWeight {
         }
         return count;
     }
+
+    public int hammingWeightV2(int n) {
+        // 可以看到，n & (n - 1)n&(n−1) 得到的结果，就是将 n 最低位 1，换成 0 之后的值。
+        int count = 0;
+        while (n != 0) {
+            n &= n - 1;
+            count++;
+        }
+        return count;
+    }
+
+    public int hammingWeightV3(int n) {
+
+        return Integer.bitCount(n);
+    }
 }
