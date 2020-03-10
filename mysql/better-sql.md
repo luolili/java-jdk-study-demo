@@ -80,3 +80,9 @@ select prod_name from product where prod_name like '[^JM]%'
 ## 别名 保留字 as 是可选的，但最好加上，别名最好是一个单词
 数据处理函数  
 ##用函数的问题：兼容性 
+## distinct 不可用于 count(*)
+分组  
+##列里面包含 Null 那 Null 行会作为一组
+##group by 子句的列必须是检索列，有效的表达式，不可是聚集函数
+##where 和 having 区别：where:行级过滤， 在分组前进行过滤，having 在分组后过滤
+##group by 一般和 order by 一起用，实现数据排序

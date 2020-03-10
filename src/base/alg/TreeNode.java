@@ -4,7 +4,7 @@ package base.alg;
  * 树的节点
  */
 public class TreeNode {
-    int value;
+    public int value;
     public TreeNode left;
     public TreeNode right;
 
