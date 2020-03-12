@@ -86,3 +86,11 @@ select prod_name from product where prod_name like '[^JM]%'
 ##group by 子句的列必须是检索列，有效的表达式，不可是聚集函数
 ##where 和 having 区别：where:行级过滤， 在分组前进行过滤，having 在分组后过滤
 ##group by 一般和 order by 一起用，实现数据排序
+子查询
+##一个查询的结果要作为另一个查询的条件
+select cust_id from order where order_num in  
+(select order_num from order_item where prod_id = 'f')  
+作为子查询 的 select 止咳查询单个列
+##子查询不都是最好的方法
+select cust_name,(select count(*) from order where order.cust_id = Customer.id) as ord from Customer order by cust_name  
+这里用到了完全限定列名：order.cust_id

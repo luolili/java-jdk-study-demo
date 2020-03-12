@@ -2,6 +2,9 @@ package base.alg.tree;
 
 import base.alg.TreeNode;
 
+/**
+ * a 里面有b 的结构和节点值
+ */
 public class IsSubStructure {
 
     public boolean isSubStructure(TreeNode A, TreeNode B) {
