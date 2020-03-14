@@ -87,7 +87,11 @@ ctrl+e:跳到 命令的最后;ctrl+y:复制 ctrl+w/k/u的字符
 18.grep -r folder/:folder 必须是当前目录下面的目录，当你不知道要搜索的文本存在哪个文件的时候用  
 
 19.sort name.txt:对里面的名字排序；sort -o sorted_name.txt name.txt把排序后的内容输出到sorted_name.txt  
+20.sort -n <<END  
+21:w,uptime: load average:平均活跃的进程，tload  
+22.ps -ef:列出所有的进程，ps -efH, ps -u,pstree  
 
+23.ls &:让 ls在后台进程运行。& 后台进程还是与terminal相关，terminal关闭或logout，进程也会结束
 ## 上线流程
 1.准备 linux 服务器，web 服务器（如nginx）
 
@@ -121,10 +125,15 @@ vim nginx.conf
 http-server-location  
 
 shift+: 输入 set nu:显示行号  
-进入编辑模式 按 i,wq : 保存退出  
+进入编辑模式 按 i,ctr+c,wq : 保存退出  
 
 5.上传网站到服务器  
 先 yum install openssh-client  
+yum remove nginx: 删除软件  
+yum list installed: 查看已经安的软件  
+yum search nginx: 从仓库里搜  
+yum info nginx: 查看软件信息  
+yum update: 更新所有软件  
 logout 退出服务器（同时可以看 网站 访问的ip）
 scp -r local_dir @ip:/remote_dir   
 scp -r  ./demo/* @ip:/root/www (在项目文件哪里打开gitbash)  
@@ -135,6 +144,7 @@ nginx （启动nginx）
 nginx -s reload （重新加载）
 cat /etc/nginx/nginx.conf （查看文件）  
 
+nginx 乱码：在 nginx.conf server 下加 charset utf-8;  
 通过公网 ip 可以访问 demo了。  
 ##软件安装
 对于 ubuntu ,软件叫做软件包：package,后缀 .deb,对于redhat:。rpm.  
