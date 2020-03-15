@@ -104,7 +104,7 @@ ssh root@linux的ip
  home（用户的私人目录）,lib（被程序所调用的库文件）  
  lib64,,  
  lost+found,media（访问外设的文件）,mnt（mount,挂载）  
- opt（可选的应用软件）,proc,root,run,sbin（系统的可执行程序）,srv（服务）,sys,tmp,usr（软件资源，类似win program file）,var（可变的，程序的数据，如 log文件）
+ opt（可选的应用软件，主要放安装包）,proc,root,run,sbin（系统的可执行程序）,srv（服务）,sys,tmp,usr（软件资源，类似win program file）,var（可变的，程序的数据，如 log文件）
 3.安装 nginx:  
 先查看是否安装了 nginx: nginx -V  
 bash:/usr/sbin/nginx:no such file or directory 表示没有安装 nginx  
@@ -147,5 +147,12 @@ cat /etc/nginx/nginx.conf （查看文件）
 nginx 乱码：在 nginx.conf server 下加 charset utf-8;  
 通过公网 ip 可以访问 demo了。  
 ##软件安装
+>方法 1：rmp 要根据依赖顺序来安装，需要安装包（后缀是.rmp），知道版本号  
+方法 2：yum 要网络，不需要安装包和版本号（最简单）  
+方法 3：解压后就可用（如 jdk,mycat(放在 opt 目录下，解压后拷贝到/usr/local下)）  
+方法 4：解压后编译安装（如 mysql）  
+
+ 
 对于 ubuntu ,软件叫做软件包：package,后缀 .deb,对于redhat:。rpm.  
-软件包 放在 软件仓库
+软件包 放在 软件仓库  
+jdk:先本地下载 jdk.tar.gz 包，在usr/local 下面出啊估计文件夹java,用xftp上传到linux usr/local/java,解压；
