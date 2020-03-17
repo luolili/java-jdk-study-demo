@@ -155,4 +155,23 @@ nginx 乱码：在 nginx.conf server 下加 charset utf-8;
  
 对于 ubuntu ,软件叫做软件包：package,后缀 .deb,对于redhat:。rpm.  
 软件包 放在 软件仓库  
-jdk:先本地下载 jdk.tar.gz 包，在usr/local 下面出啊估计文件夹java,用xftp上传到linux usr/local/java,解压；
+jdk:先本地下载 jdk.tar.gz 包，在usr/local 下面创建文件夹java,用xftp上传到linux usr/local/java,解压；配置环境变量；source /etc/profile  
+redis 安装：wget 下载 redis.tar.gz;进入 redis 目录执行： make，出现：it is a good idea to run make test. 表示没问题。
+
+执行：make test 出现 you need tcl 8.5 or newer.
+
+安装 tcl: yum install tcl. 又执行make test,出现Active defrag. 
+执行：cd src && make install or make install  
+进入 src 执行：./redis-server  
+把 redis 配置为后台服务：进入 redis.conf 找到 deamonize no:把 no 改为 yes.
+
+在/etc下面创建 redis 文件夹，在此redis目录下执行cp -f /usr/local/redis-5.0.5/redis.conf ./  
+修改配置文件名：mv redis.conf 6379.conf  
+
+cp /usr/local/redis-5.0.5/utils/redis_init_script /etc/rc.d/init.d/  
+mv redis_init_script redisd  
+修改 redisd  
+执行：chkconfig redisd on  
+service redisd start  
+ctrl+c  
+ps -ef | grep redis
