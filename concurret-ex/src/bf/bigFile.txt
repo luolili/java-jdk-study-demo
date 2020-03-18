@@ -1,4 +1,4 @@
-##了解 Future 
+##了解 Future
 他是一个接口，表示 一个异步运算的结果，提供的方法是为了检查任务是否完成，若没有，就等他完成。可获得计算的结果。通过 get 方法获得结果，若任务没有完成，会 block.
 
 ```
@@ -20,8 +20,8 @@ V get(long timeout, TimeUnit unit)
 
 ![Image text](../concurrent/pic/FutureTask.png)
 
-主要的属性：  
-outcome:计算的结果；callable（被执行的东西）, Thread runner. 
+主要的属性：
+outcome:计算的结果；callable（被执行的东西）, Thread runner.
 ```
  private volatile int state;
     //初始值
@@ -35,8 +35,8 @@ outcome:计算的结果；callable（被执行的东西）, Thread runner.
     private static final int CANCELLED    = 4;
     private static final int INTERRUPTING = 5;
     private static final int INTERRUPTED  = 6;
-``` 
-主要方法：  
+```
+主要方法：
 ```
  private V report(int s) throws ExecutionException {
         Object x = outcome;
