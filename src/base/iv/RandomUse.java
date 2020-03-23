@@ -4,13 +4,14 @@ import java.util.Random;
 
 /**
  * 随机生成-10  -10
+ * random 只能 随机生成正数
  */
 public class RandomUse {
 
     public static void main(String[] args) {
         Random r = new Random();
 
-        int res = gen();
+        int res;
         for (int i = 0; i < 20; i++) {
             res = gen();
             System.out.println(res);
