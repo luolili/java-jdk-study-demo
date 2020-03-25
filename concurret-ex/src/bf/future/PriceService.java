@@ -3,6 +3,7 @@ package bf.future;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
@@ -16,7 +17,7 @@ public class PriceService {
 
     );
 
-    public List<String> findPricesByDiscount(String product) {
+    public List<String> findPrices(String product) {
         // 方法1：串行执行，4141
 //        return shops.stream()
 //                .map(shop->String.format("%s  price is %.2f",
@@ -42,19 +43,30 @@ public class PriceService {
         return futureList.stream().map(CompletableFuture::join).collect(Collectors.toList());
     }
 
-    public List<String> findPrices(String product) {
+    public List<String> findPricesByDiscount(String product) {
 
 
         // 方法3：CompletableFuture,2086，可调节线程数，远程调用：不依赖cpu的运算能力，需要更多的线程
         // 变为异步
         Executor exec = Executors.newFixedThreadPool(Math.min(shops.size() + 50, 100));
-        List<CompletableFuture<String>> futureList = shops.stream()
-                .map(shop -> CompletableFuture.supplyAsync(() -> shop.getPrice(product), exec))
-                .map(future -> future.thenApply(Quote::parse))
-                .map(future -> future.thenCompose(quote -> CompletableFuture.supplyAsync(() -> DiscountService.applyDiscount(quote), exec)))
-                .collect(Collectors.toList());
+        CompletableFuture<String> yourName = CompletableFuture.supplyAsync(() -> {
+            return "dd";
+        });
+        CompletableFuture<String> greetingFuture = yourName.thenApply(name -> {
+            return "hi " + name;
+        });
+        String res = null;
+        try {
+            res = greetingFuture.get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        System.out.println(res);
         // 顺序操作了，阻塞
-        return futureList.stream().map(CompletableFuture::join).collect(Collectors.toList());
+        //return futureList.stream().map(CompletableFuture::join).collect(Collectors.toList());
+        return null;
     }
 
     public static void main(String[] args) {
@@ -64,6 +76,7 @@ public class PriceService {
         List<String> res = priceService.findPrices("ph");
         long diff = System.currentTimeMillis() - st;
         System.out.println("diff:" + diff);
+        priceService.findPricesByDiscount("i");
 
     }
 }
