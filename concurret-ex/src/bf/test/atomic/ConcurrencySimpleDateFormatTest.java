@@ -1,22 +1,23 @@
 package bf.test.atomic;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 用代码进行压测;让某个方法之执行一次
+ * 用代码进行压测
  */
-public class ConcurrencyBooleanTest {
-
+public class ConcurrencySimpleDateFormatTest {
+    //     static SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
     // 请求次数
     public static final int clientTotal = 1000;
     // 线程和数
     public static final int threadTotal = 50;
-    //AtomicLong 不断的去循环：先获取 主内存的值，然后进行更新，当并发不高的时候，成功概率高，反之很低
-    public static AtomicBoolean count = new AtomicBoolean(false);
+    public static AtomicInteger count = new AtomicInteger(0);
 
     public static void main(String[] args) throws Throwable {
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -27,7 +28,7 @@ public class ConcurrencyBooleanTest {
                 try {
                     // 判断当前 thread 是否可运行
                     semaphore.acquire();
-                    once();
+                    format();
                     semaphore.release();
                 } catch (Exception e) {
 
@@ -42,10 +43,14 @@ public class ConcurrencyBooleanTest {
 
     }
 
-    public static void once() {
-
-        if (count.compareAndSet(false, true)) {
-            System.out.println("exec");
+    public static void format() {
+        //定义全局变量出现异常
+        try {
+            //定义局部变量 thread 封闭
+            SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+            f.parse("2018-02-02");
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 }

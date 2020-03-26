@@ -4,19 +4,19 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 用代码进行压测;让某个方法之执行一次
+ * 用代码进行压测
  */
-public class ConcurrencyBooleanTest {
+public class ConcurrencyStringBuilderTest {
 
     // 请求次数
     public static final int clientTotal = 1000;
     // 线程和数
     public static final int threadTotal = 50;
-    //AtomicLong 不断的去循环：先获取 主内存的值，然后进行更新，当并发不高的时候，成功概率高，反之很低
-    public static AtomicBoolean count = new AtomicBoolean(false);
+    public static AtomicInteger count = new AtomicInteger(0);
+    static StringBuilder sb = new StringBuilder();
 
     public static void main(String[] args) throws Throwable {
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -27,7 +27,7 @@ public class ConcurrencyBooleanTest {
                 try {
                     // 判断当前 thread 是否可运行
                     semaphore.acquire();
-                    once();
+                    append();
                     semaphore.release();
                 } catch (Exception e) {
 
@@ -38,14 +38,12 @@ public class ConcurrencyBooleanTest {
         }
         cdl.await();
         executorService.shutdown();
-        System.out.println("count=" + count);
+        System.out.println("len=" + sb.length());
 
     }
 
-    public static void once() {
+    public static void append() {
 
-        if (count.compareAndSet(false, true)) {
-            System.out.println("exec");
-        }
+        sb.append("9");
     }
 }

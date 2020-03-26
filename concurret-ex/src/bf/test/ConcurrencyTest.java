@@ -35,6 +35,7 @@ public class ConcurrencyTest {
 
         }
         cdl.await();
+        executorService.shutdown();
         System.out.println("count=" + count);
 
     }
