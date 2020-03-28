@@ -16,4 +16,9 @@
  ##redis 如何主从同步
  在 slave 启动的时候， 会给 master 发送一条 sync 的消息，master 收到消息后 会调用 syncCommand 方法进行同步处理，在方法里面会调用 rdbSaveBackground 方法 开启数据备份的进程，进程会执行 rdbSave 方法进行数据的全量备份。  
  备份成功后，会更新 master的各种状态，然后把数据发送给等待的 slave
+ ---
+ ##为什么用缓存
+ 提高性能：内存的存取数据快  
+ 高并发：
+ ##单线程模型
  
