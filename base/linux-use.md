@@ -174,4 +174,23 @@ mv redis_init_script redisd
 执行：chkconfig redisd on  
 service redisd start  
 ctrl+c  
-ps -ef | grep redis
+ps -ef | grep redis  
+安装 mysql:  
+yum install mysql*  
+yum install mariadb-server
+启动mysql:systemctl start mariadb.server  
+netstat -anp | grep 3306:看3306端口是否启动  
+mysqladmin -u root password root:密码初始化为 root  
+mysql -uroot -proot:连接 mysql  
+把本地的数据库弄到 centos  
+把本地的 .sql文件备份，传到centos,  
+mysql -uroot -proot < /tmp/miaosha.sql:执行 sql 语句  
+完成项目打包运行的脚本：  
+在 centos 上的项目目录下面 新建一个 application.properties 文件，里面的内容是正式环境的配置  
+外挂配置文件：  
+java -jar miaosha.jar --spring.config.addition-location=/miaosha/application.properties  
+在项目目录下面 新建一个 deply.sh 启动文件：  
+nohup java Xms400m Xmx400m -XX:NewSize=200m -XX:MaxNewSize=200m -jar miaosha.jar --spring.config.addition-location=/miaosha/application.properties  
+chmod -R 777 *  
+./deply.sh &  
+堆栈信息在 nohup.out
