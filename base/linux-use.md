@@ -194,3 +194,8 @@ nohup java Xms400m Xmx400m -XX:NewSize=200m -XX:MaxNewSize=200m -jar miaosha.jar
 chmod -R 777 *  
 ./deply.sh &  
 堆栈信息在 nohup.out
+## 发现性能问题--jmeter（上线之前）
+server.tomcat.max-thread=800 等 tomcat 的配置 优化
+###1分布式扩展
+nginx+分布式会话管理+redis存储 分布式 session  
+静态资源放入 NAS
