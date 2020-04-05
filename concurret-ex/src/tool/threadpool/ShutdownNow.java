@@ -21,7 +21,7 @@ public class ShutdownNow {
         executorService.shutdown();
         //executorService.execute(new ShutdownTask());
         System.out.println("stat:" + executorService.isShutdown());
-        //workQueue 里面没被执行的任务队列
+        //任务队列 里面没被执行的任务队列
         List<Runnable> runnableList = executorService.shutdownNow();
         System.out.println(runnableList.size());
 
