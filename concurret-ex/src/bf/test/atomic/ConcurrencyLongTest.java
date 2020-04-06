@@ -37,6 +37,7 @@ public class ConcurrencyLongTest {
 
         }
         cdl.await();
+        executorService.shutdown();
         System.out.println("count=" + count);
 
     }
