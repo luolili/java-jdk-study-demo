@@ -3,10 +3,16 @@ package base.iv;
 public class StringEquals {
 
     public static void main(String[] args) {
+        //在方法区的常量池里面创建了对象
+        String r1 = "ab";
+        String r2 = "abc";
+        //string builder 来实现拼接
+        String r3 = r1 + "c";
+
         //分配到堆内存
         String s = new String("Test");
         if (s == "Test") {
-            System.out.println("ff");
+            System.out.println("1");
         }
         System.out.println(s.equals("Test"));
         if (s.equals("Test")) {
