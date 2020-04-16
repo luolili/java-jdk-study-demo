@@ -32,5 +32,10 @@ public class TimeTest {
        /* try{
             System.out.println();
         }*/
+        String res1 = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss"));
+        String res2 = dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        System.out.println("res:" + res1 + "res2:" + res2);
+
+
     }
 }
