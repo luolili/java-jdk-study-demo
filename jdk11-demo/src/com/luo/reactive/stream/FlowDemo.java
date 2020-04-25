@@ -11,7 +11,7 @@ public class FlowDemo {
         //发布人
         SubmissionPublisher<Integer> publisher = new SubmissionPublisher<>();
 
-        Subscriber<Integer> subscriber = new Subscriber<Integer>() {
+        Subscriber<Integer> subscriber = new Subscriber<>() {
             private Subscription subscription;
 
             @Override

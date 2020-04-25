@@ -14,5 +14,8 @@ public class StringTest {
         String lines = "he\nhu\ner";
         lines.lines().forEach(System.out::println);
         System.out.println("$".repeat(11));
+        System.out.println(str.subSequence(0, 3));
+        System.out.println(Void.class == null);
+        //System.out.println(new Void() == null.);
     }
 }
