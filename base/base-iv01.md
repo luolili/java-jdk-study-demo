@@ -92,7 +92,7 @@ select * from where pow(c, 2) =1000
  #MQ
  1. 数据丢失的3中情况？
  - 生产者在传消息的时候，消息丢失了
- 生产者在发送消息之前开启rabbbbitMQ的事务channel.txSelect,如果mq没有收到消息，生产者这边会报错，
+ 生产者在发送消息之前开启rabbitMQ的事务channel.txSelect,如果mq没有收到消息，生产者这边会报错，
  回滚事务，收到了消息，提交事务。
  ```
  channel.txSelect

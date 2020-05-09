@@ -14,6 +14,103 @@ master/worker 结构：接受用户请求是异步的，它先把所有请求全
 ##动静资源分离的好处
 静态资源(js,css,html,jpg)放入 nginx,动态资源(jsp)放入 tomcat  
 减少对后端服务器的请求，提高对资源的响应速度,可对静态资源做缓存
+##负载均衡的算法
+轮训(默认)  
+权重轮训  
+ip_hash  
+服务器响应时间  
+url_hash
+##服务器配置
+```
+ server {
+listen80; # 端口号
+location / {
+    root /usr/share/nginx/html; # 静态文件路径
+    proxy_pass http://192.168.20.1:8080; # 反向代理，应用服务器HTTP地址
+}
+```
+
+```
+# 负载均衡配置
+upstream myapp {
+
+server192.168.20.1:8080; # 应用服务器1
+
+server192.168.20.2:8080; # 应用服务器2
+}
+  server {
+listen80;
+
+location / {
+
+    proxy_pass http://myapp;
+
+}
+}
+
+```
+
+```
+server {
+
+listen80default_server;
+
+server_name _;
+
+return444; # 过滤其他域名的请求，返回444状态码
+}
+    server {
+
+listen80;
+
+server_name www.aaa.com; # www.aaa.com域名
+
+location / {
+
+    proxy_pass http://localhost:8080; # 对应端口号8080
+
+}
+
+}
+
+server {
+# 虚拟主机配置：多个域名指向同一个主机
+server {
+ 
+ listen80default_server;
+ 
+ server_name _;
+ 
+ return444; # 过滤其他域名的请求，返回444状态码
+ }
+     server {
+ 
+ listen80;
+ 
+ server_name www.aaa.com; # www.aaa.com域名
+ 
+ location / {
+ 
+     proxy_pass http://localhost:8080; # 对应端口号8080
+ 
+ }
+ 
+ }
+ 
+ server {
+ 
+ listen80;
+ 
+ server_name www.bbb.com; # www.bbb.com域名
+ 
+ location / {
+ 
+     proxy_pass http://localhost:8081; # 对应端口号8081
+ 
+ }
+ }
+
+```
 ##/etc/logrotate.d/nginx
 nginx 日志的切割，如按天来切割
 ##nginx -V 
