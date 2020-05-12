@@ -5,6 +5,13 @@ import java.util.concurrent.Executors;
 
 /**
  * 线程数是1
+ * 五个参数
+ * 核心线程数：在池子里面的 线程数量，即使他们是空闲的
+ * 最大线程数：
+ * 等待时间：在线程数 超过 核心线程数的时候，空闲的线程在结束后等待的
+ * 时间
+ *工作队列：保存提交的任务
+ *
  */
 public class SingleThreadpoolTest {
     static ExecutorService executorService = Executors.newSingleThreadExecutor();
