@@ -26,3 +26,12 @@
  读的高并发：一主多从，从负责读；4个 slave 可达到20万/秒的并发量（QPS）
  > redis replication 的机制：
  异步复制数据到 slave 节点；slave node 可连接到其他的 slave node;slave node 在复制的时候，不会影响 master node 的正常工作；slave node 在复制的时候，是用旧的数据来提供服务，当复制完的时候，会暂停服务，把旧的数据删除；
+ 
+ ##幂等性
+ redis+token，先获取token,如果有，删除token
+ ##redis 挂掉了怎么办
+ 主从模式
+ ##redis 超卖
+ 分布式锁
+ ##hystrix降级原理
+ ##枚举为什么是单利

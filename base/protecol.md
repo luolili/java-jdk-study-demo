@@ -13,3 +13,11 @@ tcp 保证数据正确性和顺序；udp不保证这些
 tcp 是可靠的；udp 是不可靠的
 tcp 传输慢； udp 传输快  
 场景：tcp:浏览器，文件传输；udp:qq语音/视频
+##表单数据json数据区别
+表单：a=1&b=2&c=3  
+json: {"a":1,"b":2,"c":3}  
+但是如果数据比较复杂，比如包含数组、对象等时，就只有json才能胜任了
+##js 合并2个数组
+let c = a.concat(b)  
+let c = [...a,...b] 
+a.push.apply(a,b) 
